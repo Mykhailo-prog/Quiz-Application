@@ -1,0 +1,14 @@
+<div class="test">
+  <table>
+    <tr>
+      <th>
+        Player
+      </th>
+      <th>Score</th>
+    </tr>
+    <tr v-for="user in users" :key="user.id">
+      <td>{{user.login}}</td>
+      <td>{{user.score}}</td>
+    </tr>
+  </table>
+</div>

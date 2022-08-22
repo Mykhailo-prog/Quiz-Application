@@ -1,0 +1,52 @@
+<b-container>
+  <b-row>
+    <b-col class="p-0">
+      <div>
+        <quest-list
+          v-for="question in questions"
+          :key="question.id"
+          v-if="count === questions.indexOf(question)"
+          :question="question"
+        ></quest-list>
+      </div>
+      <b-button @click="Back">Back</b-button>
+    </b-col>
+  </b-row>
+</b-container>
+
+<!-- <b-card-group>
+  <b-card>
+    <quest-list
+      :questions="GetQuestions"
+      @checkFin="checkReady"
+    ></quest-list>
+    <div class="control">
+      <b-input-group>
+        <b-button class="btn-light control" @click="prevq"
+          >Prev</b-button
+        >
+        <b-input-group-append v-for="q in quests" :key="q.id">
+          <b-button
+            :class="currQuest === quests.indexOf(q) ? 'active btn-light' : 'btn-light'"
+            @click="changeQuest(quests.indexOf(q))"
+            >{{quests.indexOf(q)+1}}</b-button
+          >
+        </b-input-group-append>
+        <b-button class="btn-light" @click="nextq">Next</b-button>
+      </b-input-group>
+      <b-button
+        v-if="!finishStatus"
+        class="finish btn-light btn-outline-primary"
+        disabled
+        >Finish</b-button
+      >
+      <b-button
+        v-else
+        class="finish btn-light btn-outline-primary"
+        @click="updateUser"
+      >
+        Finish
+      </b-button>
+    </div>
+  </b-card>
+</b-card-group> -->

@@ -1,0 +1,22 @@
+<div class="control">
+  <b-input-group>
+    <b-button class="btn-light control" @click="Prev">Prev</b-button>
+    <b-input-group-append v-for="quest in quests" :key="quest.id">
+      <b-button
+        :class="counter === quests.indexOf(quest) ? 'active btn-light' : 'btn-light'"
+        @click="setCount(quests.indexOf(quest))"
+        >{{quests.indexOf(quest)+1}}</b-button
+      >
+    </b-input-group-append>
+    <b-button class="btn-light" @click="Next">Next</b-button>
+  </b-input-group>
+  <b-button
+    v-if="checkParam"
+    class="finish btn-light btn-outline-primary"
+    @click="finishTest"
+    >Finish</b-button
+  >
+  <b-button v-else class="finish btn-light btn-outline-primary" disabled>
+    Finish
+  </b-button>
+</div>

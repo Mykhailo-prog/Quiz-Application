@@ -1,0 +1,21 @@
+<b-container>
+  <b-row>
+    <div class="image">
+      <img
+        alt="Vue logo"
+        class="vue-logo p-4"
+        :src="require('@/assets/img/QuizLogo.png')"
+      />
+    </div>
+    <b-col class="p-0 main">
+      <login-user></login-user>
+    </b-col>
+  </b-row>
+  <b-row>
+    <b-col class="p-0">
+      <div>
+        <user-list @reloadUsers="loaded" :users="GetUsers"></user-list>
+      </div>
+    </b-col>
+  </b-row>
+</b-container>

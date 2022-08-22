@@ -1,0 +1,27 @@
+<div>
+  <b-card
+    no-body
+    style="max-width: 20rem; cursor: pointer;"
+    class="m-4"
+    img-alt="Image"
+    img-top
+    @click="defineTest"
+    :class="TestId = test.testId"
+  >
+    <template #header>
+      <h4 class="mb-0">{{test.name}}</h4>
+    </template>
+
+    <b-card-body class="p-0" style="width: 300px; height: 300px;">
+      <b-card-img
+        alt="Vue logo"
+        class="vue-logo"
+        :src="require('@/assets/img/MathLogo.jpg')"
+      />
+    </b-card-body>
+
+    <b-card-footer class="footer"
+      >Questions: {{test.questions.length}}</b-card-footer
+    >
+  </b-card>
+</div>

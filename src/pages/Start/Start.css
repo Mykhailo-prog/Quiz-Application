@@ -1,0 +1,24 @@
+.vue-logo {
+  margin: bottom;
+  max-width: 200px;
+}
+
+.start {
+  text-align: center;
+  margin-top: 30px;
+}
+.container {
+  border: 4px solid black;
+}
+.control {
+  text-align: center;
+}
+.input-group {
+  margin-left: auto;
+  margin-right: auto;
+  width: 220px;
+}
+.finish {
+  display: flex;
+  margin-left: auto;
+}

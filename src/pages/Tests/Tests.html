@@ -1,0 +1,13 @@
+<b-container>
+  <b-row class="page-title">
+    <div><h1>Choose test</h1></div>
+  </b-row>
+  <b-row>
+    <test-list
+      v-for="test in tests"
+      :test="test"
+      :key="test.id"
+      @chosen-test="getQuest"
+    ></test-list>
+  </b-row>
+</b-container>

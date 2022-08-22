@@ -1,0 +1,58 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <ProjectType>Web</ProjectType>
+    <ProjectSubType>Javascript</ProjectSubType>
+    <CreateNewFolder>true</CreateNewFolder>
+    <CreateInPlace>true</CreateInPlace>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="ClientApp.njsproj" File="ClientApp.njsproj" ReplaceParameters="true">
+      <Folder Name="public" TargetFolderName="public">
+        <ProjectItem>favicon.ico</ProjectItem>
+        <ProjectItem>index.html</ProjectItem>
+      </Folder> 
+      <Folder Name="src" TargetFolderName="src">
+        <Folder Name="assets" TargetFolderName="assets">
+          <Folder Name="img" TargetFolderName="img">
+            <ProjectItem>logo.png</ProjectItem>
+          </Folder>
+        </Folder>
+        <Folder Name="components" TargetFolderName="components">
+          <Folder Name="PageHeader" TargetFolderName="PageHeader">
+            <ProjectItem>PageHeader.vue</ProjectItem>
+            <ProjectItem>PageHeader.html</ProjectItem>
+            <ProjectItem>PageHeader.css</ProjectItem>
+            <ProjectItem>index.js</ProjectItem>
+          </Folder>
+        </Folder>
+        <Folder Name="pages" TargetFolderName="pages">
+          <Folder Name="Hello" TargetFolderName="Hello">
+            <ProjectItem>Hello.vue</ProjectItem>
+            <ProjectItem>Hello.html</ProjectItem>
+            <ProjectItem>Hello.css</ProjectItem>
+            <ProjectItem>index.js</ProjectItem>
+          </Folder>
+        </Folder>
+        <ProjectItem>App.css</ProjectItem>
+        <ProjectItem>App.html</ProjectItem>
+        <ProjectItem>App.vue</ProjectItem>
+        <ProjectItem>main.js</ProjectItem>
+        <ProjectItem>router.js</ProjectItem>
+        <ProjectItem>store.js</ProjectItem>
+      </Folder>
+      <ProjectItem>babel.config.js</ProjectItem>
+      <ProjectItem>package.json</ProjectItem>
+      <ProjectItem>package-lock.json</ProjectItem>
+      <ProjectItem>.eslintrc.js</ProjectItem>
+      <ProjectItem ReplaceParameters="true">vue.config.js</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>Microsoft.NodejsTools.ProjectWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+    <FullClassName>Microsoft.NodejsTools.ProjectWizard.NpmWizardExtension</FullClassName>
+  </WizardExtension>
+  <WizardExtension>
+    <Assembly>Microsoft.NodejsTools.ProjectWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+    <FullClassName>Microsoft.NodejsTools.ProjectWizard.NodejsPackageParametersExtension</FullClassName>
+  </WizardExtension>
+</VSTemplate>
