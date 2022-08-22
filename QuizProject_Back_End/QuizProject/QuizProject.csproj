@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Reserv\**" />
+    <Content Remove="Reserv\**" />
+    <EmbeddedResource Remove="Reserv\**" />
+    <None Remove="Reserv\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20220816112847_addTestEntity.cs" />
+    <Compile Remove="Migrations\20220816112847_addTestEntity.Designer.cs" />
+    <Compile Remove="Migrations\20220816113512_addTestEntity.cs" />
+    <Compile Remove="Migrations\20220816113512_addTestEntity.Designer.cs" />
+    <Compile Remove="Migrations\20220816143516_addTestEntity.cs" />
+    <Compile Remove="Migrations\20220816143516_addTestEntity.Designer.cs" />
+    <Compile Remove="Migrations\20220816143722_addTestEntity.cs" />
+    <Compile Remove="Migrations\20220816143722_addTestEntity.Designer.cs" />
+    <Compile Remove="Migrations\20220816144514_addTestEntity.cs" />
+    <Compile Remove="Migrations\20220816144514_addTestEntity.Designer.cs" />
+    <Compile Remove="Migrations\20220816144738_addTestEntity.cs" />
+    <Compile Remove="Migrations\20220816144738_addTestEntity.Designer.cs" />
+    <Compile Remove="Migrations\20220816145513_addTestEntity.cs" />
+    <Compile Remove="Migrations\20220816145513_addTestEntity.Designer.cs" />
+    <Compile Remove="Migrations\20220817124938_disableNull.cs" />
+    <Compile Remove="Migrations\20220817124938_disableNull.Designer.cs" />
+    <Compile Remove="Migrations\20220817160653_addTestField.cs" />
+    <Compile Remove="Migrations\20220817160653_addTestField.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.25" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.25">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+
+</Project>
