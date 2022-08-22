@@ -33,7 +33,7 @@ export default {
     },
   },
   actions: {
-    async getQuestions({ commit }, questions) {
+    getQuestions({ commit }, questions) {
       commit("SET_QUEST_LIST", questions);
     },
     increaseCounter({ commit }) {

@@ -10,7 +10,7 @@ export default {
       state.userList = users;
     },
     SET_CURRENT_USER(state, user) {
-      state.currUser = user;
+      state.currUser = state.userList.find((u) => u.login === user.login);
     },
     CLEAN_USER_LIST(state) {
       state.userList = [];
@@ -26,7 +26,6 @@ export default {
     async loadUsers({ commit }) {
       const loadedUsers = await axios.get("https://localhost:44378/api/users");
       commit("SET_USER_LIST", loadedUsers.data);
-      console.log("Users loaded");
     },
     async checkUser({ commit, state, dispatch }, userLogin) {
       const User = state.userList.find((u) => u.login === userLogin);
@@ -35,18 +34,14 @@ export default {
           login: userLogin,
           password: "",
         });
-        dispatch("loadUsers");
-        commit("SET_CURRENT_USER", newUser);
+        await dispatch("loadUsers");
+        commit("SET_CURRENT_USER", newUser.data);
       } else {
         commit("SET_CURRENT_USER", User);
       }
     },
     cleanUsers({ commit }) {
       commit("CLEAN_USER_LIST");
-    },
-    test({ dispatch }) {
-      dispatch("loadUsers");
-      console.log("TestTESTTESTSS");
     },
   },
 };

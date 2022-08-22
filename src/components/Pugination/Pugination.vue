@@ -9,7 +9,6 @@ export default {
       Set: "getCounter",
       Finish: "finishTest",
       Load: "loadUsers",
-      Test: "test",
       CleanUsers: "cleanUsers",
       CleanCounter: "cleanCounter",
       CleanAnswers: "cleanAnswers",
@@ -28,10 +27,10 @@ export default {
     async finishTest() {
       await this.Finish({ user: this.CurrUser, testId: this.TestId });
       this.$router.push("/");
-      await this.CleanUsers();
-      await this.CleanCounter();
-      await this.CleanAnswers();
-      this.Test();
+      this.CleanUsers();
+      this.CleanCounter();
+      this.CleanAnswers();
+      await this.Load();
     },
   },
   computed: {

@@ -9047,11 +9047,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Visual Studio\\repos\\QuizProject\\QuizProject\\QuizProject.csproj",
+      "projectUniqueName": "E:\\Projects\\VS Code\\Testing-vue\\QuizApplication\\QuizProject_Back_End\\QuizProject\\QuizProject.csproj",
       "projectName": "QuizProject",
-      "projectPath": "E:\\Visual Studio\\repos\\QuizProject\\QuizProject\\QuizProject.csproj",
+      "projectPath": "E:\\Projects\\VS Code\\Testing-vue\\QuizApplication\\QuizProject_Back_End\\QuizProject\\QuizProject.csproj",
       "packagesPath": "C:\\Users\\Misha\\.nuget\\packages\\",
-      "outputPath": "E:\\Visual Studio\\repos\\QuizProject\\QuizProject\\obj\\",
+      "outputPath": "E:\\Projects\\VS Code\\Testing-vue\\QuizApplication\\QuizProject_Back_End\\QuizProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Misha\\AppData\\Roaming\\NuGet\\NuGet.Config",

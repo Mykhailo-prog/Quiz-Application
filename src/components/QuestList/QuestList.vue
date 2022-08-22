@@ -13,25 +13,20 @@ export default {
   },
   data() {
     return {
-      //Answers: [],
       usersAnswer: "",
       currQuest: {},
-      //currQuestId: 0,
     };
   },
   methods: {
     ...mapActions(["getUserAnswer", "check"]),
 
     getAnswer(answer) {
-      //this.currQuestId = answer.questionId;
       this.usersAnswer = answer.ans;
       this.getUserAnswer({
         answer: this.usersAnswer,
         index: this.getAnswerPos,
       });
       this.check(this.getQuests);
-      //this.Answers[parseInt(answer.questionId, 10) - 1] = answer.answer;
-      //this.checkFinish();
     },
     checkFinish() {
       this.$emit("checkFin", this.Answers);
@@ -50,11 +45,6 @@ export default {
   },
   components: {
     Pugination,
-  },
-  watch: {
-    currQuestId: function() {
-      this.usersAnswer = "";
-    },
   },
 };
 </script>

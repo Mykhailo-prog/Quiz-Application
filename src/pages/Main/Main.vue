@@ -15,9 +15,6 @@ export default {
     load() {
       this.loadUsers();
     },
-    loaded() {
-      console.log("LOAD!!!");
-    },
     checkStatus() {
       if (this.GetUsers != []) {
         this.userListStatus = true;
@@ -38,7 +35,6 @@ export default {
     this.GetUsers;
     this.load();
   },
-  updated() {},
   components: {
     UserList,
     LoginUser,

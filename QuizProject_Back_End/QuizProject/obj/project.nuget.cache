@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "P1RIEV3yAgjen6M2QnD5r5Sv2+HW7SfX74fAp//n4y2KTP/98ln1YpOm4qV0ZwtXz2eK8yYf49awab4oOhfaGA==",
+  "dgSpecHash": "QRFaEjXogJYpTrKgMteQ3ezy+wVd1yFOZ/euAGjZm4gH/4Y3Qx7NyEyxaMBgtzunb0o6JJ/aUl9cC7HIqR0Z2w==",
   "success": true,
-  "projectFilePath": "E:\\Visual Studio\\repos\\QuizProject\\QuizProject\\QuizProject.csproj",
+  "projectFilePath": "E:\\Projects\\VS Code\\Testing-vue\\QuizApplication\\QuizProject_Back_End\\QuizProject\\QuizProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Misha\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.2.0\\microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",
     "C:\\Users\\Misha\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",

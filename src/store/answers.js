@@ -25,8 +25,8 @@ export default {
     check({ commit }, quests) {
       commit("CHECK_FINISH", quests);
     },
-    finishTest({ state, commit }, payload) {
-      axios.put("https://localhost:44378/api/users/" + payload.user.id, {
+    async finishTest({ state, commit }, payload) {
+      await axios.put("https://localhost:44378/api/users/" + payload.user.id, {
         login: payload.user.login,
         password: payload.user.password,
         score: payload.user.score,

@@ -15,6 +15,7 @@ export default {
       tests: (state) => state.tests.testList,
       quests: (state) => state.tests.currTest.questions,
     }),
+    //Можна ініціалізувати через currTest!
     GetQuestions() {
       this.getQuestions(this.quests);
       return true;
