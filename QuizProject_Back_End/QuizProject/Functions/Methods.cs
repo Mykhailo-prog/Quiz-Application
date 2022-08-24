@@ -45,6 +45,11 @@ namespace QuizProject.Functions
             Question = quest.Quest,
             CorrectAnswer =quest.CorrectAnswer,
         };
+        public static CreatedTestDTO CreatedTestToDTO(UserCreatedTest uct) => new CreatedTestDTO
+        {
+            UserId = uct.UserId,
+            TestId = uct.TestId,
+        };
         public async static Task<int> GetScore(List<string> answers, int testId, int score, QuizContext db)
         {
             db.Questions.Load();

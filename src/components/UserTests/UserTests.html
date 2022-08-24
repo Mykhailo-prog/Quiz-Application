@@ -6,6 +6,7 @@
       class="m-4"
       img-alt="Image"
       img-top
+      v-b-modal.modal-1
     >
       <template #header>
         <h4 class="mb-0">New test</h4>
@@ -19,5 +20,25 @@
         />
       </b-card-body>
     </b-card>
+  </div>
+  <div>
+    <b-modal id="modal-1" title="BootstrapVue" scrollable>
+      <b-form>
+        <b-form-group id="input-group-1" label="Test name:" label-for="input-1">
+          <b-form-input
+            id="input-1"
+            placeholder="Enter your test name"
+            required
+          >
+          </b-form-input>
+        </b-form-group>
+        <div v-for="i in counter">
+          <quest-input :counter="i"></quest-input>
+        </div>
+
+        <b-button @click="counter++">Add</b-button>
+        <b-button @click="counter--">Minus</b-button>
+      </b-form>
+    </b-modal>
   </div>
 </div>

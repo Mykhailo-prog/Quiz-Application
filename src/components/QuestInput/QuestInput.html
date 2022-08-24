@@ -1,0 +1,39 @@
+<div>
+  <b-card no-body class="mb-1 accbnt" role="tablist">
+    <b-card-header header-tag="header" class="p-1" role="tab">
+      <b-button block @click="QuestVisible = !QuestVisible" variant="info"
+        >Question {{counter}}</b-button
+      >
+    </b-card-header>
+    <b-collapse
+      :id="counter.toString()+'quest'"
+      v-model="QuestVisible"
+      :accordion="counter.toString()+'quest'"
+      role="tabpanel"
+    >
+      <b-card-body>
+        <b-card-text>
+          <b-input-group
+            id="input-group-2"
+            label="Questions:"
+            label-for="collapse-1"
+          >
+            <b-form-input id="input-1" placeholder="Enter question" required>
+            </b-form-input>
+            <b-form-input
+              id="input-1"
+              placeholder="Enter correct answer"
+              required
+            >
+            </b-form-input>
+          </b-input-group>
+        </b-card-text>
+        <div v-for="i in AnsCounter">
+          <answer-input :AnswerCounter="i"></answer-input>
+        </div>
+        <b-button @click="AnsCounter++">Add</b-button>
+        <b-button @click="AnsCounter--">Minus</b-button>
+      </b-card-body>
+    </b-collapse>
+  </b-card>
+</div>

@@ -30,6 +30,10 @@
     <Compile Remove="Migrations\20220817124938_disableNull.Designer.cs" />
     <Compile Remove="Migrations\20220817160653_addTestField.cs" />
     <Compile Remove="Migrations\20220817160653_addTestField.Designer.cs" />
+    <Compile Remove="Migrations\20220824134334_AddUserCreatedTests.cs" />
+    <Compile Remove="Migrations\20220824134334_AddUserCreatedTests.Designer.cs" />
+    <Compile Remove="Migrations\20220824134619_AddUserCreatedTests.cs" />
+    <Compile Remove="Migrations\20220824134619_AddUserCreatedTests.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

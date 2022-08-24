@@ -5,10 +5,12 @@ import Store from "./store/index";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import BootstrapVue from "bootstrap-vue";
+import { ModalPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 
 Vue.use(BootstrapVue);
 Vue.use(VueAxios, axios);
+Vue.use(ModalPlugin);
 Vue.config.productionTip = false;
 
 new Vue({
