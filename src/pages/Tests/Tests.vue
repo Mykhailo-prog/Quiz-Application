@@ -1,9 +1,15 @@
 <template src="./Tests.html"></template>
 <script>
 import TestList from "@/components/TestList";
+import UserTests from "@/components/UserTests";
 import { mapState, mapActions } from "vuex";
 export default {
   name: "Tests",
+  data() {
+    return {
+      navItem: 1,
+    };
+  },
   methods: {
     ...mapActions(["loadTests", "getQuestions"]),
     getQuest() {
@@ -30,6 +36,7 @@ export default {
   },
   components: {
     TestList,
+    UserTests,
   },
 };
 </script>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizProject.Models.ModelConfiguration;
 
 namespace QuizProject.Models
 {
@@ -16,8 +17,12 @@ namespace QuizProject.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().Property(x => x.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Question>().Property(x => x.Id).ValueGeneratedOnAdd();
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new TestConfiguration());
+            modelBuilder.ApplyConfiguration(new QuestionConfiguration());
+            modelBuilder.ApplyConfiguration(new AnswerConfiguration());
+            //modelBuilder.Entity<User>().Property(x => x.Id).ValueGeneratedOnAdd();
+            //modelBuilder.Entity<Question>().Property(x => x.Id).ValueGeneratedOnAdd();
             /*modelBuilder.Entity<Answer>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Test>().Property(x => x.TestId).ValueGeneratedOnAdd();*/
             /*modelBuilder.Entity<Test>(e => {
