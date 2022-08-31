@@ -19,6 +19,10 @@ export default {
   computed: {
     ...mapState({
       tests: (state) => state.tests.testList,
+      userTests: (state) =>
+        state.tests.testList.filter(
+          (test) => test.userCreatedTest[0].userId === state.users.currUser.id
+        ),
       quests: (state) => state.tests.currTest.questions,
     }),
     //Можна ініціалізувати через currTest!

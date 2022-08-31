@@ -20,6 +20,12 @@
     ></test-list>
   </b-row>
   <b-row v-else-if="navItem === 2">
+    <test-list
+      v-for="test in userTests"
+      :test="test"
+      :key="test.id"
+      @chosen-test="getQuest"
+    ></test-list>
     <user-tests></user-tests>
   </b-row>
 </b-container>

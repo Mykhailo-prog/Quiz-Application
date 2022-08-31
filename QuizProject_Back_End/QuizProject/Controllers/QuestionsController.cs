@@ -81,7 +81,7 @@ namespace QuizProject.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<QuestionDTO>> PostQuestion(QuestionDTO questiondto)
+        public async Task<ActionResult<Question>> PostQuestion(QuestionDTO questiondto)
         {
             var quest = new Question
             {
@@ -90,11 +90,11 @@ namespace QuizProject.Controllers
                 TestId = questiondto.TestId,
                 
             };
-            var test = await _context.Tests.Include(e => e.Questions).FirstOrDefaultAsync(q => q.TestId == questiondto.TestId);
+            //var test = await _context.Tests.Include(e => e.Questions).FirstOrDefaultAsync(q => q.TestId == questiondto.TestId);
             _context.Questions.Add(quest);
             await _context.SaveChangesAsync();
 
-            return Ok(Methods.QuestToDTO(quest));
+            return Ok(quest);
         }
 
         // DELETE: api/Questions/5

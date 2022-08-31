@@ -18,21 +18,29 @@
             label="Questions:"
             label-for="collapse-1"
           >
-            <b-form-input id="input-1" placeholder="Enter question" required>
+            <b-form-input
+              id="input-1"
+              placeholder="Enter question"
+              required
+              v-model="NewQuest.question"
+            >
             </b-form-input>
             <b-form-input
               id="input-1"
               placeholder="Enter correct answer"
               required
+              v-model="NewQuest.correctAnswer"
             >
             </b-form-input>
           </b-input-group>
         </b-card-text>
         <div v-for="i in AnsCounter">
-          <answer-input :AnswerCounter="i"></answer-input>
+          <answer-input :AnswerCounter="i" @added-ans="addAns"></answer-input>
         </div>
-        <b-button @click="AnsCounter++">Add</b-button>
-        <b-button @click="AnsCounter--">Minus</b-button>
+        <b-button-group class="button-group">
+          <b-button @click="AnsCounter++" variant="info">Add</b-button>
+          <b-button @click="delAns" variant="info">Delete</b-button>
+        </b-button-group>
       </b-card-body>
     </b-collapse>
   </b-card>

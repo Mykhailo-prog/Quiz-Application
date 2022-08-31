@@ -82,19 +82,23 @@ namespace QuizProject.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<AnswerDTO>> PostAnswer(AnswerDTO answerdto)
+        public async Task<ActionResult<List<AnswerDTO>>> PostAnswer(List<AnswerDTO> answersdto)
         {
-            var answer = new Answer
+            //var quest = await _context.Questions.Include(q => q.Answers).FirstOrDefaultAsync(e => e.Id == answersdto[0].QuestionId);
+            foreach (AnswerDTO ans in answersdto)
             {
-                Ans = answerdto.Answer,
-                QuestionId = answerdto.QuestionId
-            };
-            var quest =  await _context.Questions.Include(q => q.Answers).FirstOrDefaultAsync(e => e.Id == answer.QuestionId);
-            quest.Answers.Add(answer);
-            _context.Answers.Add(answer);
+                var answer = new Answer
+                {
+                    Ans = ans.Answer,
+                    QuestionId = ans.QuestionId
+                };
+                _context.Answers.Add(answer);
+            }
+            //quest.Answers.Add(answer);
+            
             await _context.SaveChangesAsync();
 
-            return Ok(Methods.AnswerToDTO(answer));
+            return Ok(answersdto);
         }
 
         // DELETE: api/Answers/5

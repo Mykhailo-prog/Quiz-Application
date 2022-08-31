@@ -22,6 +22,9 @@ export default {
     getUserAnswer({ commit }, payload) {
       commit("SET_USER_ANSWER", payload);
     },
+    cleanAnswers({ commit }) {
+      commit("CLEAN_ANSWERS");
+    },
     check({ commit }, quests) {
       commit("CHECK_FINISH", quests);
     },
@@ -33,9 +36,6 @@ export default {
         test: payload.testId,
         userAnswers: state.answerList,
       });
-    },
-    cleanAnswers({ commit }) {
-      commit("CLEAN_ANSWERS");
     },
   },
   getters: {},
