@@ -7,3 +7,7 @@ Releases simple base application "Quiz", that allow to pass several tests. User 
 ## Patch 1.1
 
 Release ability to create users own tests.
+
+## Patch 1.2
+
+Release form validation and ability to delete user's tests.
