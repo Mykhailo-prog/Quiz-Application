@@ -11,9 +11,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["loadTests", "getQuestions"]),
+    ...mapActions(["loadTests", "getQuestions", "delTest"]),
     getQuest() {
       this.GetQuestions;
+    },
+    deleteTest(id) {
+      this.delTest(id);
     },
   },
   computed: {

@@ -11,7 +11,7 @@
       <template #header>
         <h4 class="mb-0">New test</h4>
       </template>
-      <b-card-body class="p-0" style="width: 300px; height: 349px;">
+      <b-card-body class="p-0" style="width: 300px; height: 362px;">
         <b-card-img
           alt="Vue logo"
           class=""
@@ -39,13 +39,18 @@
             <b-form-input
               id="input-1"
               placeholder="Enter your test name"
+              :state="TestValid() ? null : false"
               required
               v-model="NewTest.name"
             >
             </b-form-input>
           </b-form-group>
           <div v-for="i in QuestCounter">
-            <quest-input :counter="i" @added-quest="checkQuest"></quest-input>
+            <quest-input
+              :counter="i"
+              @added-quest="checkQuest"
+              @ans-valid="AnswerValidation"
+            ></quest-input>
           </div>
           <b-button-group style="width:100%;">
             <b-button @click="QuestCounter++" variant="info">Add</b-button>
@@ -55,7 +60,11 @@
       </template>
 
       <template #modal-footer="">
-        <b-button variant="success" @click="CreateTest">
+        <b-button
+          :variant="testValid ? 'success' : 'danger'"
+          @click="CreateTest"
+          :class="testValid ? '' : 'disabled'"
+        >
           Create
         </b-button>
       </template>

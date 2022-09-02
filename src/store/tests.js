@@ -26,6 +26,12 @@ export default {
       const test = state.testList.find((t) => t.testId === id);
       commit("SET_CURRENT_TEST", test);
     },
+    async delTest({ dispatch }, testId) {
+      await axios.delete(
+        "https://localhost:44378/api/tests/" + testId.toString()
+      );
+      await dispatch("loadTests");
+    },
     async postNewTest({ commit }, payload) {
       const newTest = await axios
         .post("https://localhost:44378/api/tests", payload.test)

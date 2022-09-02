@@ -5,10 +5,12 @@
         Player
       </th>
       <th>Score</th>
+      <th>Tests Created</th>
     </tr>
     <tr v-for="user in users" :key="user.id">
       <td>{{user.login}}</td>
       <td>{{user.score}}</td>
+      <td>{{user.createdTests === null ? 0 : user.createdTests.length}}</td>
     </tr>
   </table>
 </div>

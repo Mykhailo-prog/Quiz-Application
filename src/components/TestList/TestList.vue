@@ -6,6 +6,9 @@ export default {
     test: {
       type: Object,
     },
+    userTestCheck: {
+      type: Boolean,
+    },
   },
   data() {
     return {
@@ -19,6 +22,11 @@ export default {
       this.chooseTest(this.TestId);
       this.$emit("chosen-test");
     },
+    deleteTest() {
+      this.$emit("delete-test", this.TestId);
+      this.$bvModal.hide("delete-" + this.TestId.toString());
+    },
+    checkDelete() {},
   },
 };
 </script>

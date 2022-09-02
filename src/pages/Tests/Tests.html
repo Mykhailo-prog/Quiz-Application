@@ -24,7 +24,9 @@
       v-for="test in userTests"
       :test="test"
       :key="test.id"
+      :userTestCheck="true"
       @chosen-test="getQuest"
+      @delete-test="deleteTest"
     ></test-list>
     <user-tests></user-tests>
   </b-row>
