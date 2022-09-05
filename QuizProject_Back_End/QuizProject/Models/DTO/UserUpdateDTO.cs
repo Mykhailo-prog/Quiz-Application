@@ -8,6 +8,7 @@ namespace QuizProject.Models.DTO
         public string Password { get; set; }
         public int Score { get; set; }
         public int Test { get; set; }
+        public string Time { get; set; }
         public List<string> userAnswers { get; set; }
     }
 }

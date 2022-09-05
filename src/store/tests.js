@@ -5,6 +5,7 @@ export default {
   state: {
     testList: [],
     currTest: {},
+    start: [],
   },
   mutations: {
     SET_TEST_LIST(state, tests) {
@@ -16,6 +17,10 @@ export default {
     SET_NEW_TEST_ID(state, test) {
       state.newTestId = test.testId;
     },
+    START_TIME(state) {
+      state.start[0] = new Date().getMinutes();
+      state.start[1] = new Date().getSeconds();
+    },
   },
   actions: {
     async loadTests({ commit }) {
@@ -25,6 +30,7 @@ export default {
     chooseTest({ commit, state }, id) {
       const test = state.testList.find((t) => t.testId === id);
       commit("SET_CURRENT_TEST", test);
+      commit("START_TIME");
     },
     async delTest({ dispatch }, testId) {
       await axios.delete(

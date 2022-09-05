@@ -1,3 +1,6 @@
 .accbnt {
   width: 100%;
 }
+.modal-backdrop {
+  background-color: red !important;
+}

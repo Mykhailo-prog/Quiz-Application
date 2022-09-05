@@ -1,19 +1,13 @@
 <template src="./Pugination.html"></template>
 <script>
-import { mapActions, mapState, mapGetters } from "vuex";
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 export default {
   methods: {
     ...mapActions({
       Inc: "increaseCounter",
       Dec: "decreaseCounter",
       Set: "getCounter",
-      Finish: "finishTest",
-      Load: "loadUsers",
-      CleanUsers: "cleanUsers",
-      CleanCounter: "cleanCounter",
-      CleanAnswers: "cleanAnswers",
     }),
-    ...mapGetters(["getAnsLen"]),
 
     Prev() {
       this.Dec();
@@ -24,13 +18,8 @@ export default {
     setCount(count) {
       this.Set(count);
     },
-    async finishTest() {
-      await this.Finish({ user: this.CurrUser, testId: this.TestId });
-      this.$router.push("/");
-      this.CleanUsers();
-      this.CleanCounter();
-      this.CleanAnswers();
-      await this.Load();
+    async goToResult() {
+      this.$router.push("/result");
     },
   },
   computed: {
@@ -40,13 +29,6 @@ export default {
       checkParam: (state) => state.answers.checkFinish,
       counter: (state) => state.questions.pugCounter,
     }),
-    ...mapGetters(["currUser", "currTestId"]),
-    CurrUser() {
-      return this.currUser;
-    },
-    TestId() {
-      return this.currTestId;
-    },
   },
 };
 </script>

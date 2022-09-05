@@ -1,0 +1,33 @@
+<b-container>
+  <b-row>
+    <b-col class="m-5">
+      <div v-if="result === 0" style="text-align:center;">
+        <h1>{{test.name}} Failed!</h1>
+      </div>
+      <div v-else style="text-align:center;">
+        <h1>{{test.name}} Completed!</h1>
+      </div>
+      <div style="display:flex; ">
+        <div style="text-align:right; width:50%">
+          <h3>
+            Result: {{result}}%
+          </h3>
+        </div>
+        <div style="text-align:left; width:50%; margin-left:50px;">
+          <h3>
+            Time: {{userTime(Start, End)}}
+          </h3>
+        </div>
+      </div>
+      <div style="text-align: center; padding-top: 30px;">
+        <b-button size="lg" class="" variant="dark" @click="backToTests"
+          >Back to Tests</b-button
+        >
+        <b-button size="lg" class="ml-5" variant="dark" @click="exit"
+          >Exit</b-button
+        >
+      </div>
+    </b-col>
+  </b-row>
+</b-container>
+<!---->

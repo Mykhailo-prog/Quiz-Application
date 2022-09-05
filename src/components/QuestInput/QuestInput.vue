@@ -45,6 +45,9 @@ export default {
       if (this.NewQuest.NewAnswers.length === 0) {
         return false;
       }
+      if (this.Answer.answer === null || this.Answer.answer === "") {
+        return false;
+      }
       let cnt = 0;
       this.NewQuest.NewAnswers.forEach((ans) => {
         if (ans.answer === this.NewQuest.correctAnswer) {

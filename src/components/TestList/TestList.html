@@ -44,7 +44,12 @@
               />
             </svg>
           </b-button>
-          <b-modal :id="'delete-'+test.testId.toString()" hide-footer>
+          <b-modal
+            :id="'delete-'+test.testId.toString()"
+            hide-footer
+            hide-backdrop
+            centered
+          >
             <template #modal-title>
               <h3>Delete {{test.name}}?</h3>
             </template>

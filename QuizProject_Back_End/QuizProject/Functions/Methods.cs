@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,8 +51,10 @@ namespace QuizProject.Functions
             UserId = uct.UserId,
             TestId = uct.TestId,
         };
-        public async static Task<int> GetScore(List<string> answers, int testId, int score, QuizContext db)
+        public async static Task<int[]> GetScore(List<string> answers, int testId, int score, QuizContext db)
         {
+            int[] res = new int[2];
+            double procScore = 0;
             db.Questions.Load();
             var test = await db.Tests.FindAsync(testId);
             var quests = test.Questions.ToList();
@@ -59,10 +62,13 @@ namespace QuizProject.Functions
             {
                 if (answers[i] == quests[i].CorrectAnswer)
                 {
+                    procScore++;
                     score += 10;
                 }
             }
-            return score;
+            res[1] = Convert.ToInt32(Math.Round((procScore * 100) / answers.Count));
+            res[0] = score;
+            return res;
         }
     }
 }

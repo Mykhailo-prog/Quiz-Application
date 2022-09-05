@@ -17,6 +17,7 @@ export default {
       handler: function(newVal) {
         this.$emit("added-ans", newVal, this.AnswerCounter - 1);
       },
+      immediate: true,
       deep: true,
     },
   },
