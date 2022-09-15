@@ -64,7 +64,7 @@ namespace QuizProject.Controllers
                 editUser.Login = userUpdto.Login;
                 editUser.Password = userUpdto.Password;
                 editUser.Score = res[0];
-                if (!_context.UserTests.Any(u => u.TestTried == userUpdto.Test))
+                if (!_context.UserTests.Where(e => e.UserId == editUser.Id).Any(u => u.TestTried == userUpdto.Test))
                 {
                     var testtried = new UserTestCount
                     {
@@ -75,10 +75,16 @@ namespace QuizProject.Controllers
                         TriesCount = 1,
                     };
                     _context.UserTests.Add(testtried);
+                    _context.SaveChanges();
+                    if (res[1] == 100)
+                    {
+                        await Methods.ChangeStatistic(userUpdto.Test, editUser.Login, testtried.TriesCount, _context);
+                    }
+                    
                 }
                 else
                 {
-                    var testTried =  await _context.UserTests.FirstOrDefaultAsync(e => e.TestTried == userUpdto.Test);
+                    var testTried =  await _context.UserTests.Where(e => e.UserId == editUser.Id).FirstOrDefaultAsync(e => e.TestTried == userUpdto.Test);
                     testTried.Time = userUpdto.Time;
                     testTried.Result = res[1];
                     if (testTried.TriesCount == 0)
@@ -89,8 +95,13 @@ namespace QuizProject.Controllers
                     {
                         testTried.TriesCount += 1;
                     }
+                    if (res[1] == 100)
+                    {
+                        await Methods.ChangeStatistic(userUpdto.Test, editUser.Login,  testTried.TriesCount, _context);
+                    }
                 }
-
+                
+                await Methods.ChangeStatistic(userUpdto.Test, _context);
                 await _context.SaveChangesAsync();
                 return res[1];
             }

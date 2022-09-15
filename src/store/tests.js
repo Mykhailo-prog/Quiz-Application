@@ -62,6 +62,9 @@ export default {
         testId: newTest.testId,
         userId: payload.user.id,
       });
+      await axios.post("https://localhost:44378/api/Statistic", {
+        testId: newTest.testId,
+      });
     },
   },
   getters: {

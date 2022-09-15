@@ -5,12 +5,15 @@ namespace QuizProject.Models
 {
     public class QuizContext: DbContext
     {
+        public DbSet<TestStatistic> Statistics { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<UserTestCount> UserTests { get; set; }
         public DbSet<UserCreatedTest> CreatedTests { get; set; }
+
+        //public DbSet<TestStatistic> TestStats { get; set; }
         public QuizContext(DbContextOptions<QuizContext> options)
             : base(options)
         {
@@ -23,6 +26,7 @@ namespace QuizProject.Models
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
             modelBuilder.ApplyConfiguration(new AnswerConfiguration());
             modelBuilder.ApplyConfiguration(new CreatedTestConfiguration());
+            modelBuilder.ApplyConfiguration(new TestStatisticConfiguration());
             //modelBuilder.Entity<User>(u => { u.HasMany(e => e.CreatedTests).WithOne(e => e.User).HasForeignKey(e => e.UserId); });
             //modelBuilder.Entity<User>().Property(u => u.CreatedTests).IsRequired(false);
             /*modelBuilder.Entity<Test>(t =>

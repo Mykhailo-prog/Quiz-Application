@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizProject.Models;
 
 namespace QuizProject.Migrations
 {
     [DbContext(typeof(QuizContext))]
-    partial class QuizContextModelSnapshot : ModelSnapshot
+    [Migration("20220907195115_addTestStatUpd")]
+    partial class addTestStatUpd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,9 +211,6 @@ namespace QuizProject.Migrations
                     b.Property<int?>("AvgFirstTryResult")
                         .HasColumnType("int");
 
-                    b.Property<int>("AvgTryCount")
-                        .HasColumnType("int");
-
                     b.Property<int?>("BestResult")
                         .HasColumnType("int");
 
@@ -247,11 +246,6 @@ namespace QuizProject.Migrations
                         new
                         {
                             Id = 1,
-                            AvgFirstTryResult = 0,
-                            AvgTryCount = 0,
-                            BestResult = 0,
-                            CountOfAllTries = 0,
-                            MinTries = 0,
                             TestId = 1
                         });
                 });

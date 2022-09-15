@@ -26,6 +26,7 @@ namespace QuizProject.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Test>>> GetTests()
         {
+            _context.Statistics.Load();
             _context.Questions.Include(q => q.Answers).Load();
             return  await _context.Tests.Include(t => t.UserCreatedTest).ToListAsync();
         }

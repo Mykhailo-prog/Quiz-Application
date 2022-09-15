@@ -34,6 +34,14 @@
     <Compile Remove="Migrations\20220824134334_AddUserCreatedTests.Designer.cs" />
     <Compile Remove="Migrations\20220824134619_AddUserCreatedTests.cs" />
     <Compile Remove="Migrations\20220824134619_AddUserCreatedTests.Designer.cs" />
+    <Compile Remove="Migrations\20220907191801_addTestStatistic.cs" />
+    <Compile Remove="Migrations\20220907191801_addTestStatistic.Designer.cs" />
+    <Compile Remove="Migrations\20220909102333_changeTestStat.cs" />
+    <Compile Remove="Migrations\20220909102333_changeTestStat.Designer.cs" />
+    <Compile Remove="Migrations\20220909102814_changeTestStat.cs" />
+    <Compile Remove="Migrations\20220909102814_changeTestStat.Designer.cs" />
+    <Compile Remove="Migrations\20220909102903_changeTestStat.cs" />
+    <Compile Remove="Migrations\20220909102903_changeTestStat.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

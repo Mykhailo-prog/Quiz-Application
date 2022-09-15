@@ -9,5 +9,6 @@ namespace QuizProject.Models
         public string Name { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<UserCreatedTest> UserCreatedTest { get; set; }
+        public virtual TestStatistic TestStatistic { get; set; }
     }
 }
