@@ -14,4 +14,5 @@ Release form validation and ability to delete user's tests.
 
 ## Patch 1.3
 
-Release a Result page. Adds timer that counts how long player passing the test. [Back End] - Created begining statistic table.
+Release a Result page. Adds timer that counts how long player passing the test.
+[Back End] - Created begining statistic table.
