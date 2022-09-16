@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       TestId: 0,
+      showStatistic: false,
     };
   },
   methods: {

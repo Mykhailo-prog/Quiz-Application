@@ -67,17 +67,96 @@
             </div>
           </b-modal>
         </div>
+        <div v-if="!userTestCheck && !showStatistic">
+          <b-button
+            class=" p-0 btn-light"
+            @click="showStatistic = true"
+          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+          </svg>
+            </svg>
+          </b-button>
+        </div>
+        <div v-if="showStatistic">
+          <b-button
+            class=" p-0 btn-light"
+            @click="showStatistic = false"
+          >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+          </svg>
+          </b-button>
+        </div>
       </div>
     </template>
 
     <b-card-body class="p-0" style="width: 300px; height: 300px;">
-      <b-card-img
+      <div v-if="!showStatistic">
+        <b-card-img
         alt="Vue logo"
         class="vue-logo"
         @click="defineTest"
         style=" cursor: pointer;"
         :src="require('@/assets/img/MathLogo.jpg')"
       />
+      </div>
+      <div v-if="showStatistic">
+        <table>
+          <tr>
+            <td>
+              Best Time
+            </td>
+            <td>
+              {{test.testStatistic.bestTime}}
+            </td>
+            <td>
+              {{test.testStatistic.bestTimeUser}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Best Result
+            </td>
+            <td>
+              {{test.testStatistic.bestResult}}
+            </td>
+            <td>
+              {{test.testStatistic.bestResultUser}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Lessiest Attempts
+            </td>
+            <td>
+              {{test.testStatistic.minTries}}
+            </td>
+            <td>
+              {{test.testStatistic.minTriesUser}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              First Attempt Passed
+            </td>
+            <td>
+              {{test.testStatistic.avgFirstTryResult}}%
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              Attempts Count
+            </td>
+            <td>
+              {{test.testStatistic.countOfAllTries}}
+            </td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+      
     </b-card-body>
 
     <b-card-footer class="footer"

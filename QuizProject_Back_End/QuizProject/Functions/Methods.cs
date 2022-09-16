@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace QuizProject.Functions
 {
+    class Time
+    {
+        public int Min { get; set; }
+        public int Sec { get; set; }
+    }
     public class Methods
     {
         public static bool ElemExists<T>(int id, QuizContext db)
@@ -99,13 +104,13 @@ namespace QuizProject.Functions
         }
         private static void ChangeBestTime(List<UserTestCount> userStat, out string BestTime,out UserTestCount BestUser)
         {
-            List<List<string>> time = new List<List<string>>();
+            var ParsedTime = new List<Time>();
             foreach(var user in userStat)
             {
-                time.Add(new List<string>(user.Time.Split(':')));
+                ParsedTime.Add(new Time { Min = Convert.ToInt32(user.Time.Split(':')[0]),  Sec = Convert.ToInt32(user.Time.Split(':')[1]) });
             }
-            var Rtime = time.OrderBy(x => x[0]).OrderBy(x => x[1]);
-            string res = $"{Rtime.First()[0]}:{Rtime.First()[1]}";
+            var Rtime = ParsedTime.OrderBy(x => x.Sec).OrderBy(x => x.Min);
+            string res = $"{Rtime.First().Min}:{Rtime.First().Sec}";
             BestTime = res;
             BestUser = userStat.FirstOrDefault(u => u.Time == res);
         }
