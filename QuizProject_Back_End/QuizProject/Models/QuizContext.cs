@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using QuizProject.Models.ModelConfiguration;
 
 namespace QuizProject.Models
 {
-    public class QuizContext: DbContext
+    public class QuizContext: IdentityDbContext
     {
         public DbSet<TestStatistic> Statistics { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<QuizUser> QuizUsers { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Test> Tests { get; set; }
@@ -21,6 +22,7 @@ namespace QuizProject.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new TestConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());

@@ -7,11 +7,15 @@ import VueAxios from "vue-axios";
 import BootstrapVue from "bootstrap-vue";
 import { ModalPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
+import "./axios";
+import Interseptors from "@/interseptors";
 
 Vue.use(BootstrapVue);
 Vue.use(VueAxios, axios);
 Vue.use(ModalPlugin);
 Vue.config.productionTip = false;
+
+Interseptors.register();
 
 new Vue({
   router: Router,

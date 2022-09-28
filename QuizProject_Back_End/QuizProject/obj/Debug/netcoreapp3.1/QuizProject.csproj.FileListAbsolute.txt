@@ -272,3 +272,11 @@ E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject
 E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.dll
 E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.pdb
 E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.genruntimeconfig.cache
+E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll
+E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
+E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
+E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Logic.dll
+E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Logic.pdb

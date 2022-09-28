@@ -5,11 +5,10 @@ using System.Linq;
 
 namespace QuizProject.Models
 {
-    public class User
+    public class QuizUser
     {
         public int Id { get; set; }
         public string Login { get; set; }
-        public string Password { get; set; }
         public int Score { get; set; }
         public ICollection<UserTestCount> UserTestCount { get; set; }
         public ICollection<UserCreatedTest> CreatedTests { get; set; }

@@ -21,7 +21,7 @@ namespace QuizProject.Functions
             switch (param)
             {
                 case "User":
-                    return db.Users.Any(e => e.Id == id);
+                    return db.QuizUsers.Any(e => e.Id == id);
                 case "Answer":
                     return db.Answers.Any(e => e.Id == id);
                 case "Question":
@@ -32,10 +32,9 @@ namespace QuizProject.Functions
                     return false;
             }
         }
-        public static UserDTO UserToDTO(User user) => new UserDTO
+        public static UserDTO UserToDTO(QuizUser user) => new UserDTO
         {
             Login = user.Login,
-            Password = user.Password,
         };
         public static TestDTO TestToDTO(Test test) => new TestDTO
         {
@@ -118,7 +117,7 @@ namespace QuizProject.Functions
         {
             var stat = await db.Statistics.FirstOrDefaultAsync(s => s.TestId == id);
             var users = db.UserTests.Where(u => u.TestTried == id).ToList();
-            var currUser = users.Find(u => u.UserId == db.Users.FirstOrDefault(q => q.Login == login).Id); 
+            var currUser = users.Find(u => u.UserId == db.QuizUsers.FirstOrDefault(q => q.Login == login).Id); 
             if(currUser.TriesCount == 1)
             {
                 stat.AvgTryCount++;
@@ -128,7 +127,7 @@ namespace QuizProject.Functions
 
             ChangeBestTime(users, out string BTime, out UserTestCount BTUser);
             stat.BestTime = BTime;
-            var timeUser = await db.Users.FirstOrDefaultAsync(u => u.Id == BTUser.UserId);
+            var timeUser = await db.QuizUsers.FirstOrDefaultAsync(u => u.Id == BTUser.UserId);
             stat.BestTimeUser = timeUser.Login;
 
             if (stat.MinTries == 0)
@@ -157,7 +156,7 @@ namespace QuizProject.Functions
             {
                 ChangeBestResul(users, out int BResult, out UserTestCount BRUser);
                 stat.BestResult = BResult;
-                var resUser = await db.Users.FirstOrDefaultAsync(u => u.Id == BRUser.UserId);
+                var resUser = await db.QuizUsers.FirstOrDefaultAsync(u => u.Id == BRUser.UserId);
                 stat.BestResultUser = resUser.Login;
             }
             

@@ -1,13 +1,29 @@
 <div>
   <div>
-    <h1>Quiz</h1>
+    <h1>Login</h1>
   </div>
   <div class="login">
-    <b-input-group prepend="Login:" class="mt-3">
+    <b-form>
+      <b-form-group>
+        <b-form-input id="login" type="text" placeholder="Enter login">
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group class="mb-1">
+        <b-form-input
+          id="pass"
+          type="password"
+          placeholder="Enter password"
+          required
+        >
+        </b-form-input>
+      </b-form-group>
+    </b-form>
+    <!--<b-input-group prepend="Login:" class="mt-3">
       <b-form-input v-model="userLogin"></b-form-input>
       <b-input-group-append>
         <b-button class="btn-dark" @click="checkUserLogin">Confirm</b-button>
       </b-input-group-append>
-    </b-input-group>
+    </b-input-group> -->
   </div>
 </div>

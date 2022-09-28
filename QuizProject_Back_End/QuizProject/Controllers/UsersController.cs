@@ -9,6 +9,8 @@ using QuizProject.Models;
 using QuizProject.Models.DTO;
 using QuizProject.Functions;
 using Microsoft.AspNetCore.Cors;
+using Logic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuizProject.Controllers
 {
@@ -24,19 +26,19 @@ namespace QuizProject.Controllers
         }
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<QuizUser>>> GetUsers()
         {
             _context.CreatedTests.Load();
-            return await _context.Users.Include(u => u.UserTestCount).ToListAsync();
+            return await _context.QuizUsers.Include(u => u.UserTestCount).ToListAsync();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<QuizUser>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.QuizUsers.FindAsync(id);
 
-            if (!Methods.ElemExists<User>(id, _context))
+            if (!Methods.ElemExists<QuizUser>(id, _context))
             {
                 return NotFound();
             }
@@ -48,21 +50,21 @@ namespace QuizProject.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<int>> PutUser(int id, UserUpdateDTO userUpdto)
         {
 
             try
             {
-                if (!Methods.ElemExists<User>(id, _context))
+                if (!Methods.ElemExists<QuizUser>(id, _context))
                 {
                     return NotFound();
                 }
                 int[] res = Methods.GetScore(userUpdto.userAnswers, userUpdto.Test, userUpdto.Score, _context).Result;
 
-                var editUser = await _context.Users.FindAsync(id);
+                var editUser = await _context.QuizUsers.FindAsync(id);
 
                 editUser.Login = userUpdto.Login;
-                editUser.Password = userUpdto.Password;
                 editUser.Score = res[0];
                 if (!_context.UserTests.Where(e => e.UserId == editUser.Id).Any(u => u.TestTried == userUpdto.Test))
                 {
@@ -107,7 +109,7 @@ namespace QuizProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!Methods.ElemExists<User>(id, _context))
+                if (!Methods.ElemExists<QuizUser>(id, _context))
                 {
                     return NotFound();
                 }
@@ -118,18 +120,15 @@ namespace QuizProject.Controllers
             }
             return NoContent();
         }
-        // POST: api/Users
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(UserDTO userdto)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<QuizUser>> PostUser(UserDTO userdto)
         {
-            var user = new User
+            var user = new QuizUser
             {
                 Login = userdto.Login,
-                Password = userdto.Password,
             };
-            _context.Users.Add(user);
+            _context.QuizUsers.Add(user);
             await _context.SaveChangesAsync();
 
             return Ok(Methods.UserToDTO(user));
@@ -137,15 +136,16 @@ namespace QuizProject.Controllers
 
         // DELETE: api/Users/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<UserDTO>> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (!Methods.ElemExists<User>(id, _context))
+            var user = await _context.QuizUsers.FindAsync(id);
+            if (!Methods.ElemExists<QuizUser>(id, _context))
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            _context.QuizUsers.Remove(user);
             await _context.SaveChangesAsync();
 
             return Methods.UserToDTO(user);

@@ -42,17 +42,26 @@
     <Compile Remove="Migrations\20220909102814_changeTestStat.Designer.cs" />
     <Compile Remove="Migrations\20220909102903_changeTestStat.cs" />
     <Compile Remove="Migrations\20220909102903_changeTestStat.Designer.cs" />
+    <Compile Remove="Migrations\20220928141455_InitIdentityStore.cs" />
+    <Compile Remove="Migrations\20220928141455_InitIdentityStore.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.29" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.25" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.25">
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.29" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.29" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.29">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logic\Logic.csproj" />
   </ItemGroup>
 
 

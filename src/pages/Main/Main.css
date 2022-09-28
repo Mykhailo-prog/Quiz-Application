@@ -16,3 +16,10 @@
 .main {
   text-align: center;
 }
+.linksbar {
+  text-align: left;
+  width: 500px;
+  margin: auto;
+  padding-bottom: 10px;
+  display: flex;
+}

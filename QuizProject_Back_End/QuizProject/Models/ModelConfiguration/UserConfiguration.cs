@@ -2,16 +2,15 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : IEntityTypeConfiguration<QuizUser>
     {
-        public void Configure (EntityTypeBuilder<User> builder)
+        public void Configure (EntityTypeBuilder<QuizUser> builder)
         {
             builder.HasData(
-                    new User
+                    new QuizUser
                     {
                         Id = 1,
                         Login = "Admin",
-                        Password = "admin"
                     }
                 );
         }
