@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
 using System;
@@ -13,72 +14,63 @@ namespace QuizProject.Functions
         public int Min { get; set; }
         public int Sec { get; set; }
     }
-    public class Methods
+    public class TestLogic
     {
-        public static bool ElemExists<T>(int id, QuizContext db)
+        private readonly QuizContext _db;
+        public TestLogic(QuizContext context)
+        {
+            _db = context;
+        }
+
+        public bool ElemExists<T>(int id)
         {
             string param = typeof(T).Name;
             switch (param)
             {
-                case "User":
-                    return db.QuizUsers.Any(e => e.Id == id);
+                case "QuizUser":
+                    return _db.QuizUsers.Any(e => e.Id == id);
                 case "Answer":
-                    return db.Answers.Any(e => e.Id == id);
+                    return _db.Answers.Any(e => e.Id == id);
                 case "Question":
-                    return db.Questions.Any(e => e.Id == id);
+                    return _db.Questions.Any(e => e.Id == id);
                 case "Test":
-                    return db.Tests.Any(e => e.TestId == id);
+                    return _db.Tests.Any(e => e.TestId == id);
                 default:
                     return false;
             }
         }
-        public static UserDTO UserToDTO(QuizUser user) => new UserDTO
+        public static FinishTestResponse GetScore(QuizUser user, UserUpdateDTO userResult, Test test)
         {
-            Login = user.Login,
-        };
-        public static TestDTO TestToDTO(Test test) => new TestDTO
-        {
-            Name = test.Name,
-        };
-        public static AnswerDTO AnswerToDTO(Answer ans) => new AnswerDTO
-        {
-            Answer = ans.Ans,
-            QuestionId = ans.QuestionId,
-        };
-        public static QuestionDTO QuestToDTO(Question quest) => new QuestionDTO
-        {
-            Question = quest.Quest,
-            CorrectAnswer =quest.CorrectAnswer,
-        };
-        public static TestStatisticDTO TestStatToDTO(TestStatistic stat) => new TestStatisticDTO
-        {
-            TestId = stat.TestId,
-        };
-        public static CreatedTestDTO CreatedTestToDTO(UserCreatedTest uct) => new CreatedTestDTO
-        {
-            UserId = uct.UserId,
-            TestId = uct.TestId,
-        };
-        public async static Task<int[]> GetScore(List<string> answers, int testId, int score, QuizContext db)
-        {
-            int[] res = new int[2];
-            double procScore = 0;
-            db.Questions.Load();
-            var test = await db.Tests.FindAsync(testId);
-            var quests = test.Questions.ToList();
-            for(int i = 0; i < answers.Count; i++)
+            
+            var questions = test.Questions.ToList();
+            double proventResult = 0;
+
+            for (int i = 0; i< userResult.userAnswers.Count; i++)
             {
-                if (answers[i] == quests[i].CorrectAnswer)
+                if(userResult.userAnswers[i] == questions[i].CorrectAnswer)
                 {
-                    procScore++;
-                    score += 10;
+                    proventResult++;
+                    user.Score += 10;
                 }
             }
-            res[1] = Convert.ToInt32(Math.Round((procScore * 100) / answers.Count));
-            res[0] = score;
-            return res;
+
+            return new FinishTestResponse
+            {
+                UserName = user.Login,
+                Time = userResult.Time,
+                Result = Convert.ToInt32(Math.Round((proventResult * 100) / userResult.userAnswers.Count)),
+                Achievements = null
+            };
         }
-        private static int ChangeAllTriesCount(List<UserTestCount> userStat)
+        public void CreateStatistic()
+        {
+
+        }
+        public void UpdateStatistic()
+        {
+
+        }
+        private static int ChangeAllTriesCount(List<UserStatistic> userStat)
         {
             int count = 0;
             foreach (var user in userStat)
@@ -90,7 +82,7 @@ namespace QuizProject.Functions
             }
             return count;
         }
-        private static void ChangeBestResul(List<UserTestCount> userStat, out int BestRes, out UserTestCount BestUser)
+        private static void ChangeBestResul(List<UserStatistic> userStat, out int BestRes, out UserStatistic BestUser)
         {
             List<int> res = new List<int>();
             foreach(var user in userStat)
@@ -101,8 +93,9 @@ namespace QuizProject.Functions
             BestUser = userStat.FirstOrDefault(u => u.Result == res.Max());
             
         }
-        private static void ChangeBestTime(List<UserTestCount> userStat, out string BestTime,out UserTestCount BestUser)
+        private static void ChangeBestTime(List<UserStatistic> userStat, out string BestTime,out UserStatistic BestUser)
         {
+            
             var ParsedTime = new List<Time>();
             foreach(var user in userStat)
             {
@@ -116,7 +109,7 @@ namespace QuizProject.Functions
         public static async Task ChangeStatistic(int id, string login, int tries, QuizContext db)
         {
             var stat = await db.Statistics.FirstOrDefaultAsync(s => s.TestId == id);
-            var users = db.UserTests.Where(u => u.TestTried == id).ToList();
+            var users = db.UserStatistic.Where(u => u.TestTried == id).ToList();
             var currUser = users.Find(u => u.UserId == db.QuizUsers.FirstOrDefault(q => q.Login == login).Id); 
             if(currUser.TriesCount == 1)
             {
@@ -125,7 +118,7 @@ namespace QuizProject.Functions
             
             stat.AvgFirstTryResult = Convert.ToInt32(Math.Round(Convert.ToDecimal(((stat.AvgTryCount * 100) / users.Count()))));
 
-            ChangeBestTime(users, out string BTime, out UserTestCount BTUser);
+            ChangeBestTime(users, out string BTime, out UserStatistic BTUser);
             stat.BestTime = BTime;
             var timeUser = await db.QuizUsers.FirstOrDefaultAsync(u => u.Id == BTUser.UserId);
             stat.BestTimeUser = timeUser.Login;
@@ -149,12 +142,12 @@ namespace QuizProject.Functions
         public static async Task ChangeStatistic(int id, QuizContext db)
         {
             var stat = await db.Statistics.FirstOrDefaultAsync(s => s.TestId == id);
-            var users = await db.UserTests.Where(u => u.TestTried == id).ToListAsync();
+            var users = await db.UserStatistic.Where(u => u.TestTried == id).ToListAsync();
 
             stat.CountOfAllTries = ChangeAllTriesCount(users);
             if(stat.BestResult != 100)
             {
-                ChangeBestResul(users, out int BResult, out UserTestCount BRUser);
+                ChangeBestResul(users, out int BResult, out UserStatistic BRUser);
                 stat.BestResult = BResult;
                 var resUser = await db.QuizUsers.FirstOrDefaultAsync(u => u.Id == BRUser.UserId);
                 stat.BestResultUser = resUser.Login;

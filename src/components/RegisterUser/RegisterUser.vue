@@ -14,7 +14,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["RegisterUser"]),
+    ...mapActions(["RegisterUser", "resetErrors"]),
     async Register() {
       await this.RegisterUser(this.registerForm);
       if (this.RegisterResponse.success) {
@@ -24,13 +24,13 @@ export default {
           password: "",
           confirmPassword: "",
         };
-        console.log("done");
+        this.resetErrors();
         this.$router.push("/confirmEmail");
       }
     },
   },
   computed: {
-    ...mapGetters(["RegisterResponse"]),
+    ...mapGetters(["errorResponse", "RegisterResponse"]),
   },
 };
 </script>

@@ -35,7 +35,7 @@ namespace QuizProject.Controllers
             _context.Statistics.Add(stat);
             await _context.SaveChangesAsync();
 
-            return Ok(Methods.TestStatToDTO(stat));
+            return Ok(ModelsToDto.TestStatToDTO(stat));
         }
         [HttpDelete]
         public async Task<ActionResult<TestStatistic>> DeleteStat (int id)

@@ -39,6 +39,7 @@ namespace QuizProject
                 opt.Password.RequireDigit = true;
                 opt.Password.RequireLowercase = true;
                 opt.Password.RequiredLength = 5;
+                opt.User.RequireUniqueEmail = true;
             }).AddEntityFrameworkStores<QuizContext>().AddDefaultTokenProviders();
             services.AddAuthentication(opt =>
             {
@@ -59,7 +60,7 @@ namespace QuizProject
                 };
             });
             services.AddScoped<IAuthService, AuthService>();
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddSwaggerGen();
             services.AddControllers();
             services.AddCors(c => c.AddPolicy("AllowOrigin", opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));

@@ -2,7 +2,7 @@
 <script>
 import TestList from "@/components/TestList";
 import UserTests from "@/components/UserTests";
-import { mapState, mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 export default {
   name: "Tests",
   data() {
@@ -12,34 +12,15 @@ export default {
   },
   methods: {
     ...mapActions(["loadTests", "getQuestions", "delTest"]),
-    getQuest() {
-      this.GetQuestions;
-    },
     deleteTest(id) {
       this.delTest(id);
     },
   },
   computed: {
-    ...mapState({
-      tests: (state) => state.tests.testList,
-      userTests: (state) =>
-        state.tests.testList.filter(
-          (test) => test.userCreatedTest[0].userId === state.users.currUser.id
-        ),
-      quests: (state) => state.tests.currTest.questions,
-    }),
-    //Можна ініціалізувати через currTest!
-    GetQuestions() {
-      this.getQuestions(this.quests);
-      return true;
-    },
-    GetTests() {
-      return this.tests;
-    },
+    ...mapGetters(["Tests", "UserTests"]),
   },
-  mounted() {
-    this.loadTests();
-    this.GetTests;
+  async created() {
+    await this.loadTests();
   },
   components: {
     TestList,

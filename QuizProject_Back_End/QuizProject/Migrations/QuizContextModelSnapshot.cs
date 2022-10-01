@@ -133,6 +133,24 @@ namespace QuizProject.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d82cb833-4019-410d-9f17-a9d0b83247ee",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d3bf4c8a-1753-4686-9d08-83e5352a9f98",
+                            Email = "monstercattop@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "MONSTERCATTOP@GMAIL.COM",
+                            NormalizedUserName = "ADMINISTRATOR",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOu4t9io0Txgxxkl/oWmfwmafl8u3qJ7YQflp+OXZ0vdU4DTecbW8DdqOjDoWsCgsQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "869b4e96-9041-4517-b62b-3c9fdd1f1a45",
+                            TwoFactorEnabled = false,
+                            UserName = "Administrator"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -383,9 +401,6 @@ namespace QuizProject.Migrations
                     b.Property<string>("Login")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
@@ -397,8 +412,7 @@ namespace QuizProject.Migrations
                         new
                         {
                             Id = 1,
-                            Login = "Admin",
-                            Password = "admin",
+                            Login = "Administrator",
                             Score = 0
                         });
                 });

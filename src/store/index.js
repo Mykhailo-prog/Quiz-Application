@@ -5,6 +5,9 @@ import questions from "./questions";
 import tests from "./tests";
 import answers from "./answers";
 import register from "./register";
+import errors from "./errors";
+import reset from "./resetpassword";
+import store from "@/store/index.js";
 
 Vue.use(Vuex);
 
@@ -14,6 +17,8 @@ const modules = {
   tests,
   answers,
   register,
+  errors,
+  reset,
 };
 
 export default new Vuex.Store({

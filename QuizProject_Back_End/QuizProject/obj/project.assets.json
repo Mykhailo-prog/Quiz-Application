@@ -3469,21 +3469,6 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
-      },
-      "Logic/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v3.1",
-        "dependencies": {
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.29",
-          "Microsoft.AspNetCore.Identity": "2.2.0",
-          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "3.1.29"
-        },
-        "compile": {
-          "bin/placeholder/Logic.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Logic.dll": {}
-        }
       }
     }
   },
@@ -10134,16 +10119,10 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
-    },
-    "Logic/1.0.0": {
-      "type": "project",
-      "path": "../Logic/Logic.csproj",
-      "msbuildProject": "../Logic/Logic.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
-      "Logic >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 3.1.29",
       "Microsoft.AspNetCore.Cors >= 2.2.0",
       "Microsoft.AspNetCore.Identity >= 2.2.0",
@@ -10185,11 +10164,7 @@
       "frameworks": {
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
-          "projectReferences": {
-            "E:\\Projects\\VS Code\\Testing-vue\\QuizApplication\\QuizProject_Back_End\\Logic\\Logic.csproj": {
-              "projectPath": "E:\\Projects\\VS Code\\Testing-vue\\QuizApplication\\QuizProject_Back_End\\Logic\\Logic.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {

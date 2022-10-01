@@ -6,6 +6,7 @@ import Tests from "./pages/Tests";
 import Register from "./pages/Register";
 import TestResult from "./pages/TestResult";
 import ConfirmEmail from "./pages/ConfirmEmail";
+import ResetPassword from "./pages/ResetPassword";
 
 Vue.use(Router);
 
@@ -42,6 +43,11 @@ export default new Router({
       path: "/confirmEmail",
       name: "Confirm Email",
       component: ConfirmEmail,
+    },
+    {
+      path: "/resetpassword",
+      name: "Reset Password",
+      component: ResetPassword,
     },
   ],
 });

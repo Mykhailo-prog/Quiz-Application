@@ -28,8 +28,8 @@ namespace QuizProject.Services
             mailMessage.Body = mail;
             mailMessage.IsBodyHtml = true;
 
-            SmtpClient smtpClient = new SmtpClient(_configuration["SMTP:Client:Host"], Convert.ToInt32(_configuration["SMTP;Client:Port"]));
-            smtpClient.Credentials = new NetworkCredential(_configuration["SMTP:Credentials:Name"], _configuration["SMTP:Credentials:Password"]);
+            SmtpClient smtpClient = new SmtpClient(_configuration["EmailSender:SMTP:Client:Host"], Convert.ToInt32(_configuration["EmailSender:SMTP:Client:Port"]));
+            smtpClient.Credentials = new NetworkCredential(_configuration["EmailSender:SMTP:Credentials:Name"], _configuration["EmailSender:SMTP:Credentials:Password"]);
             smtpClient.EnableSsl = true;
 
             await smtpClient.SendMailAsync(mailMessage);

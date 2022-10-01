@@ -1,0 +1,49 @@
+<div>
+  <div>
+    <h1>Change password</h1>
+  </div>
+  <div>
+    <b-form>
+      <b-form-group>
+        <b-form-input
+          id="password"
+          type="password"
+          placeholder="Enter password"
+          v-model="passwordForm.password"
+          required
+        >
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group>
+        <b-form-input
+          id="passwordConf"
+          type="password"
+          placeholder="Confirm password"
+          v-model="passwordForm.confirmPassword"
+          required
+        >
+        </b-form-input>
+      </b-form-group>
+    </b-form>
+    <div v-if="!errorResponse.success">
+      <b-alert v-if="errorResponse.message" class="p-2" variant="danger" show
+        >{{errorResponse.message}}</b-alert
+      >
+      <b-alert
+        v-for="err in errorResponse.errors"
+        :key="err"
+        class="p-2"
+        show
+        variant="danger"
+        style="hyphens:auto;"
+        >{{err}}</b-alert
+      >
+    </div>
+    <div class="linksbar">
+      <b-button variant="outline-primary" class="singIn" @click="ResetPassword"
+        >Reset password</b-button
+      >
+    </div>
+  </div>
+</div>

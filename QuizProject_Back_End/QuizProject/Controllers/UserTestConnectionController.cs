@@ -34,7 +34,7 @@ namespace QuizProject.Controllers
             };
             _context.CreatedTests.Add(uct);
             await _context.SaveChangesAsync();
-            return Ok(Methods.CreatedTestToDTO(uct));
+            return Ok(TestLogic.CreatedTestToDTO(uct));
         }
         [HttpPut]
         public async Task<IActionResult> PutTestConnection(int id, CreatedTestDTO ctdto)

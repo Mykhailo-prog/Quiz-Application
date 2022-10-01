@@ -12,20 +12,18 @@ export default {
   },
   data() {
     return {
-      TestId: 0,
       showStatistic: false,
     };
   },
   methods: {
     ...mapActions(["chooseTest"]),
     defineTest() {
+      this.chooseTest(this.test.testId);
       this.$router.push("/quiz");
-      this.chooseTest(this.TestId);
-      this.$emit("chosen-test");
     },
     deleteTest() {
       this.$emit("delete-test", this.TestId);
-      this.$bvModal.hide("delete-" + this.TestId.toString());
+      this.$bvModal.hide("delete-" + this.test.testId.toString());
     },
     checkDelete() {},
   },

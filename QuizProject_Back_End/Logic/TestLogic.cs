@@ -2,9 +2,9 @@
 
 namespace Logic
 {
-    public class meth
+    static public class TestLogic
     {
-        public void test()
+        static public void test()
         {
             Console.WriteLine("111");
         }

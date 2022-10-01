@@ -3,14 +3,9 @@
     <b-card-body class="pt-0">
       <h1>{{question.quest}}</h1>
     </b-card-body>
-    <b-list-group
-      v-for="answer in question.answers"
-      :key="answer.id"
-      :class="currQuest = question"
-    >
+    <b-list-group v-for="answer in question.answers" :key="answer.id">
       <b-list-group-item
         style="cursor:pointer;"
-        v-model="usersAnswer"
         @click="getAnswer(answer)"
         :class="usersAnswer === answer.ans ? 'active' : ''"
       >
@@ -20,20 +15,3 @@
     <pugination></pugination>
   </b-card>
 </b-card-group>
-
-<!-- <div>
-  <h2>{{questions.question}}</h2>
-  <b-list-group
-    v-for="ans in questions.answers"
-    :class="currQuestId = ans.questionId"
-    @click="getAnswer(ans)"
-    :key="ans.id"
-  >
-    <b-list-group-item
-      v-model="usersAnswer"
-      :class="usersAnswer === ans.answer ? 'active' : ''"
-    >
-      {{questions.answers.indexOf(ans)+1}}) {{ans.answer}}
-    </b-list-group-item>
-  </b-list-group>
-</div> -->

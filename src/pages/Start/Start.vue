@@ -1,7 +1,7 @@
 <template src="./Start.html"></template>
 <script>
 import QuestList from "@/components/QuestList";
-import { mapState, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   name: "Quiz",
   data() {
@@ -9,15 +9,8 @@ export default {
   },
   methods: {},
   computed: {
-    ...mapState({
-      questions: (state) => state.questions.questList,
-      count: (state) => state.questions.pugCounter,
-    }),
-    GetQuestion() {
-      return this.questions;
-    },
+    ...mapGetters(["Questions", "PuginationCounter"]),
   },
-  mounted() {},
   components: {
     QuestList,
   },

@@ -48,9 +48,12 @@
       </b-form-group>
     </b-form>
 
-    <div v-if="RegisterResponse.errors">
+    <div v-if="!errorResponse.success">
+      <b-alert v-if="errorResponse.message" class="p-2" variant="danger" show
+        >{{errorResponse.message}}</b-alert
+      >
       <b-alert
-        v-for="err in RegisterResponse.errors"
+        v-for="err in errorResponse.errors"
         :key="err"
         class="p-2"
         show

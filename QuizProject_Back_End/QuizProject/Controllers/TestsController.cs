@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +14,10 @@ namespace QuizProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TestsController : ControllerBase
     {
+        private readonly TestLogic _testLogic;
         private readonly QuizContext _context;
 
         public TestsController(QuizContext context)
@@ -24,6 +27,7 @@ namespace QuizProject.Controllers
 
         // GET: api/Tests
         [HttpGet]
+        
         public async Task<ActionResult<IEnumerable<Test>>> GetTests()
         {
             _context.Statistics.Load();
@@ -37,7 +41,7 @@ namespace QuizProject.Controllers
         {
             var test = await _context.Tests.FindAsync(id);
 
-            if (!Methods.ElemExists<Test>(id, _context))
+            if (!_testLogic.ElemExists<Test>(id))
             {
                 return NotFound();
             }
@@ -53,7 +57,7 @@ namespace QuizProject.Controllers
         {
             try
             {
-                if (!Methods.ElemExists<Test>(id, _context))
+                if (!_testLogic.ElemExists<Test>(id))
                 {
                     return BadRequest();
                 }
@@ -65,7 +69,7 @@ namespace QuizProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!Methods.ElemExists<Test>(id, _context))
+                if (!_testLogic.ElemExists<Test>(id))
                 {
                     return NotFound();
                 }
@@ -100,7 +104,7 @@ namespace QuizProject.Controllers
         {
             _context.Questions.Include(q => q.Answers).Load();
             var test = await _context.Tests.FirstAsync(t => t.TestId == id);
-            if (!Methods.ElemExists<Test>(id, _context))
+            if (!_testLogic.ElemExists<Test>(id))
             {
                 return NotFound();
             }
@@ -108,7 +112,7 @@ namespace QuizProject.Controllers
             _context.Tests.Remove(test);
             await _context.SaveChangesAsync();
 
-            return Methods.TestToDTO(test);
+            return ModelsToDto.TestToDTO(test);
         }
     }
 }

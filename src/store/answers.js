@@ -9,11 +9,9 @@ export default {
   mutations: {
     SET_USER_ANSWER(state, payload) {
       state.answerList[payload.index] = payload.answer;
-    },
-    CHECK_FINISH(state, quests) {
-      if (state.answerList.length === quests.length) {
-        state.checkFinish = true;
-      }
+      state.answerList.length === payload.quests.length
+        ? (state.checkFinish = true)
+        : (state.checkFinish = false);
     },
     CLEAN_ANSWERS(state) {
       state.answerList = [];
@@ -22,6 +20,10 @@ export default {
       state.procResult = result;
     },
   },
+  getters: {
+    Answers: (state) => state.answerList,
+    CheckFinish: (state) => state.checkFinish,
+  },
   actions: {
     getUserAnswer({ commit }, payload) {
       commit("SET_USER_ANSWER", payload);
@@ -29,22 +31,5 @@ export default {
     cleanAnswers({ commit }) {
       commit("CLEAN_ANSWERS");
     },
-    check({ commit }, quests) {
-      commit("CHECK_FINISH", quests);
-    },
-    async finishTest({ state, commit }, payload) {
-      const res = await axios
-        .put("https://localhost:44378/api/users/" + payload.user.id, {
-          login: payload.user.login,
-          password: payload.user.password,
-          score: payload.user.score,
-          test: payload.testId,
-          time: payload.time,
-          userAnswers: state.answerList,
-        })
-        .then((response) => response.data);
-      commit("SET_RESULT", res);
-    },
   },
-  getters: {},
 };

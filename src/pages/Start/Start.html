@@ -3,9 +3,9 @@
     <b-col class="p-0">
       <div>
         <quest-list
-          v-for="question in questions"
+          v-for="question in Questions"
           :key="question.id"
-          v-if="count === questions.indexOf(question)"
+          v-if="PuginationCounter === Questions.indexOf(question)"
           :question="question"
         ></quest-list>
       </div>

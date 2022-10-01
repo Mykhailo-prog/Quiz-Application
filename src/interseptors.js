@@ -17,8 +17,6 @@ export default {
       async (err) => {
         var res = JSON.parse(err.response.request.response);
         store.commit("SET_RESPONSE", res);
-
-        console.log(res.errors);
       }
     );
   },

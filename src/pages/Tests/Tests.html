@@ -13,19 +13,17 @@
   </b-row>
   <b-row v-if="navItem === 1">
     <test-list
-      v-for="test in tests"
+      v-for="test in Tests"
       :test="test"
-      :key="test.id"
-      @chosen-test="getQuest"
+      :key="test.testId"
     ></test-list>
   </b-row>
   <b-row v-else-if="navItem === 2">
     <test-list
-      v-for="test in userTests"
+      v-for="test in UserTests"
       :test="test"
-      :key="test.id"
+      :key="test.testId"
       :userTestCheck="true"
-      @chosen-test="getQuest"
       @delete-test="deleteTest"
     ></test-list>
     <user-tests></user-tests>

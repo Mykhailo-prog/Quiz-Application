@@ -44,6 +44,8 @@
     <Compile Remove="Migrations\20220909102903_changeTestStat.Designer.cs" />
     <Compile Remove="Migrations\20220928141455_InitIdentityStore.cs" />
     <Compile Remove="Migrations\20220928141455_InitIdentityStore.Designer.cs" />
+    <Compile Remove="Migrations\20220929125626_IdentitySeed.cs" />
+    <Compile Remove="Migrations\20220929125626_IdentitySeed.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,10 +60,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Logic\Logic.csproj" />
   </ItemGroup>
 
 

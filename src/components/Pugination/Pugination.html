@@ -1,19 +1,21 @@
 <div class="control">
   <b-input-group class="mt-3">
-    <b-button class="btn-light control" @click="Prev">&lsaquo;</b-button>
-    <b-input-group-append v-for="quest in quests" :key="quest.id">
+    <b-button class="btn-light control" @click="changeCounter('-')"
+      >&lsaquo;</b-button
+    >
+    <b-input-group-append v-for="quest in Questions" :key="quest.id">
       <b-button
-        :class="counter === quests.indexOf(quest) ? 'active btn-light' : 'btn-light'"
-        @click="setCount(quests.indexOf(quest))"
-        >{{quests.indexOf(quest)+1}}</b-button
+        :class="PuginationCounter ===  QuestPos(quest) ? 'active btn-light' : 'btn-light'"
+        @click="changeCounter(QuestPos(quest))"
+        >{{QuestPos(quest)+1}}</b-button
       >
     </b-input-group-append>
-    <b-button class="btn-light" @click="Next">&rsaquo;</b-button>
+    <b-button class="btn-light" @click="changeCounter('+')">&rsaquo;</b-button>
   </b-input-group>
   <b-button
-    v-if="checkParam"
+    v-if="CheckFinish"
     class="finish btn-light btn-outline-primary"
-    @click="goToResult"
+    @click="Finish"
     >Finish</b-button
   >
   <b-button v-else class="finish btn-light btn-outline-primary" disabled>

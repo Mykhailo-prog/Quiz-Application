@@ -58,7 +58,7 @@ export default {
     ...mapGetters(["currUser", "currTestId"]),
   },
   beforeMount() {
-    this.finishTest();
+    //this.finishTest();
   },
   components: {},
 };

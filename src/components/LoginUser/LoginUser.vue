@@ -1,20 +1,31 @@
 <template src="./LoginUser.html"></template>
 <script>
-import { mapActions } from "vuex";
+import { BIconThreeDotsVertical } from "bootstrap-vue";
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      userLogin: "",
+      loginForm: {
+        login: "",
+        password: "",
+      },
     };
   },
   methods: {
-    ...mapActions(["checkUser"]),
-    checkUserLogin() {
-      if (this.userLogin != "") {
-        this.checkUser(this.userLogin);
+    ...mapActions(["loginUser"]),
+    async LoginUser() {
+      await this.loginUser(this.loginForm);
+      if (this.Access.success) {
+        this.loginForm = {
+          login: "",
+          password: "",
+        };
         this.$router.push("/tests");
       }
     },
+  },
+  computed: {
+    ...mapGetters(["errorResponse", "Access"]),
   },
 };
 </script>

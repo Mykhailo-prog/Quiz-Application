@@ -6,6 +6,7 @@ using QuizProject.Models.DTO;
 using QuizProject.Servieces;
 using System.Threading.Tasks;
 
+
 namespace QuizProject.Controllers
 {
     [Route("api/[controller]")]
@@ -34,7 +35,26 @@ namespace QuizProject.Controllers
             }
             return BadRequest(ModelState);
         }
-        [HttpGet("ConfirmEmail")]
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody]LoginModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _authServiece.LoginUserAsync(model);
+
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+
+                return BadRequest(result);
+            }
+
+            return BadRequest("Something is invalid");
+        }
+
+        [HttpGet("confirmemail")]
         public async Task<IActionResult> ConfirmEmail(string userId, string token)
         {
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
@@ -44,10 +64,42 @@ namespace QuizProject.Controllers
 
             if (result.Success)
             {
-                Redirect(_configuration["FrontUrl"]);
+                return Redirect(_configuration["FrontUrl"]);
             }
 
             return BadRequest(result);
+        }
+
+        [HttpPost("ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return NotFound();
+            }
+
+            var result = await _authServiece.ForgetPasswordAsync(email);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _authServiece.ResetPasswordAsync(model);
+
+                if (result.Success)
+                {
+                    return Ok(result);
+                }
+                return BadRequest(result);
+            }
+            return BadRequest("Smth goes Wrong!");
         }
     }
 }

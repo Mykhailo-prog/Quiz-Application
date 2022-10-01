@@ -1,13 +1,28 @@
+import TestResult from "@/pages/TestResult";
 import axios from "axios";
-import { mapState } from "vuex";
 
 export default {
   state: {
     testList: [],
     currTest: {},
     start: [],
+    end: [],
+    resultTime: "",
+    testResult: {},
   },
   mutations: {
+    END_TIME(state, endTime) {
+      state.end = [new Date().getMinutes(), new Date().getSeconds()];
+      state.resultTime = `${
+        state.end[1] > state.start[1]
+          ? state.end[0] - state.start[0]
+          : state.end[0] - state.start[0] - 1
+      }:${
+        state.end[1] > state.start[1]
+          ? state.end[1] - state.start[1]
+          : Math.abs(state.start[1] - 60) + state.end[1]
+      }`;
+    },
     SET_TEST_LIST(state, tests) {
       state.testList = tests;
     },
@@ -18,26 +33,57 @@ export default {
       state.newTestId = test.testId;
     },
     START_TIME(state) {
-      state.start[0] = new Date().getMinutes();
-      state.start[1] = new Date().getSeconds();
+      state.start = [new Date().getMinutes(), new Date().getSeconds()];
     },
+    SET_TEST_RESULT(state, res) {
+      state.testResult = res;
+    },
+  },
+  getters: {
+    Tests: (state) => state.testList,
+    UserTests: (state, getters) =>
+      state.testList.filter(
+        (test) => test.userCreatedTest[0].userId === getters.Access.user.id
+      ),
+    CurrentTest: (state) => state.currTest,
+    ResultTime: (state) => state.resultTime,
+    TestResult: (state) => testResult,
   },
   actions: {
     async loadTests({ commit }) {
       const loadedTests = await axios.get("https://localhost:44378/api/tests");
       commit("SET_TEST_LIST", loadedTests.data);
     },
-    chooseTest({ commit, state }, id) {
+    setEndTime({ commit }, endTime) {
+      commit("END_TIME", endTime);
+    },
+    chooseTest({ commit, state, dispatch }, id) {
       const test = state.testList.find((t) => t.testId === id);
+
       commit("SET_CURRENT_TEST", test);
+      commit("SET_QUEST_LIST_LENGTH", test.questions);
       commit("START_TIME");
     },
+
     async delTest({ dispatch }, testId) {
       await axios.delete(
         "https://localhost:44378/api/tests/" + testId.toString()
       );
       await dispatch("loadTests");
     },
+
+    async finishTest({ state, commit, getters }) {
+      const res = await axios.put(
+        "https://localhost:44378/api/users/" + getters.Access.user.id,
+        {
+          test: getters.CurrentTest.testId,
+          time: state.resultTime,
+          userAnswers: getters.Answers,
+        }
+      );
+      commit("SET_TEST_RESULT", res.data);
+    },
+
     async postNewTest({ commit }, payload) {
       const newTest = await axios
         .post("https://localhost:44378/api/tests", payload.test)
@@ -65,11 +111,6 @@ export default {
       await axios.post("https://localhost:44378/api/Statistic", {
         testId: newTest.testId,
       });
-    },
-  },
-  getters: {
-    currTestId(state) {
-      return state.currTest.testId;
     },
   },
 };

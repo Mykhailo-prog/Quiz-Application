@@ -10,7 +10,7 @@ namespace QuizProject.Models
         public int Id { get; set; }
         public string Login { get; set; }
         public int Score { get; set; }
-        public ICollection<UserTestCount> UserTestCount { get; set; }
+        public ICollection<UserStatistic> UserTestCount { get; set; }
         public ICollection<UserCreatedTest> CreatedTests { get; set; }
 
     }

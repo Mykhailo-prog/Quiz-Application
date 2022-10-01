@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,10 @@ namespace QuizProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AnswersController : ControllerBase
     {
+        private readonly TestLogic _testLogic;
         private readonly QuizContext _context;
 
         public AnswersController(QuizContext context)
@@ -36,7 +39,7 @@ namespace QuizProject.Controllers
         {
             var answer = await _context.Answers.FindAsync(id);
 
-            if (!Methods.ElemExists<Answer>(id, _context))
+            if (!_testLogic.ElemExists<Answer>(id))
             {
                 return NotFound();
             }
@@ -52,7 +55,7 @@ namespace QuizProject.Controllers
         {
             try
             {
-                if (!Methods.ElemExists<Answer>(id, _context))
+                if (!_testLogic.ElemExists<Answer>(id))
                 {
                     return NotFound();
                 }
@@ -65,7 +68,7 @@ namespace QuizProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!Methods.ElemExists<Answer>(id, _context))
+                if (!_testLogic.ElemExists<Answer>(id))
                 {
                     return NotFound();
                 }
@@ -106,7 +109,7 @@ namespace QuizProject.Controllers
         public async Task<ActionResult<AnswerDTO>> DeleteAnswer(int id)
         {
             var answer = await _context.Answers.FindAsync(id);
-            if (!Methods.ElemExists<Answer>(id, _context))
+            if (!_testLogic.ElemExists<Answer>(id))
             {
                 return NotFound();
             }
@@ -114,7 +117,7 @@ namespace QuizProject.Controllers
             _context.Answers.Remove(answer);
             await _context.SaveChangesAsync();
 
-            return Methods.AnswerToDTO(answer);
+            return ModelsToDto.AnswerToDTO(answer);
         }
     }
 }

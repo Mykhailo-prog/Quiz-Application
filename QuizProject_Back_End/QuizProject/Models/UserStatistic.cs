@@ -1,6 +1,6 @@
 ﻿namespace QuizProject.Models
 {
-    public class UserTestCount
+    public class UserStatistic
     {
         public int Id { get; set; }
         public int TestTried { get; set; }

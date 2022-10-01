@@ -2,7 +2,7 @@
 <script>
 import UserList from "@/components/UserList";
 import LoginUser from "@/components/LoginUser";
-import { mapState, mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Main",
@@ -24,16 +24,11 @@ export default {
     },
   },
   computed: {
-    ...mapState({
-      users: (state) => state.users.userList,
-    }),
-    GetUsers() {
-      return this.users;
-    },
+    ...mapGetters(["Users"]),
   },
   mounted() {
-    this.GetUsers;
     this.load();
+    localStorage.removeItem("token");
   },
   components: {
     UserList,

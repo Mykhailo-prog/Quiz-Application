@@ -8,13 +8,16 @@ using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
 using QuizProject.Functions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace QuizProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class QuestionsController : ControllerBase
     {
+        private readonly TestLogic _testLogic;
         private readonly QuizContext _context;
 
         public QuestionsController(QuizContext context)
@@ -35,7 +38,7 @@ namespace QuizProject.Controllers
         {
             var question = await _context.Questions.Include(q => q.Answers).FirstOrDefaultAsync( q => q.Id == id);
 
-            if (!Methods.ElemExists<Question>(id, _context))
+            if (!_testLogic.ElemExists<Question>(id))
             {
                 return NotFound();
             }
@@ -51,7 +54,7 @@ namespace QuizProject.Controllers
         {
             try
             {
-                if (!Methods.ElemExists<Question>(id, _context))
+                if (!_testLogic.ElemExists<Question>(id))
                 {
                     return NotFound();
                 }
@@ -64,7 +67,7 @@ namespace QuizProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!Methods.ElemExists<Question>(id, _context))
+                if (!_testLogic.ElemExists<Question>(id))
                 {
                     return NotFound();
                 }
@@ -102,7 +105,7 @@ namespace QuizProject.Controllers
         public async Task<ActionResult<QuestionDTO>> DeleteQuestion(int id)
         {
             var question = await _context.Questions.FindAsync(id);
-            if (!Methods.ElemExists<Question>(id, _context))
+            if (!_testLogic.ElemExists<Question>(id))
             {
                 return NotFound();
             }
@@ -110,7 +113,7 @@ namespace QuizProject.Controllers
             _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
 
-            return Methods.QuestToDTO(question);
+            return ModelsToDto.QuestToDTO(question);
         }
     }
 }

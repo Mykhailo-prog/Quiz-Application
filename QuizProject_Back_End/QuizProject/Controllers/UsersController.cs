@@ -9,7 +9,6 @@ using QuizProject.Models;
 using QuizProject.Models.DTO;
 using QuizProject.Functions;
 using Microsoft.AspNetCore.Cors;
-using Logic;
 using Microsoft.AspNetCore.Authorization;
 
 namespace QuizProject.Controllers
@@ -19,6 +18,7 @@ namespace QuizProject.Controllers
     public class UsersController : ControllerBase
     {
         private readonly QuizContext _context;
+        private readonly TestLogic _testLogic;
 
         public UsersController(QuizContext context)
         {
@@ -38,7 +38,7 @@ namespace QuizProject.Controllers
         {
             var user = await _context.QuizUsers.FindAsync(id);
 
-            if (!Methods.ElemExists<QuizUser>(id, _context))
+            if (!_testLogic.ElemExists<QuizUser>(id))
             {
                 return NotFound();
             }
@@ -51,65 +51,39 @@ namespace QuizProject.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<int>> PutUser(int id, UserUpdateDTO userUpdto)
+        public async Task<IActionResult> PutUser(int id, UserUpdateDTO userUpdto)
         {
 
             try
             {
-                if (!Methods.ElemExists<QuizUser>(id, _context))
+                var user = await _context.QuizUsers.FindAsync(id);
+                var test = await _context.Tests.Include(t => t.Questions).FirstOrDefaultAsync(t => t.TestId == userUpdto.Test);
+                if(user == null)
                 {
-                    return NotFound();
+                    return NotFound("No user with this ID");
+                }else if(test == null)
+                {
+                    return NotFound("Test not found!");
                 }
-                int[] res = Methods.GetScore(userUpdto.userAnswers, userUpdto.Test, userUpdto.Score, _context).Result;
 
-                var editUser = await _context.QuizUsers.FindAsync(id);
+                var result = TestLogic.GetScore(user, userUpdto, test);
 
-                editUser.Login = userUpdto.Login;
-                editUser.Score = res[0];
-                if (!_context.UserTests.Where(e => e.UserId == editUser.Id).Any(u => u.TestTried == userUpdto.Test))
+                if (!_context.UserStatistic.Where(e => e.UserId == user.Id).Any(u => u.TestTried == userUpdto.Test))
                 {
-                    var testtried = new UserTestCount
-                    {
-                        TestTried = userUpdto.Test,
-                        Time = userUpdto.Time,
-                        Result = res[1],
-                        UserId = id,
-                        TriesCount = 1,
-                    };
-                    _context.UserTests.Add(testtried);
-                    _context.SaveChanges();
-                    if (res[1] == 100)
-                    {
-                        await Methods.ChangeStatistic(userUpdto.Test, editUser.Login, testtried.TriesCount, _context);
-                    }
-                    
+                    _testLogic.CreateStatistic();
                 }
                 else
                 {
-                    var testTried =  await _context.UserTests.Where(e => e.UserId == editUser.Id).FirstOrDefaultAsync(e => e.TestTried == userUpdto.Test);
-                    testTried.Time = userUpdto.Time;
-                    testTried.Result = res[1];
-                    if (testTried.TriesCount == 0)
-                    {
-                        testTried.TriesCount = 1;
-                    }
-                    else
-                    {
-                        testTried.TriesCount += 1;
-                    }
-                    if (res[1] == 100)
-                    {
-                        await Methods.ChangeStatistic(userUpdto.Test, editUser.Login,  testTried.TriesCount, _context);
-                    }
+                    _testLogic.UpdateStatistic();
                 }
                 
-                await Methods.ChangeStatistic(userUpdto.Test, _context);
                 await _context.SaveChangesAsync();
-                return res[1];
+
+                return Ok(result);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!Methods.ElemExists<QuizUser>(id, _context))
+                if (!_testLogic.ElemExists<QuizUser>(id))
                 {
                     return NotFound();
                 }
@@ -118,7 +92,10 @@ namespace QuizProject.Controllers
                     throw;
                 }
             }
-            return NoContent();
+            catch
+            {
+                return BadRequest("User wasn't updated!");
+            }
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -131,7 +108,7 @@ namespace QuizProject.Controllers
             _context.QuizUsers.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(Methods.UserToDTO(user));
+            return Ok(ModelsToDto.UserToDTO(user));
         }
 
         // DELETE: api/Users/5
@@ -140,7 +117,7 @@ namespace QuizProject.Controllers
         public async Task<ActionResult<UserDTO>> DeleteUser(int id)
         {
             var user = await _context.QuizUsers.FindAsync(id);
-            if (!Methods.ElemExists<QuizUser>(id, _context))
+            if (!_testLogic.ElemExists<QuizUser>(id))
             {
                 return NotFound();
             }
@@ -148,7 +125,7 @@ namespace QuizProject.Controllers
             _context.QuizUsers.Remove(user);
             await _context.SaveChangesAsync();
 
-            return Methods.UserToDTO(user);
+            return ModelsToDto.UserToDTO(user);
         }
     }
 }

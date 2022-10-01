@@ -4,41 +4,43 @@ export default {
   state: {
     userList: [],
     currUser: {},
+    loginResponse: {},
   },
   mutations: {
     SET_USER_LIST(state, users) {
       state.userList = users;
     },
-    SET_CURRENT_USER(state, user) {
-      state.currUser = state.userList.find((u) => u.login === user.login);
+    UPDATE_CURRENT_USER(state, user) {
+      state.currUser = user;
+    },
+    SET_LOGIN_RESPONSE(state, res) {
+      state.loginResponse = res;
+      state.currUser = res.user;
+      localStorage.removeItem("token", res.token);
+      localStorage.setItem("token", res.token);
     },
     CLEAN_USER_LIST(state) {
       state.userList = [];
       state.currUser = {};
+      state.loginResponse = {};
     },
   },
   getters: {
-    currUser(state) {
-      return state.currUser;
-    },
+    Access: (state) => state.loginResponse,
+    Users: (state) => state.userList,
+    CurrentUser: (state) => state.loginResponse.user,
   },
   actions: {
     async loadUsers({ commit }) {
-      const loadedUsers = await axios.get("https://localhost:44378/api/users");
+      const loadedUsers = await axios.get("users");
       commit("SET_USER_LIST", loadedUsers.data);
     },
-    async checkUser({ commit, state, dispatch }, userLogin) {
-      const User = state.userList.find((u) => u.login === userLogin);
-      if (User === undefined) {
-        const newUser = await axios.post("https://localhost:44378/api/users", {
-          login: userLogin,
-          password: "",
-        });
-        await dispatch("loadUsers");
-        commit("SET_CURRENT_USER", newUser.data);
-      } else {
-        commit("SET_CURRENT_USER", User);
-      }
+    updCrrUser({ commit }, user) {
+      commit("UPDATE_CURRENT_USER", user);
+    },
+    async loginUser({ commit }, form) {
+      var response = await axios.post("/auth/login", form);
+      commit("SET_LOGIN_RESPONSE", response.data);
     },
     cleanUsers({ commit }) {
       commit("CLEAN_USER_LIST");

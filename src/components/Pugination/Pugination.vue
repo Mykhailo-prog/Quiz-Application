@@ -2,33 +2,34 @@
 <script>
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 export default {
+  props: {},
   methods: {
-    ...mapActions({
-      Inc: "increaseCounter",
-      Dec: "decreaseCounter",
-      Set: "getCounter",
-    }),
-
-    Prev() {
-      this.Dec();
+    ...mapActions([
+      "changeCounter",
+      "finishTest",
+      "setEndTime",
+      "loadUsers",
+      "updCrrUser",
+    ]),
+    QuestPos(quest) {
+      return this.Questions.indexOf(quest);
     },
-    Next() {
-      this.Inc();
-    },
-    setCount(count) {
-      this.Set(count);
-    },
-    async goToResult() {
-      this.$router.push("/result");
+    async Finish() {
+      this.setEndTime();
+      await this.finishTest();
+      await this.loadUsers();
+      this.updCrrUser(this.CurrentUser);
+      //this.$router.push("/result");
     },
   },
   computed: {
-    ...mapState({
-      quests: (state) => state.questions.questList,
-      answers: (state) => state.answers.answerList,
-      checkParam: (state) => state.answers.checkFinish,
-      counter: (state) => state.questions.pugCounter,
-    }),
+    ...mapGetters([
+      "Questions",
+      "PuginationCounter",
+      "CheckFinish",
+      "Answers",
+      "CurrentUser",
+    ]),
   },
 };
 </script>

@@ -14,9 +14,8 @@ export default {
   },
   actions: {
     async RegisterUser({ commit }, form) {
-      var result = await axios.post("auth/register", form);
-
-      commit("SET_RESPONSE", result.data);
+      var response = await axios.post("auth/register", form);
+      commit("SET_RESPONSE", response.data);
     },
   },
 };
