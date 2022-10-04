@@ -12,8 +12,8 @@ export default {
 
   methods: {
     ...mapActions(["loadUsers"]),
-    load() {
-      this.loadUsers();
+    async load() {
+      await this.loadUsers();
     },
     checkStatus() {
       if (this.GetUsers != []) {
@@ -26,8 +26,8 @@ export default {
   computed: {
     ...mapGetters(["Users"]),
   },
-  mounted() {
-    this.load();
+  async mounted() {
+    await this.load();
     localStorage.removeItem("token");
   },
   components: {

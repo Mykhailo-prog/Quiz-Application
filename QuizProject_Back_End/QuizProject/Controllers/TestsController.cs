@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuizProject.Functions;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Services;
 
 namespace QuizProject.Controllers
 {
@@ -17,12 +17,13 @@ namespace QuizProject.Controllers
     [Authorize]
     public class TestsController : ControllerBase
     {
-        private readonly TestLogic _testLogic;
+        private readonly ITestLogic _testLogic;
         private readonly QuizContext _context;
 
-        public TestsController(QuizContext context)
+        public TestsController(QuizContext context, ITestLogic testLogic)
         {
             _context = context;
+            _testLogic = testLogic;
         }
 
         // GET: api/Tests
@@ -50,18 +51,11 @@ namespace QuizProject.Controllers
         }
 
         // PUT: api/Tests/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTest(int id, TestDTO testdto)
         {
             try
             {
-                if (!_testLogic.ElemExists<Test>(id))
-                {
-                    return BadRequest();
-                }
-
                 var test = await _context.Tests.FindAsync(id);
 
                 test.Name = testdto.Name;
@@ -83,8 +77,6 @@ namespace QuizProject.Controllers
         }
 
         // POST: api/Tests
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Test>> PostTest(TestDTO testdto)
         {
@@ -112,7 +104,7 @@ namespace QuizProject.Controllers
             _context.Tests.Remove(test);
             await _context.SaveChangesAsync();
 
-            return ModelsToDto.TestToDTO(test);
+            return _testLogic.TestToDTO(test);
         }
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizProject.Models;
 
 namespace QuizProject.Migrations
 {
     [DbContext(typeof(QuizContext))]
-    partial class QuizContextModelSnapshot : ModelSnapshot
+    [Migration("20221003023332_ChangeCreateTestEntity2")]
+    partial class ChangeCreateTestEntity2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,15 +141,15 @@ namespace QuizProject.Migrations
                         {
                             Id = "d82cb833-4019-410d-9f17-a9d0b83247ee",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "136d683e-4566-47a6-a90e-fa5b442356fe",
+                            ConcurrencyStamp = "fff4600b-f342-4359-a19e-1571493b5f49",
                             Email = "monstercattop@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "MONSTERCATTOP@GMAIL.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAELX9BscjcDpLqCY3iOJWx/KLTbu/UVCuSwQ2mlROWl0JRK8A1MPhyK85TQDVov5DaQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEI4O3DUCnqLoDsg3FHDvMUHUOtoD1OXvYGBQtdeXC0+RX9EetAj6Y9zMZffk4nRSKw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f219ed00-e741-4215-b013-b97d5d66f8c0",
+                            SecurityStamp = "7331ec76-6de1-4ce9-b86d-a3a71be8b602",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });

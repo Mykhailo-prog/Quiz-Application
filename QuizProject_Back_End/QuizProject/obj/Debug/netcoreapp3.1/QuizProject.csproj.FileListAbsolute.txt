@@ -278,5 +278,3 @@ E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject
 E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll
 E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll
-E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Logic.dll
-E:\Projects\VS Code\Testing-vue\QuizApplication\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Logic.pdb

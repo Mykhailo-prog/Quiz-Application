@@ -20,3 +20,7 @@ Release a Result page. Adds timer that counts how long player passing the test.
 ## Patch 1.4
 
 Release users and tests statistic.
+
+## Patch 1.5
+
+Release authentification and authorization abilities

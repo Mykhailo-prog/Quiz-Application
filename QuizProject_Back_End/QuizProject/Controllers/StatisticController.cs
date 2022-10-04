@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuizProject.Functions;
+
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,9 +16,11 @@ namespace QuizProject.Controllers
     public class StatisticController : ControllerBase
     {
         private readonly QuizContext _context;
-        public StatisticController(QuizContext context)
+        private ITestLogic _testLogic;
+        public StatisticController(QuizContext context, ITestLogic testLogic)
         {
             _context = context;
+            _testLogic = testLogic;
         }
 
         [HttpGet]
@@ -35,7 +38,7 @@ namespace QuizProject.Controllers
             _context.Statistics.Add(stat);
             await _context.SaveChangesAsync();
 
-            return Ok(ModelsToDto.TestStatToDTO(stat));
+            return Ok(_testLogic.TestStatToDTO(stat));
         }
         [HttpDelete]
         public async Task<ActionResult<TestStatistic>> DeleteStat (int id)

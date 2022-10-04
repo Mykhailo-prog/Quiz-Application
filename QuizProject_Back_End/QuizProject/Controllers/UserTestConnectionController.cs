@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuizProject.Functions;
+
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace QuizProject.Controllers
     [ApiController]
     public class UserTestConnectionController : ControllerBase
     {
+        private readonly ITestLogic _testLogic;
         private readonly QuizContext _context;
 
         public UserTestConnectionController(QuizContext context)
@@ -29,12 +31,12 @@ namespace QuizProject.Controllers
         {
             var uct = new UserCreatedTest
             {
-                UserId = ctdto.UserId,
+                QuizUserId = ctdto.UserId,
                 TestId = ctdto.TestId,
             };
             _context.CreatedTests.Add(uct);
             await _context.SaveChangesAsync();
-            return Ok(TestLogic.CreatedTestToDTO(uct));
+            return Ok(_testLogic.CreatedTestToDTO(uct));
         }
         [HttpPut]
         public async Task<IActionResult> PutTestConnection(int id, CreatedTestDTO ctdto)
@@ -44,7 +46,7 @@ namespace QuizProject.Controllers
                 var uct = await _context.CreatedTests.FindAsync(id);
 
                 uct.TestId = ctdto.TestId;
-                uct.UserId = ctdto.UserId;
+                uct.QuizUserId = ctdto.UserId;
 
                 await _context.SaveChangesAsync();
             }

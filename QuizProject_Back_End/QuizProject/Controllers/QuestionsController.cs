@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
-using QuizProject.Functions;
 using Microsoft.AspNetCore.Authorization;
+using QuizProject.Services;
 
 namespace QuizProject.Controllers
 {
@@ -17,12 +17,13 @@ namespace QuizProject.Controllers
     [Authorize]
     public class QuestionsController : ControllerBase
     {
-        private readonly TestLogic _testLogic;
+        private readonly ITestLogic _testLogic;
         private readonly QuizContext _context;
 
-        public QuestionsController(QuizContext context)
+        public QuestionsController(QuizContext context, ITestLogic testLogic)
         {
             _context = context;
+            _testLogic = testLogic;
         }
 
         // GET: api/Questions
@@ -46,18 +47,11 @@ namespace QuizProject.Controllers
             return question;
         }
 
-        // PUT: api/Questions/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutQuestion(int id, QuestionDTO questiondto)
         {
             try
             {
-                if (!_testLogic.ElemExists<Question>(id))
-                {
-                    return NotFound();
-                }
                 var quest = await _context.Questions.FindAsync(id);
 
                 quest.Quest = questiondto.Question;
@@ -80,9 +74,6 @@ namespace QuizProject.Controllers
             return NoContent();
         }
 
-        // POST: api/Questions
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<Question>> PostQuestion(QuestionDTO questiondto)
         {
@@ -93,7 +84,6 @@ namespace QuizProject.Controllers
                 TestId = questiondto.TestId,
                 
             };
-            //var test = await _context.Tests.Include(e => e.Questions).FirstOrDefaultAsync(q => q.TestId == questiondto.TestId);
             _context.Questions.Add(quest);
             await _context.SaveChangesAsync();
 
@@ -113,7 +103,7 @@ namespace QuizProject.Controllers
             _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
 
-            return ModelsToDto.QuestToDTO(question);
+            return _testLogic.QuestToDTO(question);
         }
     }
 }

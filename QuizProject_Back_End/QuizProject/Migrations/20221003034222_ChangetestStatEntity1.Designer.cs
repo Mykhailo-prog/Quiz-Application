@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizProject.Models;
 
 namespace QuizProject.Migrations
 {
     [DbContext(typeof(QuizContext))]
-    partial class QuizContextModelSnapshot : ModelSnapshot
+    [Migration("20221003034222_ChangetestStatEntity1")]
+    partial class ChangetestStatEntity1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,15 +141,15 @@ namespace QuizProject.Migrations
                         {
                             Id = "d82cb833-4019-410d-9f17-a9d0b83247ee",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "136d683e-4566-47a6-a90e-fa5b442356fe",
+                            ConcurrencyStamp = "5c60da73-7ebc-4250-a4cb-436918e6ec53",
                             Email = "monstercattop@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "MONSTERCATTOP@GMAIL.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAELX9BscjcDpLqCY3iOJWx/KLTbu/UVCuSwQ2mlROWl0JRK8A1MPhyK85TQDVov5DaQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECn3bCHViICV45sglBl46btTtg5drbhsVWEihOt9THImP1ZXMxvqAdc+1/3pLF5tDQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f219ed00-e741-4215-b013-b97d5d66f8c0",
+                            SecurityStamp = "c09c2ffb-442e-41cf-9ebe-f526340f0e3f",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });
@@ -482,18 +484,6 @@ namespace QuizProject.Migrations
                         .IsUnique();
 
                     b.ToTable("Statistics");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AvgFirstTryResult = 0,
-                            AvgTryCount = 0,
-                            BestResult = 0,
-                            CountOfAllTries = 0,
-                            MinTries = 0,
-                            TestId = 1
-                        });
                 });
 
             modelBuilder.Entity("QuizProject.Models.UserCreatedTest", b =>

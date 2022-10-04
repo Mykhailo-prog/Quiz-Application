@@ -43,21 +43,23 @@ export default {
     Tests: (state) => state.testList,
     UserTests: (state, getters) =>
       state.testList.filter(
-        (test) => test.userCreatedTest[0].userId === getters.Access.user.id
+        (test) =>
+          (test.userCreatedTest.length === 0
+            ? null
+            : test.userCreatedTest[0].quizUserId) === getters.CurrentUser.id
       ),
     CurrentTest: (state) => state.currTest,
-    ResultTime: (state) => state.resultTime,
-    TestResult: (state) => testResult,
+    TestResult: (state) => state.testResult,
   },
   actions: {
     async loadTests({ commit }) {
-      const loadedTests = await axios.get("https://localhost:44378/api/tests");
+      const loadedTests = await axios.get("tests");
       commit("SET_TEST_LIST", loadedTests.data);
     },
     setEndTime({ commit }, endTime) {
       commit("END_TIME", endTime);
     },
-    chooseTest({ commit, state, dispatch }, id) {
+    chooseTest({ commit, state }, id) {
       const test = state.testList.find((t) => t.testId === id);
 
       commit("SET_CURRENT_TEST", test);
@@ -66,31 +68,26 @@ export default {
     },
 
     async delTest({ dispatch }, testId) {
-      await axios.delete(
-        "https://localhost:44378/api/tests/" + testId.toString()
-      );
+      await axios.delete("tests/" + testId.toString());
       await dispatch("loadTests");
     },
 
     async finishTest({ state, commit, getters }) {
-      const res = await axios.put(
-        "https://localhost:44378/api/users/" + getters.Access.user.id,
-        {
-          test: getters.CurrentTest.testId,
-          time: state.resultTime,
-          userAnswers: getters.Answers,
-        }
-      );
+      const res = await axios.put("users/" + getters.Access.user.id, {
+        test: getters.CurrentTest.testId,
+        time: state.resultTime,
+        userAnswers: getters.Answers,
+      });
       commit("SET_TEST_RESULT", res.data);
     },
 
     async postNewTest({ commit }, payload) {
       const newTest = await axios
-        .post("https://localhost:44378/api/tests", payload.test)
+        .post("tests", payload.test)
         .then((response) => response.data);
       payload.quests.forEach(async (quest) => {
         const newQuest = await axios
-          .post("https://localhost:44378/api/questions", {
+          .post("questions", {
             question: quest.question,
             correctAnswer: quest.correctAnswer,
             testId: newTest.testId,
@@ -99,16 +96,13 @@ export default {
         quest.NewAnswers.forEach((ans) => {
           ans.questionId = newQuest.id;
         });
-        await axios.post(
-          "https://localhost:44378/api/answers",
-          quest.NewAnswers
-        );
+        await axios.post("answers", quest.NewAnswers);
       });
-      await axios.post("https://localhost:44378/api/UserTestConnection", {
+      await axios.post("UserTestConnection", {
         testId: newTest.testId,
         userId: payload.user.id,
       });
-      await axios.post("https://localhost:44378/api/Statistic", {
+      await axios.post("Statistic", {
         testId: newTest.testId,
       });
     },

@@ -22,7 +22,7 @@ export default {
       this.$router.push("/quiz");
     },
     deleteTest() {
-      this.$emit("delete-test", this.TestId);
+      this.$emit("delete-test", this.test.testId);
       this.$bvModal.hide("delete-" + this.test.testId.toString());
     },
     checkDelete() {},

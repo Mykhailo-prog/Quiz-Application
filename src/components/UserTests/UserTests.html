@@ -30,7 +30,7 @@
       </template>
 
       <template #default="">
-        <b-form @submit="onSubmit">
+        <b-form @submit.prevent="">
           <b-form-group
             id="input-group-1"
             label="Test name:"
@@ -47,14 +47,14 @@
           </b-form-group>
           <div v-for="i in QuestCounter">
             <quest-input
-              :counter="i"
+              :QuestionPos="i"
               @added-quest="checkQuest"
               @ans-valid="AnswerValidation"
             ></quest-input>
           </div>
           <b-button-group style="width:100%;">
             <b-button @click="QuestCounter++" variant="info">Add</b-button>
-            <b-button @click="delQuest" variant="info">Detele</b-button>
+            <b-button @click="QuestCounter--" variant="info">Detele</b-button>
           </b-button-group>
         </b-form>
       </template>

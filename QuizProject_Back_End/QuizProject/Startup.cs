@@ -61,6 +61,7 @@ namespace QuizProject
             });
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ITestLogic, TestLogic>();
             services.AddSwaggerGen();
             services.AddControllers();
             services.AddCors(c => c.AddPolicy("AllowOrigin", opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));

@@ -7,10 +7,9 @@ export default {
     return {
       QuestCounter: 1,
       AddedQuestCounter: 0,
-      NewTest: { name: null },
+      NewTest: { name: "" },
       NewQuests: [],
       testValid: false,
-      QuestLength: null,
     };
   },
   methods: {
@@ -20,14 +19,11 @@ export default {
         await this.postNewTest({
           test: this.NewTest,
           quests: this.NewQuests,
-          user: this.CurrUser,
+          user: this.CurrentUser,
         });
         await this.loadTests();
         this.$bvModal.hide("modal-scoped");
       }
-    },
-    onSubmit(event) {
-      event.preventDefault();
     },
     checkQuest(quests, id, valid) {
       this.NewQuests[id] = quests;
@@ -35,13 +31,14 @@ export default {
     },
     AnswerValidation(valid) {
       this.testValid = valid;
+      console.log(valid);
     },
     delQuest() {
       this.QuestCounter--;
       this.NewQuests.pop();
     },
     TestValid() {
-      if (this.NewTest.name === "" || this.NewTest.name === null) {
+      if (this.NewTest.name === "") {
         return false;
       } else {
         return true;
@@ -49,19 +46,14 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["currUser"]),
-    CurrUser() {
-      return this.currUser;
-    },
-    QuestLen() {
-      return this.NewQuests.length;
-    },
+    ...mapGetters(["CurrentUser"]),
   },
   watch: {
     NewTest: {
-      handler: function(newVal, oldVal) {
+      handler: function() {
         this.testValid = this.TestValid();
         this.AnswerValidation();
+        console.log(this.AnswerValidation());
       },
       deep: true,
     },

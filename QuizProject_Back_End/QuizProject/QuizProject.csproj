@@ -46,6 +46,22 @@
     <Compile Remove="Migrations\20220928141455_InitIdentityStore.Designer.cs" />
     <Compile Remove="Migrations\20220929125626_IdentitySeed.cs" />
     <Compile Remove="Migrations\20220929125626_IdentitySeed.Designer.cs" />
+    <Compile Remove="Migrations\20221003005559_ChangeUserStatName.cs" />
+    <Compile Remove="Migrations\20221003005559_ChangeUserStatName.Designer.cs" />
+    <Compile Remove="Migrations\20221003010240_ChangeUserStat.cs" />
+    <Compile Remove="Migrations\20221003010240_ChangeUserStat.Designer.cs" />
+    <Compile Remove="Migrations\20221003010401_ChangeUserStat.cs" />
+    <Compile Remove="Migrations\20221003010401_ChangeUserStat.Designer.cs" />
+    <Compile Remove="Migrations\20221003022050_ChangeCreateTestEntity1.cs" />
+    <Compile Remove="Migrations\20221003022050_ChangeCreateTestEntity1.Designer.cs" />
+    <Compile Remove="Migrations\20221003022210_ChangeCreateTestEntity1.cs" />
+    <Compile Remove="Migrations\20221003022210_ChangeCreateTestEntity1.Designer.cs" />
+    <Compile Remove="Migrations\20221003022513_ChangeCreateTestEntity2.cs" />
+    <Compile Remove="Migrations\20221003022513_ChangeCreateTestEntity2.Designer.cs" />
+    <Compile Remove="Migrations\20221003022905_ChangeCreateTestEntity2.cs" />
+    <Compile Remove="Migrations\20221003022905_ChangeCreateTestEntity2.Designer.cs" />
+    <Compile Remove="Migrations\20221003023133_ChangeCreateTestEntity2.cs" />
+    <Compile Remove="Migrations\20221003023133_ChangeCreateTestEntity2.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

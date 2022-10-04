@@ -3,17 +3,17 @@
 import AnswerInput from "@/components/AnswerInput";
 export default {
   props: {
-    counter: {
+    QuestionPos: {
       type: Number,
     },
   },
   data() {
     return {
       QuestVisible: true,
-      AnsCounter: 1,
+      AnswerPos: 1,
       NewQuest: {
-        question: null,
-        correctAnswer: null,
+        question: "",
+        correctAnswer: "",
         testId: null,
         NewAnswers: [],
       },
@@ -21,21 +21,17 @@ export default {
     };
   },
   methods: {
-    addAns(answer, id) {
-      answer.questionId = this.counter;
+    addAnswer(answer, id) {
       this.Answer = answer;
       this.NewQuest.NewAnswers[id] = answer;
       this.QuestValid();
     },
-    delAns() {
-      this.AnsCounter--;
-      this.NewAnswers.pop();
+    delAnswer() {
+      this.AnswerPos--;
+      this.NewQuest.NewAnswers.pop();
     },
     QuestValid() {
-      if (
-        this.NewQuest.question === (null, "") ||
-        this.NewQuest.correctAnswer === (null, "")
-      ) {
+      if (this.NewQuest.question === "" || this.NewQuest.correctAnswer === "") {
         return false;
       } else {
         return true;
@@ -54,20 +50,20 @@ export default {
           cnt++;
         }
       });
-      if (cnt != 1) {
-        return false;
-      } else {
+      if (cnt === 1) {
         return true;
+      } else {
+        return false;
       }
     },
   },
   watch: {
     NewQuest: {
-      handler: function(newVal, oldVal) {
+      handler: function(newVal) {
         this.$emit(
           "added-quest",
           newVal,
-          this.counter - 1,
+          this.QuestionPos - 1,
           this.AnsValid() ? this.QuestValid() : false
         );
       },

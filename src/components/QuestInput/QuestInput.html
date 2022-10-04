@@ -2,13 +2,13 @@
   <b-card no-body class="mb-1 accbnt" role="tablist">
     <b-card-header header-tag="header" class="p-1" role="tab">
       <b-button block @click="QuestVisible = !QuestVisible" variant="info"
-        >Question {{counter}}</b-button
+        >Question {{QuestionPos}}</b-button
       >
     </b-card-header>
     <b-collapse
-      :id="counter.toString()+'quest'"
+      :id="QuestionPos.toString()+'quest'"
       v-model="QuestVisible"
-      :accordion="counter.toString()+'quest'"
+      :accordion="QuestionPos.toString()+'quest'"
       role="tabpanel"
     >
       <b-card-body>
@@ -34,12 +34,12 @@
             </b-form-input>
           </b-input-group>
         </b-card-text>
-        <div v-for="i in AnsCounter">
-          <answer-input :AnswerCounter="i" @added-ans="addAns"></answer-input>
+        <div v-for="i in AnswerPos">
+          <answer-input :AnswerPos="i" @added-ans="addAnswer"></answer-input>
         </div>
         <b-button-group class="button-group">
-          <b-button @click="AnsCounter++" variant="info">Add</b-button>
-          <b-button @click="delAns" variant="info">Delete</b-button>
+          <b-button @click="AnswerPos++" variant="info">Add</b-button>
+          <b-button @click="delAnswer()" variant="info">Delete</b-button>
         </b-button-group>
       </b-card-body>
     </b-collapse>

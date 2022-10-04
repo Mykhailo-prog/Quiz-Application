@@ -97,18 +97,18 @@
       </div>
     </template>
 
-    <b-card-body class="p-0" style="width: 300px; height: 300px;">
+    <b-card-body class="p-0" style="width: 300px; height: 316px;">
       <div v-if="!showStatistic">
         <b-card-img
           alt="Vue logo"
           class="vue-logo"
           @click="defineTest"
-          style=" cursor: pointer;"
+          style=" cursor: pointer; height: 316px;"
           :src="require('@/assets/img/MathLogo.jpg')"
         />
       </div>
       <div v-if="showStatistic">
-        <table>
+        <table class="table p-0">
           <tr>
             <td>
               Best Time

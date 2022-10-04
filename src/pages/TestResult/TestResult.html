@@ -1,31 +1,48 @@
 <b-container>
   <b-row>
     <b-col class="m-5">
-      <div v-if="result === 0" style="text-align:center;">
-        <h1>{{test.name}} Failed!</h1>
+      <div v-if="Result.result === 0" style="text-align:center;">
+        <h1>{{Test.name}} Failed!</h1>
       </div>
       <div v-else style="text-align:center;">
-        <h1>{{test.name}} Completed!</h1>
+        <h1>{{Test.name}} Completed!</h1>
       </div>
       <div style="display:flex; ">
         <div style="text-align:right; width:50%">
           <h3>
-            Result: {{result}}%
+            Result: {{Result.result}}%
           </h3>
         </div>
         <div style="text-align:left; width:50%; margin-left:50px;">
           <h3>
-            Time: {{userTime(Start, End)}}
+            Time: {{Result.time}}
           </h3>
         </div>
       </div>
-      <div style="text-align: center; padding-top: 30px;">
-        <b-button size="lg" class="" variant="dark" @click="backToTests"
-          >Back to Tests</b-button
+
+      <div>
+        <table
+          class="table"
+          style="width:450px;text-align: center; margin: auto; font-size:large;"
         >
-        <b-button size="lg" class="ml-5" variant="dark" @click="exit"
-          >Exit</b-button
-        >
+          <tr>
+            <th :colspan="Result.achievements.length">Achievemenst</th>
+          </tr>
+          <tr>
+            <td v-if="Result.achievements.length === 0">
+              No achievemenst!
+            </td>
+            <td v-else v-for="achive in Result.achievements">
+              {{achive}}
+            </td>
+          </tr>
+        </table>
+
+        <div style="text-align: center; margin-top: 20px;">
+          <b-button size="lg" class="" variant="dark" @click="backToTests"
+            >Back to Tests</b-button
+          >
+        </div>
       </div>
     </b-col>
   </b-row>

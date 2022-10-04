@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
-using QuizProject.Functions;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using QuizProject.Services;
 
 namespace QuizProject.Controllers
 {
@@ -18,11 +18,12 @@ namespace QuizProject.Controllers
     public class UsersController : ControllerBase
     {
         private readonly QuizContext _context;
-        private readonly TestLogic _testLogic;
+        private ITestLogic _testLogic;
 
-        public UsersController(QuizContext context)
+        public UsersController(QuizContext context, ITestLogic testLogic)
         {
             _context = context;
+            _testLogic = testLogic;
         }
         // GET: api/Users
         [HttpGet]
@@ -47,8 +48,6 @@ namespace QuizProject.Controllers
         }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> PutUser(int id, UserUpdateDTO userUpdto)
@@ -66,15 +65,15 @@ namespace QuizProject.Controllers
                     return NotFound("Test not found!");
                 }
 
-                var result = TestLogic.GetScore(user, userUpdto, test);
+                var result = _testLogic.GetScore(user, userUpdto, test);
 
-                if (!_context.UserStatistic.Where(e => e.UserId == user.Id).Any(u => u.TestTried == userUpdto.Test))
+                if (!_context.UserStatistic.Where(e => e.QuizUserId == user.Id).Any(u => u.TestId == userUpdto.Test))
                 {
-                    _testLogic.CreateStatistic();
+                    await _testLogic.CreateStatisticAsync(user, test, result);
                 }
                 else
                 {
-                    _testLogic.UpdateStatistic();
+                    await _testLogic.UpdateStatistic(user, test, result);
                 }
                 
                 await _context.SaveChangesAsync();
@@ -98,7 +97,7 @@ namespace QuizProject.Controllers
             }
         }
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<ActionResult<QuizUser>> PostUser(UserDTO userdto)
         {
             var user = new QuizUser
@@ -108,7 +107,7 @@ namespace QuizProject.Controllers
             _context.QuizUsers.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(ModelsToDto.UserToDTO(user));
+            return Ok(_testLogic.UserToDTO(user));
         }
 
         // DELETE: api/Users/5
@@ -125,7 +124,7 @@ namespace QuizProject.Controllers
             _context.QuizUsers.Remove(user);
             await _context.SaveChangesAsync();
 
-            return ModelsToDto.UserToDTO(user);
+            return _testLogic.UserToDTO(user);
         }
     }
 }

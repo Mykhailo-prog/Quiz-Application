@@ -12,11 +12,11 @@ export default {
     },
     UPDATE_CURRENT_USER(state, user) {
       state.currUser = user;
+      console.log("UserUpdated!");
     },
     SET_LOGIN_RESPONSE(state, res) {
       state.loginResponse = res;
       state.currUser = res.user;
-      localStorage.removeItem("token", res.token);
       localStorage.setItem("token", res.token);
     },
     CLEAN_USER_LIST(state) {
@@ -35,7 +35,7 @@ export default {
       const loadedUsers = await axios.get("users");
       commit("SET_USER_LIST", loadedUsers.data);
     },
-    updCrrUser({ commit }, user) {
+    updCurrUser({ commit }, user) {
       commit("UPDATE_CURRENT_USER", user);
     },
     async loginUser({ commit }, form) {

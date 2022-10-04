@@ -1,8 +1,9 @@
 <template src="./AnswerInput.html"></template>
 <script>
+import { mapActions } from "vuex";
 export default {
   props: {
-    AnswerCounter: {
+    AnswerPos: {
       type: Number,
     },
   },
@@ -15,7 +16,7 @@ export default {
   watch: {
     NewAnswer: {
       handler: function(newVal) {
-        this.$emit("added-ans", newVal, this.AnswerCounter - 1);
+        this.$emit("added-ans", newVal, this.AnswerPos - 1);
       },
       immediate: true,
       deep: true,

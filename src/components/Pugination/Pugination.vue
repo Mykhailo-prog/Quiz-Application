@@ -9,7 +9,9 @@ export default {
       "finishTest",
       "setEndTime",
       "loadUsers",
-      "updCrrUser",
+      "updCurrUser",
+      "cleanAnswers",
+      "cleanCounter",
     ]),
     QuestPos(quest) {
       return this.Questions.indexOf(quest);
@@ -18,8 +20,10 @@ export default {
       this.setEndTime();
       await this.finishTest();
       await this.loadUsers();
-      this.updCrrUser(this.CurrentUser);
-      //this.$router.push("/result");
+      this.cleanCounter();
+      this.cleanAnswers();
+      this.updCurrUser(this.CurrentUser);
+      this.$router.push("/result");
     },
   },
   computed: {

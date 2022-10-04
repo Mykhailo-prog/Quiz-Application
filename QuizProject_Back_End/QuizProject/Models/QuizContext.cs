@@ -29,12 +29,15 @@ namespace QuizProject.Models
             
             base.OnModelCreating(modelBuilder);
             this.SeedUsers(modelBuilder);
+
             modelBuilder.ApplyConfiguration(new QuizUserConfiguration());
             modelBuilder.ApplyConfiguration(new TestConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
             modelBuilder.ApplyConfiguration(new AnswerConfiguration());
             modelBuilder.ApplyConfiguration(new CreatedTestConfiguration());
             modelBuilder.ApplyConfiguration(new TestStatisticConfiguration());
+
+            
         }
 
         private void SeedUsers(ModelBuilder modelBuilder)

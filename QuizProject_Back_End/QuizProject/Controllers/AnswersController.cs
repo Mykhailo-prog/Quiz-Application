@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuizProject.Functions;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Services;
 
 namespace QuizProject.Controllers
 {
@@ -18,14 +18,15 @@ namespace QuizProject.Controllers
     [Authorize]
     public class AnswersController : ControllerBase
     {
-        private readonly TestLogic _testLogic;
+        private readonly ITestLogic _testLogic;
         private readonly QuizContext _context;
 
-        public AnswersController(QuizContext context)
+        public AnswersController(QuizContext context, ITestLogic testLogic)
         {
             _context = context;
+            _testLogic = testLogic;
         }
-        
+
         // GET: api/Answers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Answer>>> GetAnswers()
@@ -47,18 +48,11 @@ namespace QuizProject.Controllers
             return answer;
         }
 
-        // PUT: api/Answers/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAnswer(int id, AnswerDTO answerdto)
         {
             try
             {
-                if (!_testLogic.ElemExists<Answer>(id))
-                {
-                    return NotFound();
-                }
                 var answer = await _context.Answers.FindAsync(id);
 
                 answer.Ans = answerdto.Answer;
@@ -81,13 +75,9 @@ namespace QuizProject.Controllers
             return NoContent();
         }
 
-        // POST: api/Answers
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
         public async Task<ActionResult<List<AnswerDTO>>> PostAnswer(List<AnswerDTO> answersdto)
         {
-            //var quest = await _context.Questions.Include(q => q.Answers).FirstOrDefaultAsync(e => e.Id == answersdto[0].QuestionId);
             foreach (AnswerDTO ans in answersdto)
             {
                 var answer = new Answer
@@ -97,7 +87,6 @@ namespace QuizProject.Controllers
                 };
                 _context.Answers.Add(answer);
             }
-            //quest.Answers.Add(answer);
             
             await _context.SaveChangesAsync();
 
@@ -117,7 +106,7 @@ namespace QuizProject.Controllers
             _context.Answers.Remove(answer);
             await _context.SaveChangesAsync();
 
-            return ModelsToDto.AnswerToDTO(answer);
+            return _testLogic.AnswerToDTO(answer);
         }
     }
 }

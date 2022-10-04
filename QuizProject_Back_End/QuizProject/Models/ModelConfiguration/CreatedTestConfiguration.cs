@@ -10,7 +10,7 @@ namespace QuizProject.Models.ModelConfiguration
                     new UserCreatedTest
                     {
                         Id = 1,
-                        UserId = 1,
+                        QuizUserId = 1,
                         TestId = 1,
                     }
                 );

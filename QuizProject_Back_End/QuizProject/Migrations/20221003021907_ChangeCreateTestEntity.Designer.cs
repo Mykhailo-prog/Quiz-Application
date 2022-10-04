@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizProject.Models;
 
 namespace QuizProject.Migrations
 {
     [DbContext(typeof(QuizContext))]
-    partial class QuizContextModelSnapshot : ModelSnapshot
+    [Migration("20221003021907_ChangeCreateTestEntity")]
+    partial class ChangeCreateTestEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,15 +141,15 @@ namespace QuizProject.Migrations
                         {
                             Id = "d82cb833-4019-410d-9f17-a9d0b83247ee",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "136d683e-4566-47a6-a90e-fa5b442356fe",
+                            ConcurrencyStamp = "71146eb9-f9df-43bf-adf4-d33596f2d74a",
                             Email = "monstercattop@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "MONSTERCATTOP@GMAIL.COM",
                             NormalizedUserName = "ADMINISTRATOR",
-                            PasswordHash = "AQAAAAEAACcQAAAAELX9BscjcDpLqCY3iOJWx/KLTbu/UVCuSwQ2mlROWl0JRK8A1MPhyK85TQDVov5DaQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHwIfCBtX1CwTyReD8hbTSgfAtjl7XPGTxSHsT1iuHg/8OXf7FJbE+yMB/WSHfO1WA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f219ed00-e741-4215-b013-b97d5d66f8c0",
+                            SecurityStamp = "cee4848e-8ce0-4f89-a7fc-b3a2d5ed4986",
                             TwoFactorEnabled = false,
                             UserName = "Administrator"
                         });
@@ -503,10 +505,13 @@ namespace QuizProject.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("QuizUserId")
+                    b.Property<int?>("QuizUserId")
                         .HasColumnType("int");
 
                     b.Property<int>("TestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -516,14 +521,6 @@ namespace QuizProject.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("CreatedTests");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            QuizUserId = 1,
-                            TestId = 1
-                        });
                 });
 
             modelBuilder.Entity("QuizProject.Models.UserStatistic", b =>
@@ -637,9 +634,7 @@ namespace QuizProject.Migrations
                 {
                     b.HasOne("QuizProject.Models.QuizUser", null)
                         .WithMany("CreatedTests")
-                        .HasForeignKey("QuizUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuizUserId");
 
                     b.HasOne("QuizProject.Models.Test", null)
                         .WithMany("UserCreatedTest")
