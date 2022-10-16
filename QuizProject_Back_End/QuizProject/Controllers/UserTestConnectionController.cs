@@ -61,6 +61,8 @@ namespace QuizProject.Controllers
                     throw;
                 }
             }
+
+            //TODO: I think it is not the best type to return if everything ok, it should be Ok(); :) 
             return NoContent();
         }
     }

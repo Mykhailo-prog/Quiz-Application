@@ -43,6 +43,11 @@ namespace QuizProject.Controllers
             {
                 var result = await _authServiece.LoginUserAsync(model);
 
+                //TODO: I think it looks more clear.
+                //if(!result.Success) return BadRequest(result);
+
+                //return Ok(result);
+
                 if (result.Success)
                 {
                     return Ok(result);
@@ -51,6 +56,7 @@ namespace QuizProject.Controllers
                 return BadRequest(result);
             }
 
+            //TODO: Something what? :)))))
             return BadRequest("Something is invalid");
         }
 
@@ -85,7 +91,7 @@ namespace QuizProject.Controllers
                 return Ok(result);
             }
             return BadRequest(result);
-        }
+        }//TODO: You need to separate every method with space, please check other places.
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordModel model)
         {
@@ -99,6 +105,8 @@ namespace QuizProject.Controllers
                 }
                 return BadRequest(result);
             }
+
+            //TODO: Something what? :)))))
             return BadRequest("Smth goes Wrong!");
         }
     }

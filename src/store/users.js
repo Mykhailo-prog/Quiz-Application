@@ -1,5 +1,5 @@
 import axios from "axios";
-
+//TODO: I think you need to separate Users store from authetnication store
 export default {
   state: {
     userList: [],

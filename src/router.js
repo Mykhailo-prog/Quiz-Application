@@ -23,6 +23,11 @@ export default new Router({
       path: "/quiz",
       name: "Quiz",
       component: Start,
+      //TODO: I think we need to check if user authenticaten on vue router level too.
+      // meta: {
+      //   requiresAuth: true
+      // }
+      // And check this metha prop in router.beforeEach()
     },
     {
       path: "/tests",
