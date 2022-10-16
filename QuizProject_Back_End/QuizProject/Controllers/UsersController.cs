@@ -10,6 +10,8 @@ using QuizProject.Models.DTO;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using QuizProject.Services;
+using Microsoft.AspNetCore.Identity;
+using QuizProject.Servieces;
 
 namespace QuizProject.Controllers
 {
@@ -19,9 +21,15 @@ namespace QuizProject.Controllers
     {
         private readonly QuizContext _context;
         private ITestLogic _testLogic;
+        private IAuthService _authService;
+        private UserManager<IdentityUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(QuizContext context, ITestLogic testLogic)
+        public UsersController(QuizContext context, ITestLogic testLogic, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IAuthService authService)
         {
+            _authService = authService;
+            _roleManager = roleManager;
+            _userManager = userManager;
             _context = context;
             _testLogic = testLogic;
         }
@@ -45,6 +53,84 @@ namespace QuizProject.Controllers
             }
 
             return user;
+        }
+        // POST: api/users/checkrole
+        [HttpPost("checkrole")]
+        public async Task<bool> CheckRole(QuizUser qUser)
+        {
+            var result = await _authService.CheckRole(qUser);
+
+            if (result.Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        [HttpPost("resetscore")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ResetUserScore(string name)
+        {
+            var user = await _context.QuizUsers.FirstOrDefaultAsync(u =>u.Login == name);
+            if(user != null)
+            {
+                user.Score = 0;
+                await _context.SaveChangesAsync();
+
+                return StatusCode(200);
+            }
+
+            return NotFound("No user with this login");
+        }
+
+        [HttpPost("changepass")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminChangePassword(string name, string password)
+        {
+            var user = await _userManager.FindByNameAsync(name);
+            if(user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var result = await _userManager.ResetPasswordAsync(user, token, password);
+
+                if (result.Succeeded)
+                {
+                    return StatusCode(200);
+                }
+
+                return BadRequest("Change password Failed!");
+            }
+
+            return NotFound("No user with this login!");
+        }
+
+        [HttpPost("adminconfirm")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminConfirmEmail(string name)
+        {
+            var user = await _userManager.FindByNameAsync(name);
+            if(user != null)
+            {
+                if (user.EmailConfirmed)
+                {
+                    return BadRequest("Email already confirmed");
+                }
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+
+                if (result.Succeeded)
+                {
+                    return StatusCode(200);
+                }
+
+                return BadRequest("Email confirmation has beed failed");
+            }
+
+            return NotFound("No user with this login!");
         }
 
         // PUT: api/Users/5
@@ -110,21 +196,30 @@ namespace QuizProject.Controllers
             return Ok(_testLogic.UserToDTO(user));
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        [Authorize]
-        public async Task<ActionResult<UserDTO>> DeleteUser(int id)
+        // DELETE: api/Users
+        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser(string name)
         {
-            var user = await _context.QuizUsers.FindAsync(id);
-            if (!_testLogic.ElemExists<QuizUser>(id))
+            var user = await _userManager.FindByNameAsync(name);
+            if(user != null)
             {
-                return NotFound();
+                await _userManager.DeleteAsync(user);
+                
+                var qUser = await _context.QuizUsers.FirstOrDefaultAsync(u => u.Login == name);
+
+                if(qUser != null)
+                {
+                    _context.QuizUsers.Remove(qUser);
+                    await _context.SaveChangesAsync();
+
+                    return StatusCode(200);
+                }
+
+                return NotFound("User not found");
             }
 
-            _context.QuizUsers.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return _testLogic.UserToDTO(user);
+            return NotFound("User not found");
         }
     }
 }

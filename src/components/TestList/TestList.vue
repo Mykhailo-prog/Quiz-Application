@@ -1,6 +1,7 @@
 <template src="./TestList.html"></template>
 <script>
 import { mapActions } from "vuex";
+import TestForm from "@/components/TestForm";
 export default {
   props: {
     test: {
@@ -26,6 +27,9 @@ export default {
       this.$bvModal.hide("delete-" + this.test.testId.toString());
     },
     checkDelete() {},
+  },
+  components: {
+    TestForm,
   },
 };
 </script>

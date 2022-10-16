@@ -4,7 +4,10 @@
       <div style="display: flex;">
         <h4 class="mb-0" style="width: 100%">{{test.name}}</h4>
         <div v-if="userTestCheck">
-          <b-button class="p-0 mr-2 btn-light" disabled>
+          <b-button
+            class="p-0 mr-2 btn-light"
+            @click="$bvModal.show('modal-scoped' + test.testId)"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="22"
@@ -168,4 +171,5 @@
       >Questions: {{test.questions.length}}</b-card-footer
     >
   </b-card>
+  <test-form :editTest="test"></test-form>
 </div>

@@ -29,6 +29,8 @@ namespace QuizProject.Models
             
             base.OnModelCreating(modelBuilder);
             this.SeedUsers(modelBuilder);
+            this.SeedRoles(modelBuilder);
+            this.SeedUserRole(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new QuizUserConfiguration());
             modelBuilder.ApplyConfiguration(new TestConfiguration());
@@ -57,6 +59,28 @@ namespace QuizProject.Models
             user.PasswordHash = ph.HashPassword(user, "Admin123");
 
             modelBuilder.Entity<IdentityUser>().HasData(user);
+        }
+        private void SeedRoles(ModelBuilder builder)
+        {
+            builder.Entity<IdentityRole>().HasData(
+                    new IdentityRole()
+                    {
+                        Id = "a83cb833-4019-510d-9f17-a9d0b83540ee",
+                        Name = "Admin",
+                        NormalizedName = "ADMIN",
+                        ConcurrencyStamp = "1"
+                    }
+                );
+        }
+        private void SeedUserRole(ModelBuilder builder)
+        {
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                    new IdentityUserRole<string>()
+                    {
+                        RoleId = "a83cb833-4019-510d-9f17-a9d0b83540ee",
+                        UserId = "d82cb833-4019-410d-9f17-a9d0b83247ee"
+                    }
+                );
         }
     }
 }

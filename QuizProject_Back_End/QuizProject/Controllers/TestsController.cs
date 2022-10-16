@@ -51,43 +51,113 @@ namespace QuizProject.Controllers
         }
 
         // PUT: api/Tests/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTest(int id, TestDTO testdto)
+        [HttpPut]
+        public async Task<IActionResult> PutTest(TestDTO editTest, int id)
         {
-            try
+            if(_testLogic.ElemExists<Test>(id))
             {
-                var test = await _context.Tests.FindAsync(id);
-
-                test.Name = testdto.Name;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_testLogic.ElemExists<Test>(id))
+                try
                 {
-                    return NotFound();
+                    var test = await _context.Tests.FindAsync(id);
+                    await _context.Questions.Include(q => q.Answers).LoadAsync();
+                    test.Name = editTest.Name;
+
+                    for(int i = 0; i < editTest.Questions.Count; i++)
+                    {
+                        test.Questions[i].Quest = editTest.Questions[i].Quest;
+                        test.Questions[i].CorrectAnswer = editTest.Questions[i].CorrectAnswer;
+
+                        for(int j = 0; j < editTest.Questions[i].Answers.Count; j++)
+                        {
+                            test.Questions[i].Answers[j].Ans = editTest.Questions[i].Answers[j].Ans;
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return StatusCode(200);
                 }
-                else
+                catch (Exception e)
                 {
-                    throw;
+                    return BadRequest(e.Message);
                 }
             }
 
-            return NoContent();
+            return NotFound("No test with this name!");
         }
 
         // POST: api/Tests
         [HttpPost]
-        public async Task<ActionResult<Test>> PostTest(TestDTO testdto)
+        public async Task<IActionResult> PostTest(TestDTO testdto, int id)
         {
-            var test = new Test
-            {
-                Name = testdto.Name,
-            };
-            _context.Tests.Add(test);
-            await _context.SaveChangesAsync();
+            var user = await _context.QuizUsers.FindAsync(id);
 
-            return Ok(test);
+            if(user != null)
+            {
+                try
+                {
+                    if( _context.Tests.Any(t => t.Name == testdto.Name))
+                    {
+                        return BadRequest("Test with this name already exists! Choose another one.");
+                    }
+                    var newTest = new Test
+                    {
+                        Name = testdto.Name,
+                    };
+
+                    _context.Tests.Add(newTest);
+                    await _context.SaveChangesAsync();
+
+                    foreach (var quest in testdto.Questions)
+                    {
+                        var newQuest = new Question
+                        {
+                            TestId = newTest.TestId,
+                            Quest = quest.Quest,
+                            CorrectAnswer = quest.CorrectAnswer,
+                        };
+
+                        _context.Questions.Add(newQuest);
+                        await _context.SaveChangesAsync();
+
+                        foreach (var answer in quest.Answers)
+                        {
+                            var newAnswer = new Answer
+                            {
+                                QuestionId = newQuest.Id,
+                                Ans = answer.Ans
+                            };
+
+                            _context.Answers.Add(newAnswer);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
+                    var userConnect = new UserCreatedTest
+                    {
+                        QuizUserId = user.Id,
+                        TestId = newTest.TestId,
+                    };
+
+                    _context.CreatedTests.Add(userConnect);
+                    await _context.SaveChangesAsync();
+
+                    var newTestStat = new TestStatistic
+                    {
+                        TestId = newTest.TestId,
+                    };
+
+                    _context.Statistics.Add(newTestStat);
+                    await _context.SaveChangesAsync();
+
+                    return StatusCode(200);
+                }
+                catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+
+            return NotFound("No user with this id");
         }
 
         // DELETE: api/Tests/5

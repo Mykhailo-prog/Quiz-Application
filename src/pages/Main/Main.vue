@@ -2,37 +2,36 @@
 <script>
 import UserList from "@/components/UserList";
 import LoginUser from "@/components/LoginUser";
+import RegisterUser from "@/components/RegisterUser";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Main",
   data() {
-    return {};
+    return {
+      navItem: 1,
+    };
   },
 
   methods: {
-    ...mapActions(["loadUsers"]),
-    async load() {
-      await this.loadUsers();
-    },
-    checkStatus() {
-      if (this.GetUsers != []) {
-        this.userListStatus = true;
-      } else {
-        this.userListStatus = false;
-      }
+    ...mapActions(["loadUsers", "cleanUsers"]),
+    confirmAlert() {
+      this.$bvModal.show("confirmAlert");
+      this.navItem--;
     },
   },
   computed: {
     ...mapGetters(["Users"]),
   },
-  async mounted() {
-    await this.load();
+  async created() {
+    this.cleanUsers();
+    await this.loadUsers();
     localStorage.removeItem("token");
   },
   components: {
     UserList,
     LoginUser,
+    RegisterUser,
   },
 };
 </script>

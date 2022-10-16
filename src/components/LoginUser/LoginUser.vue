@@ -13,6 +13,9 @@ export default {
   },
   methods: {
     ...mapActions(["loginUser"]),
+    registerBtn() {
+      this.$emit("toRegister");
+    },
     async LoginUser() {
       await this.loginUser(this.loginForm);
       if (this.Access.success) {

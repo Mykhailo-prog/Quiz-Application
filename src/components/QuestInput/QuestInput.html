@@ -22,24 +22,32 @@
               id="input-1"
               placeholder="Enter question"
               required
-              v-model="NewQuest.question"
+              v-model="NewQuest.Quest"
             >
             </b-form-input>
             <b-form-input
               id="input-1"
               placeholder="Enter correct answer"
               required
-              v-model="NewQuest.correctAnswer"
+              v-model="NewQuest.CorrectAnswer"
             >
             </b-form-input>
           </b-input-group>
         </b-card-text>
         <div v-for="i in AnswerPos">
-          <answer-input :AnswerPos="i" @added-ans="addAnswer"></answer-input>
+          <answer-input
+            :editAnswer="editQuest ? editQuest.answers[i-1] : null"
+            :AnswerPos="i"
+            @added-ans="addAnswer"
+          ></answer-input>
         </div>
         <b-button-group class="button-group">
-          <b-button @click="AnswerPos++" variant="info">Add</b-button>
-          <b-button @click="delAnswer()" variant="info">Delete</b-button>
+          <b-button v-if="!editQuest" @click="AnswerPos++" variant="info"
+            >Add</b-button
+          >
+          <b-button v-if="!editQuest" @click="delAnswer()" variant="info"
+            >Delete</b-button
+          >
         </b-button-group>
       </b-card-body>
     </b-collapse>

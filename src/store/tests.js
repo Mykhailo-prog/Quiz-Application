@@ -82,28 +82,15 @@ export default {
     },
 
     async postNewTest({ commit }, payload) {
-      const newTest = await axios
-        .post("tests", payload.test)
-        .then((response) => response.data);
-      payload.quests.forEach(async (quest) => {
-        const newQuest = await axios
-          .post("questions", {
-            question: quest.question,
-            correctAnswer: quest.correctAnswer,
-            testId: newTest.testId,
-          })
-          .then((response) => response.data);
-        quest.NewAnswers.forEach((ans) => {
-          ans.questionId = newQuest.id;
-        });
-        await axios.post("answers", quest.NewAnswers);
+      await axios.post("tests", payload.test, {
+        params: { id: payload.user.id },
       });
-      await axios.post("UserTestConnection", {
-        testId: newTest.testId,
-        userId: payload.user.id,
-      });
-      await axios.post("Statistic", {
-        testId: newTest.testId,
+    },
+    async updateTest({ state }, payload) {
+      await axios.put("tests", payload.test, {
+        params: {
+          id: payload.testId,
+        },
       });
     },
   },

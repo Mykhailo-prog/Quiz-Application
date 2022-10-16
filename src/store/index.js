@@ -7,8 +7,6 @@ import answers from "./answers";
 import register from "./register";
 import errors from "./errors";
 import reset from "./resetpassword";
-import testForm from "./testForm";
-import store from "@/store/index.js";
 
 Vue.use(Vuex);
 
@@ -20,7 +18,6 @@ const modules = {
   register,
   errors,
   reset,
-  testForm,
 };
 
 export default new Vuex.Store({

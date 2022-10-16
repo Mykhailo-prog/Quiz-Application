@@ -12,7 +12,6 @@ export default {
     },
     UPDATE_CURRENT_USER(state, user) {
       state.currUser = user;
-      console.log("UserUpdated!");
     },
     SET_LOGIN_RESPONSE(state, res) {
       state.loginResponse = res;
@@ -31,6 +30,10 @@ export default {
     CurrentUser: (state) => state.loginResponse.user,
   },
   actions: {
+    async checkRole({ state }) {
+      const result = await axios.post("users/checkrole", state.currUser);
+      return result.data;
+    },
     async loadUsers({ commit }) {
       const loadedUsers = await axios.get("users");
       commit("SET_USER_LIST", loadedUsers.data);
@@ -41,6 +44,24 @@ export default {
     async loginUser({ commit }, form) {
       var response = await axios.post("/auth/login", form);
       commit("SET_LOGIN_RESPONSE", response.data);
+    },
+    async deleteUser({ commit }, payload) {
+      await axios.delete("users", { params: { name: payload.name } });
+    },
+    async adminConfirmEmail({ commit }, payload) {
+      await axios.post("users/adminconfirm", null, {
+        params: { name: payload.name },
+      });
+    },
+    async changePassword({ commit }, payload) {
+      await axios.post("users/changepass", null, {
+        params: { name: payload.name, password: payload.password },
+      });
+    },
+    async resetScore({ commit }, payload) {
+      await axios.post("users/resetscore", null, {
+        params: { name: payload.name },
+      });
     },
     cleanUsers({ commit }) {
       commit("CLEAN_USER_LIST");

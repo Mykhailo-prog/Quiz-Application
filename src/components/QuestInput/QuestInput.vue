@@ -1,8 +1,13 @@
 <template src="./QuestInput.html"></template>
 <script>
 import AnswerInput from "@/components/AnswerInput";
+import validation from "@/formValidation";
+
+import { mapActions } from "vuex";
+
 export default {
   props: {
+    editQuest: Object,
     QuestionPos: {
       type: Number,
     },
@@ -12,50 +17,36 @@ export default {
       QuestVisible: true,
       AnswerPos: 1,
       NewQuest: {
-        question: "",
-        correctAnswer: "",
-        testId: null,
-        NewAnswers: [],
+        Quest: "",
+        CorrectAnswer: "",
+        Answers: [],
       },
       Answer: null,
     };
   },
   methods: {
+    parseQuest(quest) {
+      this.AnswerPos = quest.answers.length;
+      this.NewQuest.Quest = quest.quest;
+      this.NewQuest.CorrectAnswer = quest.correctAnswer;
+    },
     addAnswer(answer, id) {
       this.Answer = answer;
-      this.NewQuest.NewAnswers[id] = answer;
-      this.QuestValid();
+      this.NewQuest.Answers[id] = answer;
+      validation.questValidation({
+        quest: this.NewQuest.Quest,
+        answer: this.NewQuest.CorrectAnswer,
+      });
     },
     delAnswer() {
       this.AnswerPos--;
-      this.NewQuest.NewAnswers.pop();
+      this.NewQuest.Answers.pop();
     },
-    QuestValid() {
-      if (this.NewQuest.question === "" || this.NewQuest.correctAnswer === "") {
-        return false;
-      } else {
-        return true;
-      }
-    },
-    AnsValid() {
-      if (this.NewQuest.NewAnswers.length === 0) {
-        return false;
-      }
-      if (this.Answer.answer === null || this.Answer.answer === "") {
-        return false;
-      }
-      let cnt = 0;
-      this.NewQuest.NewAnswers.forEach((ans) => {
-        if (ans.answer === this.NewQuest.correctAnswer) {
-          cnt++;
-        }
-      });
-      if (cnt === 1) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+  },
+  mounted() {
+    if (this.editQuest) {
+      this.parseQuest(this.editQuest);
+    }
   },
   watch: {
     NewQuest: {
@@ -64,7 +55,15 @@ export default {
           "added-quest",
           newVal,
           this.QuestionPos - 1,
-          this.AnsValid() ? this.QuestValid() : false
+          validation.answerValidation({
+            Quest: this.NewQuest,
+            Answer: this.Answer,
+          })
+            ? validation.questValidation({
+                quest: this.NewQuest.Quest,
+                answer: this.NewQuest.CorrectAnswer,
+              })
+            : false
         );
       },
       immediate: true,
@@ -72,7 +71,13 @@ export default {
     },
     Answer: {
       handler: function(newVal) {
-        this.$emit("ans-valid", this.AnsValid());
+        this.$emit(
+          "ans-valid",
+          validation.answerValidation({
+            Quest: this.NewQuest,
+            Answer: this.Answer,
+          })
+        );
       },
       deep: true,
     },

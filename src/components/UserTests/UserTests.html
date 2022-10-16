@@ -11,7 +11,7 @@
       <template #header>
         <h4 class="mb-0">New test</h4>
       </template>
-      <b-card-body class="p-0" style="width: 300px; height: 362px;">
+      <b-card-body class="p-0" style="width: 300px; height: 378px;">
         <b-card-img
           alt="Vue logo"
           class=""
@@ -20,54 +20,5 @@
       </b-card-body>
     </b-card>
   </div>
-  <div>
-    <b-modal id="modal-scoped" scrollable hide-backdrop>
-      <template #modal-header="{close}">
-        <h5>Creating new Test</h5>
-        <button @click="close()" class="close" type="button" aria-label="Close">
-          ×
-        </button>
-      </template>
-
-      <template #default="">
-        <b-form @submit.prevent="">
-          <b-form-group
-            id="input-group-1"
-            label="Test name:"
-            label-for="input-1"
-          >
-            <b-form-input
-              id="input-1"
-              placeholder="Enter your test name"
-              :state="TestValid() ? null : false"
-              required
-              v-model="NewTest.name"
-            >
-            </b-form-input>
-          </b-form-group>
-          <div v-for="i in QuestCounter">
-            <quest-input
-              :QuestionPos="i"
-              @added-quest="checkQuest"
-              @ans-valid="AnswerValidation"
-            ></quest-input>
-          </div>
-          <b-button-group style="width:100%;">
-            <b-button @click="QuestCounter++" variant="info">Add</b-button>
-            <b-button @click="QuestCounter--" variant="info">Detele</b-button>
-          </b-button-group>
-        </b-form>
-      </template>
-
-      <template #modal-footer="">
-        <b-button
-          :variant="testValid ? 'success' : 'danger'"
-          @click="CreateTest"
-          :class="testValid ? '' : 'disabled'"
-        >
-          Create
-        </b-button>
-      </template>
-    </b-modal>
-  </div>
+  <test-form></test-form>
 </div>

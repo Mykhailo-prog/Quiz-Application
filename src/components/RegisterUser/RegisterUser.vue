@@ -14,7 +14,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["RegisterUser", "resetErrors"]),
+    ...mapActions(["RegisterUser", "resetErrors", "loadUsers"]),
     async Register() {
       await this.RegisterUser(this.registerForm);
       if (this.RegisterResponse.success) {
@@ -25,7 +25,8 @@ export default {
           confirmPassword: "",
         };
         this.resetErrors();
-        this.$router.push("/confirmEmail");
+        await this.loadUsers();
+        this.$emit("toLogin");
       }
     },
   },

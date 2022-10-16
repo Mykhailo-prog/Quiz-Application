@@ -3,6 +3,7 @@
 import { mapActions } from "vuex";
 export default {
   props: {
+    editAnswer: Object,
     AnswerPos: {
       type: Number,
     },
@@ -10,8 +11,18 @@ export default {
   data() {
     return {
       AnswerVisible: true,
-      NewAnswer: { answer: null, questionId: null },
+      NewAnswer: { Ans: null },
     };
+  },
+  methods: {
+    parseAnswer(answer) {
+      this.NewAnswer.Ans = answer.ans;
+    },
+  },
+  mounted() {
+    if (this.editAnswer) {
+      this.parseAnswer(this.editAnswer);
+    }
   },
   watch: {
     NewAnswer: {

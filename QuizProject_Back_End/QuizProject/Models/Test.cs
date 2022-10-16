@@ -7,8 +7,8 @@ namespace QuizProject.Models
     {
         public int TestId { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<Question> Questions { get; set; }
-        public virtual ICollection<UserCreatedTest> UserCreatedTest { get; set; }
+        public virtual List<Question> Questions { get; set; }
+        public virtual List<UserCreatedTest> UserCreatedTest { get; set; }
         public virtual TestStatistic TestStatistic { get; set; }
     }
 }

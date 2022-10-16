@@ -8,7 +8,11 @@
         <b-nav-item @click="navItem = 2">
           <h1>Your Tests</h1>
         </b-nav-item>
-        <b-nav-item style="margin-left:595px;" @click="$router.push('/')">
+        <b-nav-item v-if="isAdmin" @click="navItem = 3">
+          <h1>Admin Page</h1>
+        </b-nav-item>
+        <b-nav-item @click="$router.push('/')">
+          <!--595px-->
           <h1>Log out</h1>
         </b-nav-item>
       </b-nav>
@@ -30,5 +34,8 @@
       @delete-test="deleteTest"
     ></test-list>
     <user-tests></user-tests>
+  </b-row>
+  <b-row v-else-if="navItem === 3">
+    <admin-page></admin-page>
   </b-row>
 </b-container>

@@ -8,6 +8,7 @@ using QuizProject.Models;
 using QuizProject.Models.DTO;
 using QuizProject.Services;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -24,6 +25,7 @@ namespace QuizProject.Servieces
         Task<UserManagerResponse> ConfirmEmailAsync(string userId, string token);
         Task<UserManagerResponse> ForgetPasswordAsync(string email);
         Task<UserManagerResponse> ResetPasswordAsync(ResetPasswordModel model);
+        Task<UserManagerResponse> CheckRole(QuizUser qUser);
     }
     public class AuthService : IAuthService
     {
@@ -31,13 +33,41 @@ namespace QuizProject.Servieces
         private IConfiguration _configuration;
         private QuizContext _context;
         private IEmailService _emailService;
-        public AuthService(UserManager<IdentityUser> userManager, IConfiguration configuration, QuizContext context, IEmailService emailService)
+        RoleManager<IdentityRole> _roleManager;
+        public AuthService(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IConfiguration configuration, QuizContext context, IEmailService emailService)
         {
+            _roleManager = roleManager;
             _userManager = userManager;
             _configuration = configuration;
             _context = context;
             _emailService = emailService;
 
+        }
+        public async Task<UserManagerResponse> CheckRole(QuizUser qUser)
+        {
+            var user = await _userManager.FindByNameAsync(qUser.Login);
+            if (user != null)
+            {
+                foreach (var role in await _userManager.GetRolesAsync(user))
+                {
+                    if (role == "Admin")
+                        return new UserManagerResponse
+                        {
+                            Success = true,
+                            Message = "Admin role confirmed!"
+                        };
+                }
+                return new UserManagerResponse
+                {
+                    Success = false,
+                    Message = "Not Admin"
+                };
+            }
+            return new UserManagerResponse
+            {
+                Success = false,
+                Message = "No user with this login"
+            };
         }
 
         public async Task<UserManagerResponse> ConfirmEmailAsync(string userId, string token)
@@ -125,7 +155,6 @@ namespace QuizProject.Servieces
                     Success = false
                 };
             }
-
             var result = await _userManager.CheckPasswordAsync(user, model.Password);
 
             if (!result)
@@ -137,11 +166,19 @@ namespace QuizProject.Servieces
                 };
             }
 
-            var claims = new[]
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, model.Login),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
+
+            if (userRoles.Any())
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRoles.FirstOrDefault()));
+            }
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
