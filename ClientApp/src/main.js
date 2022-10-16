@@ -8,7 +8,7 @@ import BootstrapVue from "bootstrap-vue";
 import { ModalPlugin } from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "./axios";
-import Interseptors from "@/interseptors";
+import Interseptors from "ClientApp/src/interseptors";
 
 Vue.use(BootstrapVue);
 Vue.use(VueAxios, axios);

@@ -1,6 +1,6 @@
 {
   "TODO": "I think app name should be changed. And you need to check if all depedencies really use.",
-  "name": "example-vue-app",
+  "name": "quiz-application",
   "version": "0.1.0",
   "private": true,
   "scripts": {

@@ -1,4 +1,4 @@
-import TestResult from "@/pages/TestResult";
+import TestResult from "ClientApp/src/pages/TestResult";
 import axios from "axios";
 
 export default {
