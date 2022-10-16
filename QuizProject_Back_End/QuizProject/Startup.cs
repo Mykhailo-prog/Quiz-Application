@@ -53,6 +53,7 @@ namespace QuizProject
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    //TODO: see my comment in EmailService
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
@@ -69,6 +70,7 @@ namespace QuizProject
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //TODO: If Db not exists inti here db migration to create it and fill with data
             app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             if (env.IsDevelopment())
             {

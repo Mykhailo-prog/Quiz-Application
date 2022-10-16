@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+//TODO: every class, interface, enum etc should has separated file
+//TODO: Please read about SOLID. If you want to read/write/change/ statistic it should be separated service etc. S - Single Responsibility Principle
 namespace QuizProject.Services
 {
     public interface ITestLogic
@@ -31,7 +33,7 @@ namespace QuizProject.Services
             Min = Convert.ToInt32(stringTime.Split(':')[0]);
             Sec = Convert.ToInt32(stringTime.Split(':')[1]);
         }
-    }
+    }//TODO: free space
     public class TestLogic : ITestLogic
     {
         
@@ -41,6 +43,7 @@ namespace QuizProject.Services
             _db = context;
         }
 
+        //TODO: looks like redutant method, you can just check if something exists with FirstOrDefaultAsync method, is not it?
         public bool ElemExists<T>(int id)
         {
             string param = typeof(T).Name;
@@ -57,9 +60,11 @@ namespace QuizProject.Services
                 default:
                     return false;
             }
-        }
+        }//TODO: free space
         public FinishTestResponse GetScore(QuizUser user, UserUpdateDTO userResult, Test test)
         {
+            //TODO: Are you sure you want to get every time all Questions??? What will happened if we will have 1 billion records in Question table?
+            //Please remember about IQuerible and IEnumerable
             var questions = test.Questions.ToList();
             double proventResult = 0;
 
@@ -78,7 +83,7 @@ namespace QuizProject.Services
                 Time = userResult.Time,
                 Result = Convert.ToInt32(Math.Round((proventResult * 100) / userResult.userAnswers.Count)),
             };
-        }
+        }//TODO: free space
         public async Task CreateStatisticAsync(QuizUser user, Test test, FinishTestResponse result)
         {
             var userStat = new UserStatistic
@@ -93,7 +98,7 @@ namespace QuizProject.Services
             await _db.SaveChangesAsync();
 
             await ChangeStatistic(test.TestId, user, userStat, result);
-        }
+        }//TODO: free space
         public async Task UpdateStatistic(QuizUser user, Test test, FinishTestResponse result)
         {
             var userStat = await _db.UserStatistic.FirstOrDefaultAsync(x => x.QuizUserId == user.Id);
@@ -105,7 +110,7 @@ namespace QuizProject.Services
             await _db.SaveChangesAsync();
 
             await ChangeStatistic(test.TestId, user, userStat, result);
-        }
+        }//TODO: free space. if this method does not planning to be used out of this class it should has private modificator. Please check modificators in your services
         public async Task ChangeStatistic(int id, QuizUser user, UserStatistic currUserStat, FinishTestResponse result)
         {
             var stat = await _db.Statistics.FirstOrDefaultAsync(x => x.TestId == id);

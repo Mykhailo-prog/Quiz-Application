@@ -13,6 +13,7 @@ namespace QuizProject.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
+    //TODO: Is it not athorized controller?
     public class StatisticController : ControllerBase
     {
         private readonly QuizContext _context;
