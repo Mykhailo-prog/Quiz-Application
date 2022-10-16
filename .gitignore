@@ -1,4 +1,4 @@
 /node_modules
-**/bin
-**/obj
-/.vs
+QuizProject_Back_End/.vs
+/*/*/bin
+/*/*/obj
