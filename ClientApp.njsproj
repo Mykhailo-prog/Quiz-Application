@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
@@ -6,15 +7,14 @@
     <RootNamespace>AdministrationUi.Frontend</RootNamespace>
     <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>6f377859-3a42-4fd0-825a-c65a15d3f698</ProjectGuid>
-    <ProjectHome>
+    <ProjectHome>&#xD;
     </ProjectHome>
     <StartupFile>node_modules\@vue\cli-service\bin\vue-cli-service.js</StartupFile>
-    <SearchPath>
+    <SearchPath>&#xD;
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -30,30 +30,34 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="babel.config.js" />
-    <Content Include="package.json" />
-    <Content Include="package-lock.json" />
-    <Content Include="vue.config.js" />
-    <Content Include="public\**" />
-    <Content Include="src\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="public\" />
-    <Folder Include="src\" />
-    <Folder Include="src\assets\" />
-    <Folder Include="src\assets\img\" />
-    <Folder Include="src\components\" />
-    <Folder Include="src\models\" />
-    <Folder Include="src\pages\" />
-    <Folder Include="src\pages\Hello" />
-  </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-      npm run build
+    <PostBuildEvent>&#xD;
+      npm run build&#xD;
     </PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets"/>
+  <ItemGroup>
+    <Content Include="babel.config.js"/>
+    <Content Include="package.json"/>
+    <Content Include="package-lock.json"/>
+    <Content Include="vue.config.js"/>
+    <Content Include="public\**"/>
+    <Content Include="src\**"/>
+    <Content Include="webpack.config.js"/>
+    <Content Include=".git\logs\refs\heads\debugBranch"/>
+    <Content Include=".git\refs\heads\debugBranch"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="public\"/>
+    <Folder Include="src\"/>
+    <Folder Include="src\assets\"/>
+    <Folder Include="src\assets\img\"/>
+    <Folder Include="src\components\"/>
+    <Folder Include="src\models\"/>
+    <Folder Include="src\pages\"/>
+    <Folder Include="src\pages\Hello"/>
+  </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
@@ -71,20 +75,20 @@
       </FlavorProperties>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
         <WebProjectProperties>
-          <StartPageUrl>
+          <StartPageUrl>&#xD;
           </StartPageUrl>
           <StartAction>CurrentPage</StartAction>
           <AspNetDebugging>True</AspNetDebugging>
           <SilverlightDebugging>False</SilverlightDebugging>
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>
-          <ExternalProgram>
+          <ExternalProgram>&#xD;
           </ExternalProgram>
-          <StartExternalURL>
+          <StartExternalURL>&#xD;
           </StartExternalURL>
-          <StartCmdLineArguments>
+          <StartCmdLineArguments>&#xD;
           </StartCmdLineArguments>
-          <StartWorkingDirectory>
+          <StartWorkingDirectory>&#xD;
           </StartWorkingDirectory>
           <EnableENC>False</EnableENC>
           <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
