@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>AdministrationUi.ClientApp</Name>
+    <RootNamespace>AdministrationUi.Frontend</RootNamespace>
+    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>6f377859-3a42-4fd0-825a-c65a15d3f698</ProjectGuid>
+    <ProjectHome>&#xD;&#xD;
+    </ProjectHome>
+    <StartupFile>node_modules\@vue\cli-service\bin\vue-cli-service.js</StartupFile>
+    <SearchPath>&#xD;&#xD;
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <NodejsPort>1337</NodejsPort>
+    <StartWebBrowser>True</StartWebBrowser>
+    <ScriptArguments>serve</ScriptArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>&#xD;&#xD;
+      npm run build&#xD;&#xD;
+    </PostBuildEvent>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets"/>
+  <ItemGroup>
+    <Content Include="babel.config.js"/>
+    <Content Include="package.json"/>
+    <Content Include="package-lock.json"/>
+    <Content Include="vue.config.js"/>
+    <Content Include="public\**"/>
+    <Content Include="src\**"/>
+    <Content Include=".eslintrc.js"/>
+    <Content Include="QuizProject_Back_End\.vs\QuizProject\FileContentIndex\02ae1dd6-05c8-4a49-8607-73a3c819e0ef.vsidx"/>
+    <Content Include="QuizProject_Back_End\.vs\QuizProject\FileContentIndex\4c5cdee8-e4da-4a4e-bf51-52de86eed918.vsidx"/>
+    <Content Include="QuizProject_Back_End\.vs\QuizProject\FileContentIndex\4ec241c0-ecc6-421d-a60c-48cdc6b7934c.vsidx"/>
+    <Content Include="QuizProject_Back_End\.vs\QuizProject\FileContentIndex\af97ae76-3542-4d9d-872a-001e85293b6a.vsidx"/>
+    <Content Include="QuizProject_Back_End\.vs\QuizProject\FileContentIndex\d3d9f4df-16b4-4548-b358-577ca396bb27.vsidx"/>
+    <Content Include="QuizProject_Back_End\.vs\QuizProject\FileContentIndex\d54f87d9-17c3-493e-9a2e-e1e0f86cf94d.vsidx"/>
+    <Content Include="QuizProject_Back_End\.vs\QuizProject\FileContentIndex\dd63199f-2b0a-4538-9e73-94e3335e7c51.vsidx"/>
+    <Content Include="QuizProject_Back_End\.vs\QuizProject\FileContentIndex\e755cfb1-04fe-4ccf-a427-97030afa8dff.vsidx"/>
+    <Content Include="jsconfig.json"/>
+    <Content Include="public\favicon.ico"/>
+    <Content Include="public\index.html"/>
+    <Content Include="src\App.css"/>
+    <Content Include="src\App.html"/>
+    <Content Include="src\App.vue"/>
+    <Content Include="src\assets\img\MathLogo.jpg"/>
+    <Content Include="src\assets\img\Plus.jpg"/>
+    <Content Include="src\assets\img\Plus.png"/>
+    <Content Include="src\assets\img\QuizLogo.png"/>
+    <Content Include="src\assets\img\logo.png"/>
+    <Content Include="src\axios.js"/>
+    <Content Include="src\components\AdminPage\AdminPage.css"/>
+    <Content Include="src\components\AdminPage\AdminPage.html"/>
+    <Content Include="src\components\AdminPage\AdminPage.vue"/>
+    <Content Include="src\components\AdminPage\index.js"/>
+    <Content Include="src\components\AnswerInput\AnswerInput.css"/>
+    <Content Include="src\components\AnswerInput\AnswerInput.html"/>
+    <Content Include="src\components\AnswerInput\AnswerInput.vue"/>
+    <Content Include="src\components\AnswerInput\index.js"/>
+    <Content Include="src\components\ForgotPassword\ForgotPassword.css"/>
+    <Content Include="src\components\ForgotPassword\ForgotPassword.html"/>
+    <Content Include="src\components\ForgotPassword\ForgotPassword.vue"/>
+    <Content Include="src\components\ForgotPassword\index.js"/>
+    <Content Include="src\components\LoginUser\index.js"/>
+    <Content Include="src\components\LoginUser\LoginUser.css"/>
+    <Content Include="src\components\LoginUser\LoginUser.html"/>
+    <Content Include="src\components\LoginUser\LoginUser.vue"/>
+    <Content Include="src\components\Pugination\index.js"/>
+    <Content Include="src\components\Pugination\Pugination.css"/>
+    <Content Include="src\components\Pugination\Pugination.html"/>
+    <Content Include="src\components\Pugination\Pugination.vue"/>
+    <Content Include="src\components\QuestInput\index.js"/>
+    <Content Include="src\components\QuestInput\QuestInput.css"/>
+    <Content Include="src\components\QuestInput\QuestInput.html"/>
+    <Content Include="src\components\QuestInput\QuestInput.vue"/>
+    <Content Include="src\components\QuestList\index.js"/>
+    <Content Include="src\components\QuestList\QuestList.css"/>
+    <Content Include="src\components\QuestList\QuestList.html"/>
+    <Content Include="src\components\QuestList\QuestList.vue"/>
+    <Content Include="src\components\RegisterUser\index.js"/>
+    <Content Include="src\components\RegisterUser\RegisterUser.css"/>
+    <Content Include="src\components\RegisterUser\RegisterUser.html"/>
+    <Content Include="src\components\RegisterUser\RegisterUser.vue"/>
+    <Content Include="src\components\ResetPass\index.js"/>
+    <Content Include="src\components\ResetPass\ResetPass.css"/>
+    <Content Include="src\components\ResetPass\ResetPass.html"/>
+    <Content Include="src\components\ResetPass\ResetPass.vue"/>
+    <Content Include="src\components\TestForm\index.js"/>
+    <Content Include="src\components\TestForm\TestForm.css"/>
+    <Content Include="src\components\TestForm\TestForm.html"/>
+    <Content Include="src\components\TestForm\TestForm.vue"/>
+    <Content Include="src\components\TestList\index.js"/>
+    <Content Include="src\components\TestList\TestList.css"/>
+    <Content Include="src\components\TestList\TestList.html"/>
+    <Content Include="src\components\TestList\TestList.vue"/>
+    <Content Include="src\components\UserList\index.js"/>
+    <Content Include="src\components\UserList\UserList.css"/>
+    <Content Include="src\components\UserList\UserList.html"/>
+    <Content Include="src\components\UserList\UserList.vue"/>
+    <Content Include="src\components\UserTests\index.js"/>
+    <Content Include="src\components\UserTests\UserTests.css"/>
+    <Content Include="src\components\UserTests\UserTests.html"/>
+    <Content Include="src\components\UserTests\UserTests.vue"/>
+    <Content Include="src\formValidation.js"/>
+    <Content Include="src\interseptors.js"/>
+    <Content Include="src\main.js"/>
+    <Content Include="src\pages\Main\index.js"/>
+    <Content Include="src\pages\Main\Main.css"/>
+    <Content Include="src\pages\Main\Main.html"/>
+    <Content Include="src\pages\Main\Main.vue"/>
+    <Content Include="src\pages\ResetPassword\index.js"/>
+    <Content Include="src\pages\ResetPassword\ResetPassword.css"/>
+    <Content Include="src\pages\ResetPassword\ResetPassword.html"/>
+    <Content Include="src\pages\ResetPassword\ResetPassword.vue"/>
+    <Content Include="src\pages\Start\index.js"/>
+    <Content Include="src\pages\Start\Start.css"/>
+    <Content Include="src\pages\Start\Start.html"/>
+    <Content Include="src\pages\Start\Start.vue"/>
+    <Content Include="src\pages\TestResult\index.js"/>
+    <Content Include="src\pages\TestResult\TestResult.css"/>
+    <Content Include="src\pages\TestResult\TestResult.html"/>
+    <Content Include="src\pages\TestResult\TestResult.vue"/>
+    <Content Include="src\pages\Tests\index.js"/>
+    <Content Include="src\pages\Tests\Tests.css"/>
+    <Content Include="src\pages\Tests\Tests.html"/>
+    <Content Include="src\pages\Tests\Tests.vue"/>
+    <Content Include="src\router.js"/>
+    <Content Include="src\store\answers.js"/>
+    <Content Include="src\store\errors.js"/>
+    <Content Include="src\store\index.js"/>
+    <Content Include="src\store\questions.js"/>
+    <Content Include="src\store\register.js"/>
+    <Content Include="src\store\resetpassword.js"/>
+    <Content Include="src\store\tests.js"/>
+    <Content Include="src\store\users.js"/>
+    <Content Include="ClientApp\public\favicon.ico"/>
+    <Content Include="ClientApp\public\index.html"/>
+    <Content Include="ClientApp\src\App.css"/>
+    <Content Include="ClientApp\src\App.html"/>
+    <Content Include="ClientApp\src\App.vue"/>
+    <Content Include="ClientApp\src\assets\img\logo.png"/>
+    <Content Include="ClientApp\src\assets\img\MathLogo.jpg"/>
+    <Content Include="ClientApp\src\assets\img\Plus.jpg"/>
+    <Content Include="ClientApp\src\assets\img\Plus.png"/>
+    <Content Include="ClientApp\src\assets\img\QuizLogo.png"/>
+    <Content Include="ClientApp\src\axios.js"/>
+    <Content Include="ClientApp\src\components\AdminPage\AdminPage.css"/>
+    <Content Include="ClientApp\src\components\AdminPage\AdminPage.html"/>
+    <Content Include="ClientApp\src\components\AdminPage\AdminPage.vue"/>
+    <Content Include="ClientApp\src\components\AdminPage\index.js"/>
+    <Content Include="ClientApp\src\components\AnswerInput\AnswerInput.css"/>
+    <Content Include="ClientApp\src\components\AnswerInput\AnswerInput.html"/>
+    <Content Include="ClientApp\src\components\AnswerInput\AnswerInput.vue"/>
+    <Content Include="ClientApp\src\components\AnswerInput\index.js"/>
+    <Content Include="ClientApp\src\components\ForgotPassword\ForgotPassword.css"/>
+    <Content Include="ClientApp\src\components\ForgotPassword\ForgotPassword.html"/>
+    <Content Include="ClientApp\src\components\ForgotPassword\ForgotPassword.vue"/>
+    <Content Include="ClientApp\src\components\ForgotPassword\index.js"/>
+    <Content Include="ClientApp\src\components\LoginUser\index.js"/>
+    <Content Include="ClientApp\src\components\LoginUser\LoginUser.css"/>
+    <Content Include="ClientApp\src\components\LoginUser\LoginUser.html"/>
+    <Content Include="ClientApp\src\components\LoginUser\LoginUser.vue"/>
+    <Content Include="ClientApp\src\components\Pugination\index.js"/>
+    <Content Include="ClientApp\src\components\Pugination\Pugination.css"/>
+    <Content Include="ClientApp\src\components\Pugination\Pugination.html"/>
+    <Content Include="ClientApp\src\components\Pugination\Pugination.vue"/>
+    <Content Include="ClientApp\src\components\QuestInput\index.js"/>
+    <Content Include="ClientApp\src\components\QuestInput\QuestInput.css"/>
+    <Content Include="ClientApp\src\components\QuestInput\QuestInput.html"/>
+    <Content Include="ClientApp\src\components\QuestInput\QuestInput.vue"/>
+    <Content Include="ClientApp\src\components\QuestList\index.js"/>
+    <Content Include="ClientApp\src\components\QuestList\QuestList.css"/>
+    <Content Include="ClientApp\src\components\QuestList\QuestList.html"/>
+    <Content Include="ClientApp\src\components\QuestList\QuestList.vue"/>
+    <Content Include="ClientApp\src\components\RegisterUser\index.js"/>
+    <Content Include="ClientApp\src\components\RegisterUser\RegisterUser.css"/>
+    <Content Include="ClientApp\src\components\RegisterUser\RegisterUser.html"/>
+    <Content Include="ClientApp\src\components\RegisterUser\RegisterUser.vue"/>
+    <Content Include="ClientApp\src\components\ResetPass\index.js"/>
+    <Content Include="ClientApp\src\components\ResetPass\ResetPass.css"/>
+    <Content Include="ClientApp\src\components\ResetPass\ResetPass.html"/>
+    <Content Include="ClientApp\src\components\ResetPass\ResetPass.vue"/>
+    <Content Include="ClientApp\src\components\TestForm\index.js"/>
+    <Content Include="ClientApp\src\components\TestForm\TestForm.css"/>
+    <Content Include="ClientApp\src\components\TestForm\TestForm.html"/>
+    <Content Include="ClientApp\src\components\TestForm\TestForm.vue"/>
+    <Content Include="ClientApp\src\components\TestList\index.js"/>
+    <Content Include="ClientApp\src\components\TestList\TestList.css"/>
+    <Content Include="ClientApp\src\components\TestList\TestList.html"/>
+    <Content Include="ClientApp\src\components\TestList\TestList.vue"/>
+    <Content Include="ClientApp\src\components\UserList\index.js"/>
+    <Content Include="ClientApp\src\components\UserList\UserList.css"/>
+    <Content Include="ClientApp\src\components\UserList\UserList.html"/>
+    <Content Include="ClientApp\src\components\UserList\UserList.vue"/>
+    <Content Include="ClientApp\src\components\UserTests\index.js"/>
+    <Content Include="ClientApp\src\components\UserTests\UserTests.css"/>
+    <Content Include="ClientApp\src\components\UserTests\UserTests.html"/>
+    <Content Include="ClientApp\src\components\UserTests\UserTests.vue"/>
+    <Content Include="ClientApp\src\formValidation.js"/>
+    <Content Include="ClientApp\src\interseptors.js"/>
+    <Content Include="ClientApp\src\main.js"/>
+    <Content Include="ClientApp\src\pages\Main\index.js"/>
+    <Content Include="ClientApp\src\pages\Main\Main.css"/>
+    <Content Include="ClientApp\src\pages\Main\Main.html"/>
+    <Content Include="ClientApp\src\pages\Main\Main.vue"/>
+    <Content Include="ClientApp\src\pages\ResetPassword\index.js"/>
+    <Content Include="ClientApp\src\pages\ResetPassword\ResetPassword.css"/>
+    <Content Include="ClientApp\src\pages\ResetPassword\ResetPassword.html"/>
+    <Content Include="ClientApp\src\pages\ResetPassword\ResetPassword.vue"/>
+    <Content Include="ClientApp\src\pages\Start\index.js"/>
+    <Content Include="ClientApp\src\pages\Start\Start.css"/>
+    <Content Include="ClientApp\src\pages\Start\Start.html"/>
+    <Content Include="ClientApp\src\pages\Start\Start.vue"/>
+    <Content Include="ClientApp\src\pages\TestResult\index.js"/>
+    <Content Include="ClientApp\src\pages\TestResult\TestResult.css"/>
+    <Content Include="ClientApp\src\pages\TestResult\TestResult.html"/>
+    <Content Include="ClientApp\src\pages\TestResult\TestResult.vue"/>
+    <Content Include="ClientApp\src\pages\Tests\index.js"/>
+    <Content Include="ClientApp\src\pages\Tests\Tests.css"/>
+    <Content Include="ClientApp\src\pages\Tests\Tests.html"/>
+    <Content Include="ClientApp\src\pages\Tests\Tests.vue"/>
+    <Content Include="ClientApp\src\router.js"/>
+    <Content Include="ClientApp\src\store\answers.js"/>
+    <Content Include="ClientApp\src\store\errors.js"/>
+    <Content Include="ClientApp\src\store\index.js"/>
+    <Content Include="ClientApp\src\store\questions.js"/>
+    <Content Include="ClientApp\src\store\register.js"/>
+    <Content Include="ClientApp\src\store\resetpassword.js"/>
+    <Content Include="ClientApp\src\store\tests.js"/>
+    <Content Include="ClientApp\src\store\users.js"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\18703c270368e1ff0ee2419c6fa9a81f711a7e1b.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\1a5f033568cafdfdb4c122ec1ae531db748f0416.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\2c0d8f28726336d975ead5ff9311e7001c827cf7.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\2dd06a0749a25c1051caee2d96ea0f498c0b23b0.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\36fa27efc54eb21eb7f10565ae469524132033ca.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\564503f81071c11f97accfe6cc558a265f40db89.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\677c3bc9f4c79a6edaa0ee4f68f96e4405a6b486.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\79ff04f121e67d1c12b8f4266176c03f303612ce.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\842bfe19fc5756b147e460695b6d3d7ea6517eda.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\a307fc65f448539b356a6eaddcc3de6c777f7ccd.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\c82b551006463383aefeb58d11965575e1bf6f9f.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\c9248dd4eb9e0ff74ff87f57e3e8c54b0f55124c.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\caabe951bccebdb53ffecea7f07bd16454134bd8.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\d78faea23e58beb7e74bb61c9e23c27bdd4b31b5.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\d9e922b215b9c93639a79fee22afaf1f97baab19.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\e2edaf1bbcaa92840cac3cf52e09d4dab996f98f.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\e87e58a9f7b4add4c5ce1d29bd790cc789ce9764.json.gz"/>
+    <Content Include="ClientApp\node_modules\.cache\eslint-loader\e9ac1dc768016e87fe2bb504207a258a9b8b0106.json.gz"/>
+    <Content Include="ClientApp\.eslintrc.js"/>
+    <Content Include="ClientApp\babel.config.js"/>
+    <Content Include="ClientApp\jsconfig.json"/>
+    <Content Include="ClientApp\package-lock.json"/>
+    <Content Include="ClientApp\package.json"/>
+    <Content Include="ClientApp\vue.config.js"/>
+    <Content Include="ClientApp\.vs\ProjectEvaluation\quizproject.metadata.v2"/>
+    <Content Include="ClientApp\.vs\ProjectEvaluation\quizproject.metadata.v5.1"/>
+    <Content Include="ClientApp\.vs\ProjectEvaluation\quizproject.projects.v2"/>
+    <Content Include="ClientApp\.vs\ProjectEvaluation\quizproject.projects.v5.1"/>
+    <Content Include="ClientApp\.vs\QuizProject\config\applicationhost.config"/>
+    <Content Include="ClientApp\.vs\QuizProject\DesignTimeBuild\.dtbcache.v2"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\02ae1dd6-05c8-4a49-8607-73a3c819e0ef.vsidx"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\4c5cdee8-e4da-4a4e-bf51-52de86eed918.vsidx"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\4ec241c0-ecc6-421d-a60c-48cdc6b7934c.vsidx"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\af97ae76-3542-4d9d-872a-001e85293b6a.vsidx"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\d3d9f4df-16b4-4548-b358-577ca396bb27.vsidx"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\d54f87d9-17c3-493e-9a2e-e1e0f86cf94d.vsidx"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\dd63199f-2b0a-4538-9e73-94e3335e7c51.vsidx"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\e755cfb1-04fe-4ccf-a427-97030afa8dff.vsidx"/>
+    <Content Include="ClientApp\.vs\QuizProject\FileContentIndex\read.lock"/>
+    <Content Include="ClientApp\.vs\QuizProject\v17\.futdcache.v1"/>
+    <Content Include="ClientApp\.vs\QuizProject\v17\.futdcache.v2"/>
+    <Content Include="ClientApp\.vs\QuizProject\v17\.suo"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\bin\Debug\netcoreapp3.1\Logic.deps.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\bin\Debug\netcoreapp3.1\Logic.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\bin\Debug\netcoreapp3.1\Logic.pdb"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\Logic.csproj"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\.NETCoreApp,Version=v3.1.AssemblyAttributes.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.AssemblyInfo.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.AssemblyInfoInputs.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.assets.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.csproj.AssemblyReference.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.csproj.BuildWithSkipAnalyzers"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.csproj.CoreCompileInputs.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.csproj.FileListAbsolute.txt"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.GeneratedMSBuildEditorConfig.editorconfig"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\Logic.pdb"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Logic.csproj.nuget.dgspec.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Logic.csproj.nuget.g.props"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\Logic.csproj.nuget.g.targets"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\project.assets.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\obj\project.nuget.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\Logic\TestLogic.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\appsettings.Development.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\appsettings.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\appsettings.Development.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\appsettings.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\cs\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\cs\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\cs\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\cs\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\de\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\de\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\de\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\de\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\dotnet-aspnet-codegenerator-design.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\es\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\es\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\es\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\es\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\fr\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\fr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\fr\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\fr\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\it\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\it\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\it\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\it\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ja\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ja\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ja\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ja\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ko\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ko\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ko\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ko\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.Internal.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Razor.Language.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Bcl.AsyncInterfaces.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Bcl.HashCode.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.CodeAnalysis.CSharp.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.CodeAnalysis.CSharp.Workspaces.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.CodeAnalysis.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.CodeAnalysis.Razor.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.CodeAnalysis.Workspaces.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Data.SqlClient.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Memory.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Core.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Identity.Stores.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.Identity.Client.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.JsonWebTokens.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Logging.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Tokens.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Core.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Templating.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pl\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pl\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pl\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pl\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pt-BR\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\QuizProject.deps.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\QuizProject.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\QuizProject.exe"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\QuizProject.pdb"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\QuizProject.runtimeconfig.dev.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\QuizProject.runtimeconfig.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ru\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ru\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ru\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ru\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\Microsoft.Data.SqlClient.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Composition.AttributedModel.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Composition.Convention.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Composition.Hosting.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Composition.Runtime.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Composition.TypedParts.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\System.Security.Cryptography.ProtectedData.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.CSharp.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Controllers\AnswersController.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Controllers\AuthController.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Controllers\QuestionsController.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Controllers\StatisticController.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Controllers\TestsController.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Controllers\UsersController.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Controllers\UserTestConnectionController.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220816103143_InitDB.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220816103143_InitDB.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220816145841_addTestEntity.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220816145841_addTestEntity.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220817161012_addTestsField.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220817161012_addTestsField.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220817183654_addUserTestCount.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220817183654_addUserTestCount.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220817184225_changeTestTriedToInt.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220817184225_changeTestTriedToInt.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220823161304_InitDataSeed.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220823161304_InitDataSeed.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220824143817_AddUserCreatedTests.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220824143817_AddUserCreatedTests.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220824144443_UpdUserCreatedTests.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220824144443_UpdUserCreatedTests.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220905182244_upd_UserTestCount.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220905182244_upd_UserTestCount.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220905184033_upd_UserTestCount_2.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220905184033_upd_UserTestCount_2.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220907192016_addTestStatistic.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220907192016_addTestStatistic.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220907195115_addTestStatUpd.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220907195115_addTestStatUpd.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220909102945_changeTestStat.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220909102945_changeTestStat.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220915152037_ChangeTestStat1.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220915152037_ChangeTestStat1.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220928143013_InitIdentityStore.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220928143013_InitIdentityStore.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220929125813_IdentitySeed.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220929125813_IdentitySeed.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220929130657_IdentitySeed1.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220929130657_IdentitySeed1.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220929131108_IdentitySeed2.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20220929131108_IdentitySeed2.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003010555_ChangeUserStat.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003010555_ChangeUserStat.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003021907_ChangeCreateTestEntity.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003021907_ChangeCreateTestEntity.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003023332_ChangeCreateTestEntity2.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003023332_ChangeCreateTestEntity2.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003034222_ChangetestStatEntity1.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003034222_ChangetestStatEntity1.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003034337_ChangetestStatEntity2.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221003034337_ChangetestStatEntity2.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221014144259_SeedRole.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\20221014144259_SeedRole.Designer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\QuizContextModelSnapshot.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\Answer.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\AnswerDTO.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\CreatedTestDTO.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\LoginModel.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\QuestionDTO.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\RegisterModel.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\ResetPasswordModel.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\TestDTO.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\TestStatisticDTO.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\UserDTO.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\UserUpdateDTO.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\FinishTestResponse.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\ModelConfiguration\AnswerConfiguration.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\ModelConfiguration\CreatedTestConfiguration.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\ModelConfiguration\QuestionConfiguration.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\ModelConfiguration\TestConfiguration.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\ModelConfiguration\TestStatisticConfiguration.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\ModelConfiguration\UserConfiguration.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\Question.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\QuizContext.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\Test.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\TestStatistic.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\User.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\UserCreatedTest.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\UserManagerResponse.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Models\UserStatistic.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\.NETCoreApp,Version=v3.1.AssemblyAttributes.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\apphost.exe"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\project.razor.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.AssemblyInfo.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.AssemblyInfoInputs.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.assets.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.csproj.AssemblyReference.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.csproj.BuildWithSkipAnalyzers"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.csproj.CopyComplete"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.csproj.CoreCompileInputs.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.csproj.FileListAbsolute.txt"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.dll"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.GeneratedMSBuildEditorConfig.editorconfig"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.genruntimeconfig.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.MvcApplicationPartsAssemblyInfo.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.MvcApplicationPartsAssemblyInfo.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.pdb"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\QuizProject.RazorTargetAssemblyInfo.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\staticwebassets\QuizProject.StaticWebAssets.Manifest.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\project.assets.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\project.nuget.cache"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\QuizProject.csproj.nuget.dgspec.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\QuizProject.csproj.nuget.g.props"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\obj\QuizProject.csproj.nuget.g.targets"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Program.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Properties\launchSettings.json"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\QuizProject.csproj"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\QuizProject.csproj.user"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Services\IAuthService.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Services\IEmailService.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Services\ITestLogic.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject\Startup.cs"/>
+    <Content Include="ClientApp\QuizProject_Back_End\QuizProject.sln"/>
+    <Content Include=".git\logs\refs\heads\Fixed"/>
+    <Content Include=".git\refs\heads\Fixed"/>
+    <Content Include=".git\logs\refs\remotes\origin\Fixed"/>
+    <Content Include=".git\refs\remotes\origin\Fixed"/>
+    <Content Include=".git\AUTO_MERGE"/>
+    <Content Include=".git\MERGE_HEAD"/>
+    <Content Include=".git\MERGE_MODE"/>
+    <Content Include=".git\MERGE_MSG"/>
+    <Content Include="ClientApp.njsproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="public\"/>
+    <Folder Include="src\"/>
+    <Folder Include="src\assets\"/>
+    <Folder Include="src\assets\img\"/>
+    <Folder Include="src\components\"/>
+    <Folder Include="src\models\"/>
+    <Folder Include="src\pages\"/>
+    <Folder Include="src\pages\Hello"/>
+    <Folder Include="src\components\AdminPage\"/>
+    <Folder Include="src\components\AnswerInput\"/>
+    <Folder Include="src\components\ForgotPassword\"/>
+    <Folder Include="src\components\LoginUser\"/>
+    <Folder Include="src\components\Pugination\"/>
+    <Folder Include="src\components\QuestInput\"/>
+    <Folder Include="src\components\QuestList\"/>
+    <Folder Include="src\components\RegisterUser\"/>
+    <Folder Include="src\components\ResetPass\"/>
+    <Folder Include="src\components\TestForm\"/>
+    <Folder Include="src\components\TestList\"/>
+    <Folder Include="src\components\UserList\"/>
+    <Folder Include="src\components\UserTests\"/>
+    <Folder Include="src\pages\Main\"/>
+    <Folder Include="src\pages\ResetPassword\"/>
+    <Folder Include="src\pages\Start\"/>
+    <Folder Include="src\pages\TestResult\"/>
+    <Folder Include="src\pages\Tests\"/>
+    <Folder Include="src\store\"/>
+    <Folder Include="ClientApp\public\"/>
+    <Folder Include="ClientApp\src\"/>
+    <Folder Include="ClientApp\src\assets\"/>
+    <Folder Include="ClientApp\src\assets\img\"/>
+    <Folder Include="ClientApp\src\components\"/>
+    <Folder Include="ClientApp\src\components\AdminPage\"/>
+    <Folder Include="ClientApp\src\components\AnswerInput\"/>
+    <Folder Include="ClientApp\src\components\ForgotPassword\"/>
+    <Folder Include="ClientApp\src\components\LoginUser\"/>
+    <Folder Include="ClientApp\src\components\Pugination\"/>
+    <Folder Include="ClientApp\src\components\QuestInput\"/>
+    <Folder Include="ClientApp\src\components\QuestList\"/>
+    <Folder Include="ClientApp\src\components\RegisterUser\"/>
+    <Folder Include="ClientApp\src\components\ResetPass\"/>
+    <Folder Include="ClientApp\src\components\TestForm\"/>
+    <Folder Include="ClientApp\src\components\TestList\"/>
+    <Folder Include="ClientApp\src\components\UserList\"/>
+    <Folder Include="ClientApp\src\components\UserTests\"/>
+    <Folder Include="ClientApp\src\pages\"/>
+    <Folder Include="ClientApp\src\pages\Main\"/>
+    <Folder Include="ClientApp\src\pages\ResetPassword\"/>
+    <Folder Include="ClientApp\src\pages\Start\"/>
+    <Folder Include="ClientApp\src\pages\TestResult\"/>
+    <Folder Include="ClientApp\src\pages\Tests\"/>
+    <Folder Include="ClientApp\src\store\"/>
+    <Folder Include="ClientApp\node_modules\"/>
+    <Folder Include="ClientApp\node_modules\.cache\"/>
+    <Folder Include="ClientApp\node_modules\.cache\eslint-loader\"/>
+    <Folder Include="ClientApp\.vs\"/>
+    <Folder Include="ClientApp\.vs\ProjectEvaluation\"/>
+    <Folder Include="ClientApp\.vs\QuizProject\"/>
+    <Folder Include="ClientApp\.vs\QuizProject\config\"/>
+    <Folder Include="ClientApp\.vs\QuizProject\DesignTimeBuild\"/>
+    <Folder Include="ClientApp\.vs\QuizProject\FileContentIndex\"/>
+    <Folder Include="ClientApp\.vs\QuizProject\FileContentIndex\merges\"/>
+    <Folder Include="ClientApp\.vs\QuizProject\v17\"/>
+    <Folder Include="ClientApp\.vs\sd\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\Logic\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\Logic\bin\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\Logic\bin\Debug\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\Logic\bin\Debug\netcoreapp3.1\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\Logic\obj\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\Logic\obj\Debug\netcoreapp3.1\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\cs\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\de\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\es\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\fr\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\it\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ja\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ko\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pl\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\pt-BR\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\ru\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\unix\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-arm64\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-x64\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-x86\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\tr\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hans\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\bin\Debug\netcoreapp3.1\zh-Hant\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\Controllers\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\Migrations\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\Models\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\Models\DTO\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\Models\ModelConfiguration\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\obj\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\obj\Debug\netcoreapp3.1\staticwebassets\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\Properties\"/>
+    <Folder Include="ClientApp\QuizProject_Back_End\QuizProject\Services\"/>
+  </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>&#xD;&#xD;
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>&#xD;&#xD;
+          </ExternalProgram>
+          <StartExternalURL>&#xD;&#xD;
+          </StartExternalURL>
+          <StartCmdLineArguments>&#xD;&#xD;
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>&#xD;&#xD;
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

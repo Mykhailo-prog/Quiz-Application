@@ -1,0 +1,38 @@
+<b-container>
+  <b-row>
+    <div class="image">
+      <img
+        alt="Vue logo"
+        class="vue-logo p-4"
+        :src="require('@/assets/img/QuizLogo.png')"
+      />
+    </div>
+    <b-col class="p-0 main">
+      <login-user v-if="navItem === 1" @toRegister="navItem++"></login-user>
+      <register-user
+        v-if="navItem === 2"
+        @toLogin="confirmAlert()"
+      ></register-user>
+    </b-col>
+    <b-modal id="confirmAlert" hide-footer hide-backdrop>
+      <template #modal-title>
+        <h3>Now, please confirm your Email</h3>
+      </template>
+      <div style="text-align: center;">
+        <b-button
+          size="lg"
+          variant="dark"
+          @click="$bvModal.hide('confirmAlert')"
+          >Cancel</b-button
+        >
+      </div>
+    </b-modal>
+  </b-row>
+  <b-row>
+    <b-col class="p-0">
+      <div>
+        <user-list :users="Users"></user-list>
+      </div>
+    </b-col>
+  </b-row>
+</b-container>

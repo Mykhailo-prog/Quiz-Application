@@ -1,0 +1,57 @@
+<div>
+  <div>
+    <h1>Login</h1>
+  </div>
+  <div class="login">
+    <b-form>
+      <b-form-group>
+        <b-form-input
+          id="login"
+          type="text"
+          placeholder="Enter login"
+          required
+          v-model="loginForm.login"
+        >
+        </b-form-input>
+      </b-form-group>
+
+      <b-form-group class="mb-1">
+        <b-form-input
+          id="pass"
+          type="password"
+          placeholder="Enter password"
+          required
+          v-model="loginForm.password"
+        >
+        </b-form-input>
+      </b-form-group>
+    </b-form>
+    <div class="linksbar">
+      <div class="register">
+        <b-link @click="registerBtn">Register</b-link>
+      </div>
+      <div class="forgot">
+        <b-link to="/resetpassword">Forgot password?</b-link>
+      </div>
+    </div>
+    <div v-if="!errorResponse.success">
+      <b-alert v-if="errorResponse.message" class="p-2" variant="danger" show
+        >{{errorResponse.message}}</b-alert
+      >
+      <b-alert
+        v-for="err in errorResponse.errors"
+        :key="err"
+        class="p-2"
+        show
+        variant="danger"
+        style="hyphens:auto;"
+        >{{err}}</b-alert
+      >
+    </div>
+    <div class="linksbar">
+      <b-button variant="outline-primary" class="singIn" @click="LoginUser"
+        >Sing in</b-button
+      >
+    </div>
+  </div>
+</div>

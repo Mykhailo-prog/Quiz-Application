@@ -1,0 +1,68 @@
+<div>
+  <b-modal
+    :id="editTest ? 'modal-scoped' + editTest.testId : 'modal-scoped'"
+    scrollable
+    hide-backdrop
+  >
+    <template #modal-header="{close}">
+      <h5 v-if="editTest">Edit Test</h5>
+      <h5 v-else>Creating new Test</h5>
+      <button @click="close()" class="close" type="button" aria-label="Close">
+        ×
+      </button>
+    </template>
+
+    <template #default="">
+      <b-form @submit.prevent="">
+        <b-form-group id="input-group-1" label="Test name:" label-for="input-1">
+          <b-form-input
+            id="input-1"
+            placeholder="Enter your test name"
+            :state=" testValidation ? null : false"
+            required
+            v-model="NewTest.name"
+          >
+          </b-form-input>
+        </b-form-group>
+        <div v-for="i in QuestCounter">
+          <quest-input
+            :editQuest="editTest ? editTest.questions[i-1] : null"
+            :QuestionPos="i"
+            @added-quest="checkQuest"
+            @ans-valid="AnswerValidation"
+          ></quest-input>
+        </div>
+        <b-button-group style="width:100%;">
+          <b-button v-if="!editTest" @click="QuestCounter++" variant="info"
+            >Add</b-button
+          >
+          <b-button
+            v-if="!editTest"
+            @click="QuestCounter > 1 ? QuestCounter-- : QuestCounter "
+            variant="info"
+            >Detele</b-button
+          >
+        </b-button-group>
+      </b-form>
+    </template>
+
+    <template #modal-footer="">
+      <b-button
+        v-if="!editTest"
+        :variant="testValid ? 'success' : 'danger'"
+        @click="CreateTest"
+        :class="testValid ? '' : 'disabled'"
+      >
+        Create
+      </b-button>
+      <b-button
+        v-if="editTest"
+        :variant="testValid ? 'success' : 'danger'"
+        @click="EditTest"
+        :class="testValid ? '' : 'disabled'"
+      >
+        Edit
+      </b-button>
+    </template>
+  </b-modal>
+</div>

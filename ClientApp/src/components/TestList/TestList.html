@@ -1,0 +1,175 @@
+<div>
+  <b-card no-body style="max-width: 20rem;" class="m-4" img-alt="Image" img-top>
+    <template #header>
+      <div style="display: flex;">
+        <h4 class="mb-0" style="width: 100%">{{test.name}}</h4>
+        <div v-if="userTestCheck">
+          <b-button
+            class="p-0 mr-2 btn-light"
+            @click="$bvModal.show('modal-scoped' + test.testId)"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              fill="currentColor"
+              class="bi bi-pencil-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"
+              />
+            </svg>
+          </b-button>
+        </div>
+        <div v-if="userTestCheck">
+          <b-button
+            class=" p-0 btn-light"
+            @click="$bvModal.show('delete-' + test.testId.toString())"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              class="bi bi-trash3-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"
+              />
+            </svg>
+          </b-button>
+          <b-modal
+            :id="'delete-'+ test.testId.toString()"
+            hide-footer
+            hide-backdrop
+            centered
+          >
+            <template #modal-title>
+              <h3>Delete {{test.name}}?</h3>
+            </template>
+            <div style="text-align: center;">
+              <b-button size="lg" class="" variant="dark" @click="deleteTest"
+                >Yes</b-button
+              >
+              <b-button
+                size="lg"
+                class="ml-5"
+                variant="dark"
+                @click="$bvModal.hide('delete-' + test.testId.toString())"
+                >No</b-button
+              >
+            </div>
+          </b-modal>
+        </div>
+        <div v-if="!userTestCheck && !showStatistic">
+          <b-button class=" p-0 btn-light" @click="showStatistic = true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              class="bi bi-list"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+              />
+            </svg>
+          </b-button>
+        </div>
+        <div v-if="showStatistic">
+          <b-button class=" p-0 btn-light" @click="showStatistic = false">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="currentColor"
+              class="bi bi-arrow-left-short"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+              />
+            </svg>
+          </b-button>
+        </div>
+      </div>
+    </template>
+
+    <b-card-body class="p-0" style="width: 300px; height: 316px;">
+      <div v-if="!showStatistic">
+        <b-card-img
+          alt="Vue logo"
+          class="vue-logo"
+          @click="defineTest"
+          style=" cursor: pointer; height: 316px;"
+          :src="require('@/assets/img/MathLogo.jpg')"
+        />
+      </div>
+      <div v-if="showStatistic">
+        <table class="table p-0">
+          <tr>
+            <td>
+              Best Time
+            </td>
+            <td>
+              {{test.testStatistic.bestTime}}
+            </td>
+            <td>
+              {{test.testStatistic.bestTimeUser}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Best Result
+            </td>
+            <td>
+              {{test.testStatistic.bestResult}}
+            </td>
+            <td>
+              {{test.testStatistic.bestResultUser}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Lessiest Attempts
+            </td>
+            <td>
+              {{test.testStatistic.minTries}}
+            </td>
+            <td>
+              {{test.testStatistic.minTriesUser}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              First Attempt Passed
+            </td>
+            <td>
+              {{test.testStatistic.avgFirstTryResult}}%
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              Attempts Count
+            </td>
+            <td>
+              {{test.testStatistic.countOfAllTries}}
+            </td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+    </b-card-body>
+
+    <b-card-footer class="footer"
+      >Questions: {{test.questions.length}}</b-card-footer
+    >
+  </b-card>
+  <test-form :editTest="test"></test-form>
+</div>

@@ -24,3 +24,7 @@ Release users and tests statistic.
 ## Patch 1.5
 
 Release authentification and authorization abilities
+
+## Patch 1.6
+
+Relese Admin page. Add ability to edit created tests. Changed algorythm of creating test.
