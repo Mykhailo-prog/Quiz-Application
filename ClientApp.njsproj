@@ -343,6 +343,9 @@
     <Content Include="src\pages\Start\Start.html"/>
     <Content Include="src\pages\Start\Start.vue"/>
     <Content Include="src\pages\TestResult\TestResult.vue"/>
+    <Content Include=".git\gc.pid"/>
+    <Content Include=".git\packed-refs"/>
+    <Content Include=".git\info\refs"/>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\"/>
