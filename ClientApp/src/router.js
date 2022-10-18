@@ -1,5 +1,5 @@
-import Vue from "vue";
-import Router from "vue-router";
+import * as Vue from "vue";
+import * as Router from "vue-router";
 import Main from "./pages/Main";
 import Start from "./pages/Start";
 import Tests from "./pages/Tests";
@@ -14,12 +14,12 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "Main",
+      name: "Main page",
       component: Main,
     },
     {
       path: "/quiz",
-      name: "Quiz",
+      name: "Quiz Page",
       component: Start,
       //TODO: I think we need to check if user authenticaten on vue router level too.
       // meta: {
@@ -29,7 +29,7 @@ export default new Router({
     },
     {
       path: "/tests",
-      name: "Tests",
+      name: "Tests Page",
       component: Tests,
     },
     {
