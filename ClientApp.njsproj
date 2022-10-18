@@ -556,6 +556,8 @@
     <Content Include="ClientApp\QuizProject_Back_End\QuizProject.sln"/>
     <Content Include=".git\logs\refs\heads\Fixed"/>
     <Content Include=".git\refs\heads\Fixed"/>
+    <Content Include=".git\logs\refs\remotes\origin\Fixed"/>
+    <Content Include=".git\refs\remotes\origin\Fixed"/>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\"/>
