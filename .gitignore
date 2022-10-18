@@ -1,1 +1,4 @@
-/node_modules
+ClientApp/node_modules
+ClientApp/QuizProject_Back_End/.vs
+/*/*/*/bin
+/*/*/*/obj
