@@ -1,8 +1,8 @@
 ClientApp/node_modules
 <<<<<<< HEAD
 =======
-ClientApp/QuizProject_Back_End/.vs
-/*/*/*/bin
-/*/*/*/obj
+QuizProject_Back_End/.vs
+/*/*/bin
+/*/*/obj
 >>>>>>> Fixed
 ClientApp.njsproj

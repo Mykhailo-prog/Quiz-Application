@@ -4,9 +4,8 @@ import users from "./users";
 import questions from "./questions";
 import tests from "./tests";
 import answers from "./answers";
-import register from "./register";
 import errors from "./errors";
-import reset from "./resetpassword";
+import authentication from "./auth";
 
 Vue.use(Vuex);
 
@@ -15,9 +14,8 @@ const modules = {
   questions,
   tests,
   answers,
-  register,
   errors,
-  reset,
+  authentication,
 };
 
 export default new Vuex.Store({

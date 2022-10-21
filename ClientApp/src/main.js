@@ -14,7 +14,6 @@ Vue.use(BootstrapVue);
 Vue.use(VueAxios, axios);
 Vue.use(ModalPlugin);
 Vue.config.productionTip = false;
-
 Interseptors.register();
 
 new Vue({

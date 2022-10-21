@@ -28,3 +28,7 @@ Release authentification and authorization abilities
 ## Patch 1.6
 
 Relese Admin page. Add ability to edit created tests. Changed algorythm of creating test.
+
+## Patch 1.7
+
+Reworked code in accordinate with code review.

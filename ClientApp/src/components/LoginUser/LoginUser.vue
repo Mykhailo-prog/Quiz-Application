@@ -18,7 +18,7 @@ export default {
     },
     async LoginUser() {
       await this.loginUser(this.loginForm);
-      if (this.Access.success) {
+      if (this.LoginResponse.success) {
         this.loginForm = {
           login: "",
           password: "",
@@ -28,7 +28,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["errorResponse", "Access"]),
+    ...mapGetters(["errorResponse", "LoginResponse"]),
   },
 };
 </script>

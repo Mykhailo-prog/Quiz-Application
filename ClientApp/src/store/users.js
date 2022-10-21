@@ -1,10 +1,10 @@
 import axios from "axios";
+import { isEmptyObject } from "jquery";
 //TODO: I think you need to separate Users store from authetnication store
 export default {
   state: {
     userList: [],
     currUser: {},
-    loginResponse: {},
   },
   mutations: {
     SET_USER_LIST(state, users) {
@@ -13,25 +13,21 @@ export default {
     UPDATE_CURRENT_USER(state, user) {
       state.currUser = user;
     },
-    SET_LOGIN_RESPONSE(state, res) {
-      state.loginResponse = res;
-      state.currUser = res.user;
-      localStorage.setItem("token", res.token);
-    },
     CLEAN_USER_LIST(state) {
       state.userList = [];
       state.currUser = {};
-      state.loginResponse = {};
     },
   },
   getters: {
-    Access: (state) => state.loginResponse,
     Users: (state) => state.userList,
-    CurrentUser: (state) => state.loginResponse.user,
+    CurrentUser: (state) =>
+      isEmptyObject(state.currUser) ? null : state.currUser,
   },
   actions: {
-    async checkRole({ state }) {
-      const result = await axios.post("users/checkrole", state.currUser);
+    async checkRole({ state, getters }) {
+      const result = await axios.post("users/checkrole", null, {
+        params: { login: getters.CurrentUser.login },
+      });
       return result.data;
     },
     async loadUsers({ commit }) {
@@ -40,10 +36,6 @@ export default {
     },
     updCurrUser({ commit }, user) {
       commit("UPDATE_CURRENT_USER", user);
-    },
-    async loginUser({ commit }, form) {
-      var response = await axios.post("/auth/login", form);
-      commit("SET_LOGIN_RESPONSE", response.data);
     },
     async deleteUser({ commit }, payload) {
       await axios.delete("users", { params: { name: payload.name } });

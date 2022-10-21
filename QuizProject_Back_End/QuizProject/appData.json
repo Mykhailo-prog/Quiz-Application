@@ -1,0 +1,26 @@
+﻿{
+  "AppUrl": "https://localhost:44378",
+  "FrontUrl": "http://localhost:8080/",
+  "Jwt": {
+    "Key": "FqYPbfbPf1e2a3Vx0fQQP3uPAYzlnjkp357LWsdX",
+    "Issuer": "https://localhost:44378",
+    "Audience": "https://localhost:44378"
+  },
+  "Email": {
+    "Sender": {
+      "From": "monstercattop@gmail.com",
+      "SenderName": "Administrator"
+    },
+    "SMTP": {
+      "Client": {
+        "Host": "smtp.gmail.com",
+        "Port": "587"
+      },
+      "Credentials": {
+        "Name": "monstercattop@gmail.com",
+        "Password": "yiumvjzjvupaspqw"
+      }
+    }
+  }
+}
+

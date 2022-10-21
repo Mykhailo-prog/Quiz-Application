@@ -68,16 +68,20 @@ export default {
     },
 
     async delTest({ dispatch }, testId) {
-      await axios.delete("tests/" + testId.toString());
+      await axios.delete("tests", { params: { id: testId.toString() } });
       await dispatch("loadTests");
     },
 
     async finishTest({ state, commit, getters }) {
-      const res = await axios.put("users/" + getters.Access.user.id, {
-        test: getters.CurrentTest.testId,
-        time: state.resultTime,
-        userAnswers: getters.Answers,
-      });
+      const res = await axios.put(
+        "users",
+        {
+          test: getters.CurrentTest.testId,
+          time: state.resultTime,
+          userAnswers: getters.Answers,
+        },
+        { params: { id: getters.CurrentUser.id.toString() } }
+      );
       commit("SET_TEST_RESULT", res.data);
     },
 

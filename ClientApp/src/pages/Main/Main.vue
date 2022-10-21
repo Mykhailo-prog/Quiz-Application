@@ -12,7 +12,6 @@ export default {
       navItem: 1,
     };
   },
-
   methods: {
     ...mapActions(["loadUsers", "cleanUsers"]),
     confirmAlert() {
