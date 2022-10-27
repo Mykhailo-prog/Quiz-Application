@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace QuizProject.Services
+namespace QuizProject.Services.EmailService
 {
     public class EmailService : IEmailService
     {

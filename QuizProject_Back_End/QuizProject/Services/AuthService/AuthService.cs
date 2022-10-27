@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using QuizProject.Models.DTO;
 using QuizProject.Models;
-using QuizProject.Servieces;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,8 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using QuizProject.Models.AppData;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using QuizProject.Services.EmailService;
 
-namespace QuizProject.Services
+namespace QuizProject.Services.AuthService
 {
     public class AuthService : IAuthService
     {
@@ -94,7 +94,7 @@ namespace QuizProject.Services
             {
                 Success = false,
                 Message = "Email confirmation failed!",
-                Errors = result.Errors.Select(e => e.Description)
+                Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
 
@@ -139,7 +139,7 @@ namespace QuizProject.Services
                 var user = await _userManager.FindByNameAsync(model.Login);
                 var qUser = await _context.QuizUsers.FirstOrDefaultAsync(u => u.Login == model.Login);
 
-                if (user == null)
+                if (user == null || qUser == null)
                 {
                     return new UserManagerResponse
                     {
@@ -191,11 +191,11 @@ namespace QuizProject.Services
 
                 string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
 
-                return new UserManagerResponse
+                return new UserManagerResponse<QuizUser>
                 {
                     Message = "Logged in successfully!",
                     Token = tokenAsString,
-                    User = qUser,
+                    Object = qUser,
                     Success = true,
                 };
             }
@@ -204,23 +204,22 @@ namespace QuizProject.Services
                 _logger.LogError("Error during log in operation!\n{0}", e.Message);
                 return new UserManagerResponse
                 {
-                    Message = e.Message,
-                    Success = false
+                    Message = "Log in operation failed",
+                    Success = false,
+                    Errors = new List<string> { e.Message }
                 };
             }
         }
 
         public async Task<UserManagerResponse> RegisterUserAsync(RegisterModel model)
         {
-            if (model == null)
-                throw new NullReferenceException("Model is null");
-
             if (model.Password != model.ConfirmPassword)
                 return new UserManagerResponse
                 {
                     Message = "Password not confirmed",
                     Success = false,
                 };
+
             var identityUser = new IdentityUser
             {
                 Email = model.EmailAddress,
@@ -235,7 +234,7 @@ namespace QuizProject.Services
                 {
                     Success = false,
                     Message = "Registration fails",
-                    Errors = result.Errors.Select(e => e.Description),
+                    Errors = result.Errors.Select(e => e.Description).ToList(),
                 };
             }
 
@@ -263,14 +262,14 @@ namespace QuizProject.Services
             _context.Add(user);
             await _context.SaveChangesAsync();
 
-            return new UserManagerResponse
+            return new UserManagerResponse<QuizUser>
             {
                 Success = true,
                 Message = "User has beed registered successfully!",
-                User = user
+                Object = user
             };
 
-            
+
         }
 
         public async Task<UserManagerResponse> ResetPasswordAsync(ResetPasswordModel model)
@@ -312,7 +311,7 @@ namespace QuizProject.Services
             {
                 Message = "Password wasn't reset!",
                 Success = false,
-                Errors = result.Errors.Select(e => e.Description),
+                Errors = result.Errors.Select(e => e.Description).ToList()
             };
         }
     }

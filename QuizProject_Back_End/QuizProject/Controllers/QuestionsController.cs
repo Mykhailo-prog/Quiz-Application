@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
-using QuizProject.Services;
 using Microsoft.Extensions.Logging;
+using QuizProject.Services.DataTransferService;
 
 namespace QuizProject.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using QuizProject.Models.DTO;
 using QuizProject.Models;
 
-namespace QuizProject.Services
+namespace QuizProject.Services.DataTransferService
 {
     public class DataTransferService : IDataTransferServise
     {

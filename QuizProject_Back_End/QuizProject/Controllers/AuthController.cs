@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using QuizProject.Models.AppData;
 using QuizProject.Models.DTO;
-using QuizProject.Servieces;
+using QuizProject.Services.AuthService;
 using System.Threading.Tasks;
 
 

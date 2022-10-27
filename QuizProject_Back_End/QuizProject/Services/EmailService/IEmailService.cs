@@ -8,7 +8,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace QuizProject.Services
+namespace QuizProject.Services.EmailService
 {
     //TODO: Same it will be good to add logging
     //Interface should be in separated file
@@ -17,5 +17,5 @@ namespace QuizProject.Services
     {
         Task<UserManagerResponse> SendEmailAsync(string toEmail, string subject, string mail);
     }
-    
+
 }

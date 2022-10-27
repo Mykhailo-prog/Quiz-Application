@@ -9,11 +9,14 @@ using QuizProject.Models;
 using QuizProject.Models.DTO;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
-using QuizProject.Services;
 using Microsoft.AspNetCore.Identity;
-using QuizProject.Servieces;
 using Serilog;
 using Microsoft.Extensions.Logging;
+using QuizProject.Services.DataTransferService;
+using QuizProject.Services.TestLogic;
+using QuizProject.Services.AuthService;
+using QuizProject.Services.RepositoryService;
+using System.Text.RegularExpressions;
 
 namespace QuizProject.Controllers
 {
@@ -21,28 +24,21 @@ namespace QuizProject.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly QuizContext _context;
-        private ITestLogic _testLogic;
         private IAuthService _authService;
-        private readonly IDataTransferServise _dto;
-        private UserManager<IdentityUser> _userManager;
         private readonly ILogger<UsersController> _logger;
+        private readonly IUserRepository<QuizUser, UserDTO> _repository;
 
-        public UsersController(QuizContext context, ITestLogic testLogic, UserManager<IdentityUser> userManager, ILogger<UsersController> logger, IAuthService authService, IDataTransferServise dto)
+        public UsersController(RepositoryFactory factory, ILogger<UsersController> logger, IAuthService authService)
         {
             _authService = authService;
             _logger = logger;
-            _userManager = userManager;
-            _context = context;
-            _testLogic = testLogic;
-            _dto = dto;
+            _repository = factory.GetRepository<IUserRepository<QuizUser, UserDTO>>();
         }
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<QuizUser>>> GetUsers()
+        public async Task<IEnumerable<QuizUser>> GetUsers()
         {
-            await _context.CreatedTests.LoadAsync();
-            return await _context.QuizUsers.Include(u => u.UserTestCount).ToListAsync();
+            return await _repository.GetAll();
         }
 
         // GET: api/Users/id
@@ -54,7 +50,7 @@ namespace QuizProject.Controllers
                 return BadRequest("Incorrect Id");
             }
 
-            var user = await _context.QuizUsers.FindAsync(int.Parse(id));
+            var user = await _repository.GetByID(int.Parse(id));
 
             if (user == null)
             {
@@ -88,17 +84,17 @@ namespace QuizProject.Controllers
             {
                 return BadRequest("Incorrect login");
             }
-            var user = await _context.QuizUsers.FirstOrDefaultAsync(u =>u.Login == name);
-            if(user == null)
+
+            var result = await _repository.ResetScore(name);
+
+            if (!result.Success)
             {
-                return NotFound("No user with this login");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            user.Score = 0;
+            return Ok(result);
 
-            await _context.SaveChangesAsync();
-            return Ok();
-            
         }
 
         [HttpPost("changepass")]
@@ -110,21 +106,15 @@ namespace QuizProject.Controllers
                 return BadRequest("Incorrect name or password ");
             }
 
-            var user = await _userManager.FindByNameAsync(name);
-            if(user == null)
+            var result = await _repository.ChangePassword(name, password);
+
+            if (!result.Success)
             {
-                return NotFound("No user with this login!");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, password);
-
-            if (!result.Succeeded)
-            {
-                return BadRequest("Change password Failed!");
-            }
-
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPost("adminconfirm")]
@@ -136,27 +126,15 @@ namespace QuizProject.Controllers
                 return BadRequest("Incorrect login");
             }
 
-            var user = await _userManager.FindByNameAsync(name);
+            var result = await _repository.ConfirmEmail(name);
 
-            if(user == null)
+            if (!result.Success)
             {
-                return NotFound("No user with this login!");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            if (user.EmailConfirmed)
-            {
-                return BadRequest("Email already confirmed");
-            }
-
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var result = await _userManager.ConfirmEmailAsync(user, token);
-
-            if (!result.Succeeded)
-            {
-                return BadRequest("Email confirmation has beed failed");
-            }
-
-            return Ok();
+            return Ok(result);
         }
 
         // PUT: api/Users/5
@@ -174,47 +152,18 @@ namespace QuizProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
+            var result = await _repository.UpdateScore(int.Parse(id), userUpdto) as UserManagerResponse<FinishTestResponse>;
+
+            if (!result.Success)
             {
-                var user = await _context.QuizUsers.FindAsync(int.Parse(id));
-
-                if(user == null)
+                foreach(var e in result.Errors)
                 {
-                    return NotFound("No user with this Id");
+                    _logger.LogError("Error : {0}", e);
                 }
-
-                var test = await _context.Tests.Include(t => t.Questions).FirstOrDefaultAsync(t => t.TestId == userUpdto.Test);
-
-                if(test == null)
-                {
-                    return BadRequest("No test with this Id");
-                }
-
-                var result = _testLogic.GetScore(user, userUpdto, test);
-
-                if (!_context.UserStatistic.Where(e => e.QuizUserId == user.Id).Any(u => u.TestId == userUpdto.Test))
-                {
-                    await _testLogic.CreateStatisticAsync(user, test, result);
-                }
-                else
-                {
-                    await _testLogic.UpdateStatistic(user, test, result);
-                }
-                
-                await _context.SaveChangesAsync();
-
-                return Ok(result);
+                return BadRequest(result);
             }
-            catch (DbUpdateConcurrencyException err)
-            {
-                _logger.LogError("Db update error!\n{0}", err.Message);
-                return BadRequest(err.Message);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("Database wasn't updated. Error on updating user with id:{0} \nReason: {1}", id, e.Message);
-                return BadRequest(e.Message);
-            }
+
+            return Ok(result.Object);
         }
         [HttpPost]
         [Authorize]
@@ -225,15 +174,15 @@ namespace QuizProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new QuizUser
+            var result = await _repository.Create(userdto);
+
+            if (!result.Success)
             {
-                Login = userdto.Login,
-            };
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
+            }
 
-            _context.QuizUsers.Add(user);
-            await _context.SaveChangesAsync();
-
-            return Ok(_dto.UserToDTO(user));
+            return Ok(result);
         }
 
         // DELETE: api/Users
@@ -245,26 +194,19 @@ namespace QuizProject.Controllers
             {
                 return BadRequest("Incorrect login");
             }
-            var user = await _userManager.FindByNameAsync(name);
+            
+            var result = await _repository.Delete(name);
 
-            if(user == null)
+            if (!result.Success)
             {
-                return NotFound("User not found");
+                foreach (var e in result.Errors)
+                {
+                    _logger.LogError("Error : {0}", e);
+                }
+                return BadRequest(result);
             }
 
-            await _userManager.DeleteAsync(user);
-
-            var qUser = await _context.QuizUsers.FirstOrDefaultAsync(u => u.Login == name);
-
-            if (qUser == null)
-            {
-                return NotFound("User not found");
-            }
-
-            _context.QuizUsers.Remove(qUser);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            return Ok(result);
         }
     }
 }

@@ -16,7 +16,12 @@ using Microsoft.IdentityModel.Tokens;
 using QuizProject.Models;
 using QuizProject.Models.AppData;
 using QuizProject.Services;
-using QuizProject.Servieces;
+using QuizProject.Services.AuthService;
+using QuizProject.Services.CalculateStatistic;
+using QuizProject.Services.DataTransferService;
+using QuizProject.Services.EmailService;
+using QuizProject.Services.RepositoryService;
+using QuizProject.Services.TestLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +70,7 @@ namespace QuizProject
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     //TODO: see my comment in EmailService
-                    
+                    //DONE
                     ValidIssuer = App.Jwt.Issuer,
                     ValidAudience = App.Jwt.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(App.Jwt.Key)),
@@ -74,8 +79,11 @@ namespace QuizProject
             });
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICalculateStatistic, CalculateStatistic>();
             services.AddScoped<ITestLogic, TestLogic>();
             services.AddScoped<IDataTransferServise, DataTransferService>();
+            services.AddScoped<RepositoryFactory>();
+            
             services.AddSwaggerGen();
             services.AddControllers();
             services.AddCors(c => c.AddPolicy("AllowOrigin", opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
-using QuizProject.Services;
+using QuizProject.Services.DataTransferService;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

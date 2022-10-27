@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
-using QuizProject.Services;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,7 +15,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuizProject.Servieces
+namespace QuizProject.Services.AuthService
 {
     public interface IAuthService
     {
@@ -27,5 +26,5 @@ namespace QuizProject.Servieces
         Task<UserManagerResponse> ResetPasswordAsync(ResetPasswordModel model);
         Task<UserManagerResponse> CheckRole(string login);
     }
-    
+
 }

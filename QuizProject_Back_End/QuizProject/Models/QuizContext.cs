@@ -8,7 +8,6 @@ namespace QuizProject.Models
 {
     public class QuizContext: IdentityDbContext
     {
-
         public DbSet<TestStatistic> Statistics { get; set; }
         public DbSet<QuizUser> QuizUsers { get; set; }
         public DbSet<Question> Questions { get; set; }

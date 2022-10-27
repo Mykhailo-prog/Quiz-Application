@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 using QuizProject.Models;
 using QuizProject.Models.DTO;
-using QuizProject.Services;
+using QuizProject.Services.DataTransferService;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace QuizProject.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
