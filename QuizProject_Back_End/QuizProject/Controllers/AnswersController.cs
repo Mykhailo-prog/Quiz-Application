@@ -51,15 +51,15 @@ namespace QuizProject.Controllers
 
         // GET: api/Answers
         [HttpGet]
-        public async Task<IActionResult> GetAnswers()
+        public async Task<IEnumerable<Answer>> GetAnswers()
         {
-            return Ok(await _repository.GetAll());
+            return await _repository.GetAll();
             
         }
 
         // GET: api/Answers/5
         [HttpGet("id")]
-        public async Task<ActionResult<Answer>> GetAnswer([FromQuery]string id)
+        public async Task<IActionResult> GetAnswer([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -85,7 +85,7 @@ namespace QuizProject.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutAnswer(string id, AnswerDTO answerdto)
+        public async Task<IActionResult> PutAnswer([FromForm]string id, [FromBody]AnswerDTO answerdto)
         {
             //TODO: Maybe it will be good idea to add model validation in next way:
             // And use [Require] [MaxLength] etc. attributes for DTO props. see AnswerDTO.
@@ -131,7 +131,7 @@ namespace QuizProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAnswer(List<AnswerDTO> answersdto)
+        public async Task<IActionResult> PostAnswer([FromBody]List<AnswerDTO> answersdto)
         {
             //TODO: Maybe it will be good idea to add model validation in next way:
             // And use [Require] [MaxLength] etc. attributes for DTO props. see AnswerDTO.
@@ -161,7 +161,7 @@ namespace QuizProject.Controllers
 
         // DELETE: api/Answers/5
         [HttpDelete]
-        public async Task<ActionResult<AnswerDTO>> DeleteAnswer(string id)
+        public async Task<ActionResult<AnswerDTO>> DeleteAnswer([FromQuery] string id)
         {
             //TODO: same, check if id has valid value. Same for other controllers/actions.
             //TODO: can be simplified

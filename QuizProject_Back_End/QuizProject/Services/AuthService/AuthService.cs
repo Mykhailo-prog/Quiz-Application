@@ -16,20 +16,21 @@ using QuizProject.Models.AppData;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using QuizProject.Services.EmailService;
+using QuizProject.Services.RepositoryService;
 
 namespace QuizProject.Services.AuthService
 {
     public class AuthService : IAuthService
     {
         private UserManager<IdentityUser> _userManager;
-        private readonly App App;
-        private QuizContext _context;
+        private readonly AppConf App;
         private IEmailService _emailService;
         private readonly ILogger<AuthService> _logger;
-        public AuthService(UserManager<IdentityUser> userManager, IConfiguration configuration, QuizContext context, IEmailService emailService, IOptions<App> options, ILogger<AuthService> logger)
+        private readonly IUserRepository<QuizUser, UserDTO> _repository;
+        public AuthService(RepositoryFactory factory, UserManager<IdentityUser> userManager, IEmailService emailService, IOptions<AppConf> options, ILogger<AuthService> logger)
         {
+            _repository = factory.GetRepository<IUserRepository<QuizUser, UserDTO>>();
             _userManager = userManager;
-            _context = context;
             _emailService = emailService;
             App = options.Value;
             _logger = logger;
@@ -37,99 +38,143 @@ namespace QuizProject.Services.AuthService
         }
         public async Task<UserManagerResponse> CheckRole(string login)
         {
-            var user = await _userManager.FindByNameAsync(login);
-            if (user == null)
+            try
+            {
+                var user = await _userManager.FindByNameAsync(login);
+
+                if (user == null)
+                {
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Check role operation failed",
+                        Errors = new List<string> { "No user with this login" }
+                    };
+                }
+
+                foreach (var role in await _userManager.GetRolesAsync(user))
+                {
+                    if (role == "Admin")
+                        return new UserManagerResponse
+                        {
+                            Success = true,
+                            Message = "Admin role confirmed!"
+                        };
+                }
+
+                return new UserManagerResponse
+                {
+                    Success = false,
+                    Message = "Not Admin",
+                    Errors = new List<string> { "Not Admin" }
+                };
+            }
+            catch(Exception e)
             {
                 return new UserManagerResponse
                 {
                     Success = false,
-                    Message = "No user with this login"
+                    Message = "Check role operation failed",
+                    Errors = new List<string> { e.Message }
                 };
             }
-
-            foreach (var role in await _userManager.GetRolesAsync(user))
-            {
-                if (role == "Admin")
-                    return new UserManagerResponse
-                    {
-                        Success = true,
-                        Message = "Admin role confirmed!"
-                    };
-            }
-            return new UserManagerResponse
-            {
-                Success = false,
-                Message = "Not Admin"
-            };
 
         }
 
         public async Task<UserManagerResponse> ConfirmEmailAsync(string userId, string token)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            try
             {
-                return new UserManagerResponse
+                var user = await _userManager.FindByIdAsync(userId);
+
+                if (user == null)
                 {
-                    Success = false,
-                    Message = "User not Found"
-                };
-            }
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Confirm email operation failed",
+                        Errors = new List<string> { "No user with this login" }
+                    };
+                }
 
-            var decodedToken = WebEncoders.Base64UrlDecode(token);
-            var normalToken = Encoding.UTF8.GetString(decodedToken);
+                var decodedToken = WebEncoders.Base64UrlDecode(token);
+                var normalToken = Encoding.UTF8.GetString(decodedToken);
 
-            var result = await _userManager.ConfirmEmailAsync(user, normalToken);
+                var result = await _userManager.ConfirmEmailAsync(user, normalToken);
 
-            if (result.Succeeded)
-            {
+                if (!result.Succeeded)
+                {
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Email confirmation failed!",
+                        Errors = result.Errors.Select(e => e.Description).ToList()
+                    };
+                }
+
                 return new UserManagerResponse
                 {
                     Success = true,
                     Message = "Email confirmed successfully!",
                 };
-            }
 
-            return new UserManagerResponse
+            }
+            catch (Exception e)
             {
-                Success = false,
-                Message = "Email confirmation failed!",
-                Errors = result.Errors.Select(e => e.Description).ToList()
-            };
+                return new UserManagerResponse
+                {
+                    Success = false,
+                    Message = "Confirm email operation failed",
+                    Errors = new List<string> { e.Message }
+                };
+            }
         }
 
         public async Task<UserManagerResponse> ForgetPasswordAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user == null)
+            try
             {
-                new UserManagerResponse
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user == null)
                 {
-                    Message = "No user registered with this email",
-                    Success = false
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Forget password operation failed",
+                        Errors = new List<string> { "No user with this login" }
+                    };
+                }
+
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var encodedToken = Encoding.UTF8.GetBytes(token);
+                var validToken = WebEncoders.Base64UrlEncode(encodedToken);
+
+                string url = $"{App.FrontUrl}resetpassword?email={email}&token={validToken}";
+
+                var result = await _emailService.SendEmailAsync(email, "Reset Password", "<h1>Here we are, to reset your password</h1>" +
+                    $"<p>To reset your password <a href='{url}'>click here</a></p>");
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+                return new UserManagerResponse
+                {
+                    Message = "Reset url created and sent successfully!",
+                    Success = true,
                 };
             }
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var encodedToken = Encoding.UTF8.GetBytes(token);
-            var validToken = WebEncoders.Base64UrlEncode(encodedToken);
-
-            string url = $"{App.FrontUrl}resetpassword?email={email}&token={validToken}";
-
-            var result = await _emailService.SendEmailAsync(email, "Reset Password", "<h1>Here we are, to reset your password</h1>" +
-                $"<p>To reset your password <a href='{url}'>click here</a></p>");
-
-            if (!result.Success)
+            catch (Exception e)
             {
-                return result;
+                return new UserManagerResponse
+                {
+                    Success = false,
+                    Message = "Forget password operation failed",
+                    Errors = new List<string> { e.Message }
+                };
             }
-            return new UserManagerResponse
-            {
-                Message = "Reset url created and sent successfully!",
-                Success = true,
-            };
         }
 
         public async Task<UserManagerResponse> LoginUserAsync(LoginModel model)
@@ -137,22 +182,25 @@ namespace QuizProject.Services.AuthService
             try
             {
                 var user = await _userManager.FindByNameAsync(model.Login);
-                var qUser = await _context.QuizUsers.FirstOrDefaultAsync(u => u.Login == model.Login);
+                var qUser = await _repository.GetByName(model.Login);
 
                 if (user == null || qUser == null)
                 {
                     return new UserManagerResponse
                     {
-                        Message = "No user registered with this login!",
-                        Success = false
+                        Success = false,
+                        Message = "Login operation failed",
+                        Errors = new List<string> { "No user with this login" }
                     };
                 }
                 else if (!user.EmailConfirmed)
                 {
                     return new UserManagerResponse
                     {
-                        Message = "Your email is not confirmed!",
-                        Success = false
+                        Message = "Login operation failed",
+                        Success = false,
+                        Errors = new List<string> { "Your email is not confirmed!" }
+
                     };
                 }
                 var result = await _userManager.CheckPasswordAsync(user, model.Password);
@@ -161,8 +209,9 @@ namespace QuizProject.Services.AuthService
                 {
                     return new UserManagerResponse
                     {
-                        Message = "Invalid passport",
-                        Success = false
+                        Success = false,
+                        Message = "Login operation failed",
+                        Errors = new List<string> { "Incorrect password" }
                     };
                 }
 
@@ -201,11 +250,10 @@ namespace QuizProject.Services.AuthService
             }
             catch (Exception e)
             {
-                _logger.LogError("Error during log in operation!\n{0}", e.Message);
                 return new UserManagerResponse
                 {
-                    Message = "Log in operation failed",
                     Success = false,
+                    Message = "Login operation failed",
                     Errors = new List<string> { e.Message }
                 };
             }
@@ -213,106 +261,137 @@ namespace QuizProject.Services.AuthService
 
         public async Task<UserManagerResponse> RegisterUserAsync(RegisterModel model)
         {
-            if (model.Password != model.ConfirmPassword)
-                return new UserManagerResponse
+            try
+            {
+                if (model.Password != model.ConfirmPassword)
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Register operation failed",
+                        Errors = new List<string> { "Password not confirmed" }
+                    };
+
+                var identityUser = new IdentityUser
                 {
-                    Message = "Password not confirmed",
-                    Success = false,
+                    Email = model.EmailAddress,
+                    UserName = model.Login == "" ? model.EmailAddress : model.Login,
                 };
 
-            var identityUser = new IdentityUser
-            {
-                Email = model.EmailAddress,
-                UserName = model.Login == "" ? model.EmailAddress : model.Login,
-            };
+                var result = await _userManager.CreateAsync(identityUser, model.Password);
 
-            var result = await _userManager.CreateAsync(identityUser, model.Password);
+                if (!result.Succeeded)
+                {
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Register operation failed",
+                        Errors = result.Errors.Select(e => e.Description).ToList(),
+                    };
+                }
 
-            if (!result.Succeeded)
+
+                var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+
+                var encodedEmailToken = Encoding.UTF8.GetBytes(emailToken);
+                var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken);
+
+                string url = $"{App.AppUrl}/api/auth/confirmemail?userId={identityUser.Id}&token={validEmailToken}";
+
+                var res = await _emailService.SendEmailAsync(identityUser.Email, "Confirm your Email", "<h1>Thanks to using Quiz App!</h1>" + $"<p>To confirm your email <a href='{url}'>click here</a></p>");
+
+                if (!res.Success)
+                {
+                    return res;
+                }
+
+                var createUserResult = await _repository.Create(new UserDTO { Login = model.Login });
+
+                if (!createUserResult.Success)
+                {
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Register operation failed",
+                        Errors = createUserResult.Errors
+                    };
+                }
+
+                var user = await _repository.GetByName(model.Login);
+
+                return new UserManagerResponse<QuizUser>
+                {
+                    Success = true,
+                    Message = "User has beed registered successfully!",
+                    Object = user
+                };
+            }
+            catch (Exception e)
             {
                 return new UserManagerResponse
                 {
                     Success = false,
-                    Message = "Registration fails",
-                    Errors = result.Errors.Select(e => e.Description).ToList(),
+                    Message = "Register operation failed",
+                    Errors = new List<string> { e.Message }
                 };
             }
-
-
-            var emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-
-            var encodedEmailToken = Encoding.UTF8.GetBytes(emailToken);
-            var validEmailToken = WebEncoders.Base64UrlEncode(encodedEmailToken);
-
-            string url = $"{App.AppUrl}/api/auth/confirmemail?userId={identityUser.Id}&token={validEmailToken}";
-
-            var res = await _emailService.SendEmailAsync(identityUser.Email, "Confirm your Email", "<h1>Thanks to using Quiz App!</h1>" + $"<p>To confirm your email <a href='{url}'>click here</a></p>");
-
-            if (!res.Success)
-            {
-                return res;
-            }
-
-            var user = new QuizUser
-            {
-                Login = model.Login,
-                Score = 0,
-            };
-
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-
-            return new UserManagerResponse<QuizUser>
-            {
-                Success = true,
-                Message = "User has beed registered successfully!",
-                Object = user
-            };
-
 
         }
 
         public async Task<UserManagerResponse> ResetPasswordAsync(ResetPasswordModel model)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user == null)
+            try
             {
-                return new UserManagerResponse
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null)
                 {
-                    Message = "No user registered with this email!",
-                    Success = false
-                };
-            }
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Reset password operation failed",
+                        Errors = new List<string> { "No user with this email" }
+                    };
+                }
 
-            if (model.Password != model.ConfirmPassword)
-            {
-                return new UserManagerResponse
+                if (model.Password != model.ConfirmPassword)
                 {
-                    Message = "Password not confirmed!",
-                    Success = false
-                };
-            }
+                    return new UserManagerResponse
+                    {
+                        Success = false,
+                        Message = "Reset password operation failed",
+                        Errors = new List<string> { "Password not confirmed" }
+                    };
+                }
 
-            var decodedToken = WebEncoders.Base64UrlDecode(model.Token);
-            var normalToken = Encoding.UTF8.GetString(decodedToken);
+                var decodedToken = WebEncoders.Base64UrlDecode(model.Token);
+                var normalToken = Encoding.UTF8.GetString(decodedToken);
 
-            var result = await _userManager.ResetPasswordAsync(user, normalToken, model.Password);
+                var result = await _userManager.ResetPasswordAsync(user, normalToken, model.Password);
 
-            if (result.Succeeded)
-            {
+                if (result.Succeeded)
+                {
+                    return new UserManagerResponse
+                    {
+                        Message = "Reset password operation failed",
+                        Success = false,
+                        Errors = result.Errors.Select(e => e.Description).ToList()
+                    };
+                }
                 return new UserManagerResponse
                 {
                     Message = "Password has been reset successfully!",
                     Success = true
                 };
             }
-            return new UserManagerResponse
+            catch (Exception e)
             {
-                Message = "Password wasn't reset!",
-                Success = false,
-                Errors = result.Errors.Select(e => e.Description).ToList()
-            };
+                return new UserManagerResponse
+                {
+                    Success = false,
+                    Message = "Reset password operation failed",
+                    Errors = new List<string> { e.Message }
+                };
+            }
         }
     }
 }

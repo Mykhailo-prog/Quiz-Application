@@ -16,10 +16,12 @@ using Microsoft.IdentityModel.Tokens;
 using QuizProject.Models;
 using QuizProject.Models.AppData;
 using QuizProject.Services;
+using QuizProject.Services.AdministratorService;
 using QuizProject.Services.AuthService;
 using QuizProject.Services.CalculateStatistic;
 using QuizProject.Services.DataTransferService;
 using QuizProject.Services.EmailService;
+using QuizProject.Services.IAdminService;
 using QuizProject.Services.RepositoryService;
 using QuizProject.Services.TestLogic;
 using System;
@@ -37,17 +39,17 @@ namespace QuizProject
         {
             var builder = new ConfigurationBuilder().AddJsonFile("appData.json");
             AppConfig = builder.Build();
-            App = AppConfig.Get<App>();
+            _appConf = AppConfig.Get<AppConf>();
 
             Configuration = configuration;
         }
-        public App App { get; }
+        public AppConf _appConf { get; }
 
         public IConfiguration Configuration { get; }
         public IConfiguration AppConfig { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<App>(AppConfig);
+            services.Configure<AppConf>(AppConfig);
             services.AddDbContext<QuizContext>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>(opt =>
             {
@@ -71,18 +73,22 @@ namespace QuizProject
                     ValidateIssuerSigningKey = true,
                     //TODO: see my comment in EmailService
                     //DONE
-                    ValidIssuer = App.Jwt.Issuer,
-                    ValidAudience = App.Jwt.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(App.Jwt.Key)),
+                    ValidIssuer = _appConf.Jwt.Issuer,
+                    ValidAudience = _appConf.Jwt.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appConf.Jwt.Key)),
                     ClockSkew = TimeSpan.Zero
                 };
             });
+            
+            services.AddScoped<RepositoryFactory>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IAdministratorService, AdministratorService>();
             services.AddScoped<ICalculateStatistic, CalculateStatistic>();
-            services.AddScoped<ITestLogic, TestLogic>();
             services.AddScoped<IDataTransferServise, DataTransferService>();
-            services.AddScoped<RepositoryFactory>();
+            
+            
+            
             
             services.AddSwaggerGen();
             services.AddControllers();

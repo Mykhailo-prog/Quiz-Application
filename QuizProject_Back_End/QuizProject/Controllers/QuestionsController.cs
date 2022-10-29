@@ -10,6 +10,7 @@ using QuizProject.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using QuizProject.Services.DataTransferService;
+using QuizProject.Services.RepositoryService;
 
 namespace QuizProject.Controllers
 {
@@ -18,45 +19,43 @@ namespace QuizProject.Controllers
     [Authorize]
     public class QuestionsController : ControllerBase
     {
-        private readonly IDataTransferServise _dto;
-        private readonly QuizContext _context;
         private readonly ILogger<QuestionsController> _logger;
+        private readonly IQuestionRepository<Question, QuestionDTO> _repository;
 
-        public QuestionsController(QuizContext context, IDataTransferServise dto, ILogger<QuestionsController> logger)
+        public QuestionsController(RepositoryFactory factory, ILogger<QuestionsController> logger)
         {
+            _repository = factory.GetRepository<IQuestionRepository<Question, QuestionDTO>>();
             _logger = logger;
-            _context = context;
-            _dto = dto;
         }
 
         // GET: api/Questions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Question>>> GetQuestions()
+        public async Task<IEnumerable<Question>> GetQuestions()
         {
-            return await _context.Questions.Include(q => q.Answers).ToListAsync();
+            return await _repository.GetAll();
         }
 
         // GET: api/Questions/5
         [HttpGet("id")]
-        public async Task<ActionResult<Question>> GetQuestion(string id)
+        public async Task<IActionResult> GetQuestion([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorrect Id");
             }
 
-            var question = await _context.Questions.Include(q => q.Answers).FirstOrDefaultAsync(q => q.Id == int.Parse(id));
+            var question = await _repository.GetByID(int.Parse(id));
 
             if (question == null)
             {
                 return NotFound("No question with this Id");
             }
 
-            return question;
+            return Ok(question);
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutQuestion(string id, QuestionDTO questiondto)
+        public async Task<IActionResult> PutQuestion([FromQuery]string id, [FromBody]QuestionDTO questiondto)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -68,77 +67,55 @@ namespace QuizProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var quest = await _context.Questions.FindAsync(int.Parse(id));
+            var result = await _repository.Update(int.Parse(id) ,questiondto);
 
-                if(quest == null)
-                {
-                    return NotFound("No question with this Id");
-                }
-
-                quest.Quest = questiondto.Question;
-                quest.CorrectAnswer = questiondto.CorrectAnswer;
-
-                await _context.SaveChangesAsync();
-                
-            }
-            catch (DbUpdateConcurrencyException err)
+            if (!result.Success)
             {
-                _logger.LogError("Db update error!\n{0}", err.Message);
-                return BadRequest(err.Message);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("Database wasn't updated. Error on updating question with id:{0} \nReason: {1}", id, e.Message);
-                return BadRequest(e.Message);
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            return Ok();
+            return Ok(result);
+
         }
 
         [HttpPost]
-        public async Task<ActionResult<Question>> PostQuestion(QuestionDTO questiondto)
+        public async Task<ActionResult<Question>> PostQuestion([FromBody]QuestionDTO questiondto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var quest = new Question
+            var result = await _repository.Create(questiondto);
+
+            if (!result.Success)
             {
-                Quest = questiondto.Question,
-                CorrectAnswer = questiondto.CorrectAnswer,
-                TestId = questiondto.TestId,
-                
-            };
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
+            }
 
-            _context.Questions.Add(quest);
-            await _context.SaveChangesAsync();
-
-            return Ok(quest);
+            return Ok(result);
         }
 
         // DELETE: api/Questions
         [HttpDelete]
-        public async Task<ActionResult<QuestionDTO>> DeleteQuestion(string id)
+        public async Task<ActionResult<QuestionDTO>> DeleteQuestion([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorrect Id");
             }
 
-            var question = await _context.Questions.FindAsync(int.Parse(id));
+            var result = await _repository.Delete(int.Parse(id));
 
-            if (question == null)
+            if (!result.Success)
             {
-                return NotFound("No question with this Id");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            _context.Questions.Remove(question);
-            await _context.SaveChangesAsync();
-
-            return Ok(_dto.QuestToDTO(question));
+            return Ok(result);
         }
     }
 }

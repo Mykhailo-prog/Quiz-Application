@@ -1,39 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
-using QuizProject.Models;
+﻿using QuizProject.Models;
 using QuizProject.Models.DTO;
 using QuizProject.Services.RepositoryService.RepositoryAbstractions;
-using System;
 using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 
 namespace QuizProject.Services.RepositoryService.Repositories
 {
-    public class AnswerRepository : AnswerRepositoryAbstraction<Answer, AnswerDTO>
+    public class TestConnectionRepository : DefaultRepositoryAbstraction<UserCreatedTest, CreatedTestDTO>
     {
-        public AnswerRepository(QuizContext context) : base(context)
+        public TestConnectionRepository(QuizContext context) : base(context)
         {
         }
 
-        public async override Task<UserManagerResponse> Create(List<AnswerDTO> items)
+        public override async Task<UserManagerResponse> Create(CreatedTestDTO item)
         {
             try
             {
-                foreach (AnswerDTO item in items)
+                var connect = new UserCreatedTest
                 {
-                    var answer = new Answer
-                    {
-                        Ans = item.Answer,
-                        QuestionId = item.QuestionId,
-                    };
-                    await _dbSet.AddAsync(answer);
-                }
+                    TestId = item.TestId,
+                    QuizUserId = item.UserId
+                };
 
+                await _dbSet.AddAsync(connect);
                 Save();
 
                 return new UserManagerResponse
                 {
                     Success = true,
-                    Message = "All answers have been created successfully!"
+                    Message = "Test connection have been created successfully!"
                 };
             }
             catch (Exception e)
@@ -41,38 +37,38 @@ namespace QuizProject.Services.RepositoryService.Repositories
                 return new UserManagerResponse
                 {
                     Success = false,
-                    Message = "Creating answers proccess failed!",
+                    Message = "Test connection question proccess failed!",
                     Errors = new List<string> { e.Message }
                 };
             }
         }
 
-        public override async Task<UserManagerResponse> Update(int id, AnswerDTO item)
+        public override async Task<UserManagerResponse> Update(int id, CreatedTestDTO item)
         {
             try
             {
-                var answer = await _dbSet.FindAsync(id);
+                var connect = await _dbSet.FindAsync(id);
 
-                if (answer == null)
+                if (connect == null)
                 {
                     return new UserManagerResponse
                     {
                         Success = false,
-                        Message = "Answer updating failed",
-                        Errors = new List<string> { "Answer not found" }
+                        Message = "Test connection updating failed",
+                        Errors = new List<string> { "Test connection not found" }
                     };
                 }
 
 
-                answer.Ans = item.Answer;
-                answer.QuestionId = item.QuestionId;
+                connect.TestId = item.TestId;
+                connect.QuizUserId = item.UserId;
 
                 Save();
 
                 return new UserManagerResponse
                 {
                     Success = true,
-                    Message = "Answer updated successfully"
+                    Message = "Test connection updated successfully"
                 };
             }
             catch (Exception e)
@@ -80,7 +76,7 @@ namespace QuizProject.Services.RepositoryService.Repositories
                 return new UserManagerResponse
                 {
                     Success = false,
-                    Message = "Answer updating failed",
+                    Message = "Test connection updating failed",
                     Errors = new List<string> { e.Message }
                 };
             }

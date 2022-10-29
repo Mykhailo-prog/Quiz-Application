@@ -16,7 +16,7 @@ using QuizProject.Services.DataTransferService;
 using QuizProject.Services.TestLogic;
 using QuizProject.Services.AuthService;
 using QuizProject.Services.RepositoryService;
-using System.Text.RegularExpressions;
+using QuizProject.Services.AdministratorService;
 
 namespace QuizProject.Controllers
 {
@@ -24,15 +24,17 @@ namespace QuizProject.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IAuthService _authService;
+        private readonly IAuthService _authService;
+        private readonly IAdministratorService _adminService;
         private readonly ILogger<UsersController> _logger;
         private readonly IUserRepository<QuizUser, UserDTO> _repository;
 
-        public UsersController(RepositoryFactory factory, ILogger<UsersController> logger, IAuthService authService)
+        public UsersController(RepositoryFactory factory, ILogger<UsersController> logger, IAuthService authService, IAdministratorService adminService)
         {
             _authService = authService;
             _logger = logger;
             _repository = factory.GetRepository<IUserRepository<QuizUser, UserDTO>>();
+            _adminService = adminService;
         }
         // GET: api/Users
         [HttpGet]
@@ -43,7 +45,7 @@ namespace QuizProject.Controllers
 
         // GET: api/Users/id
         [HttpGet("id")]
-        public async Task<ActionResult<QuizUser>> GetUser(string id)
+        public async Task<ActionResult<QuizUser>> GetUser([FromQuery] string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -61,7 +63,7 @@ namespace QuizProject.Controllers
         }
         // POST: api/users/checkrole
         [HttpPost("checkrole")]
-        public async Task<bool> CheckRole(string login)
+        public async Task<bool> CheckRole([FromQuery] string login)
         {
             if (string.IsNullOrWhiteSpace(login))
             {
@@ -78,14 +80,14 @@ namespace QuizProject.Controllers
         }
         [HttpPost("resetscore")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ResetUserScore(string name)
+        public async Task<IActionResult> ResetUserScore([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest("Incorrect login");
             }
 
-            var result = await _repository.ResetScore(name);
+            var result = await _adminService.ResetScore(name);
 
             if (!result.Success)
             {
@@ -99,14 +101,14 @@ namespace QuizProject.Controllers
 
         [HttpPost("changepass")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AdminChangePassword(string name, string password)
+        public async Task<IActionResult> AdminChangePassword([FromQuery] string name, [FromQuery] string password)
         {
             if(string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password))
             {
                 return BadRequest("Incorrect name or password ");
             }
 
-            var result = await _repository.ChangePassword(name, password);
+            var result = await _adminService.ChangePassword(name, password);
 
             if (!result.Success)
             {
@@ -119,14 +121,14 @@ namespace QuizProject.Controllers
 
         [HttpPost("adminconfirm")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AdminConfirmEmail(string name)
+        public async Task<IActionResult> AdminConfirmEmail([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest("Incorrect login");
             }
 
-            var result = await _repository.ConfirmEmail(name);
+            var result = await _adminService.ConfirmEmail(name);
 
             if (!result.Success)
             {
@@ -140,7 +142,7 @@ namespace QuizProject.Controllers
         // PUT: api/Users/5
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> PutUser(string id, UserUpdateDTO userUpdto)
+        public async Task<IActionResult> PutUser([FromQuery] string id, [FromBody] UserUpdateDTO userUpdto)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -167,7 +169,7 @@ namespace QuizProject.Controllers
         }
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<QuizUser>> PostUser(UserDTO userdto)
+        public async Task<ActionResult<QuizUser>> PostUser([FromBody] UserDTO userdto)
         {
             if (ModelState.IsValid)
             {
@@ -188,7 +190,7 @@ namespace QuizProject.Controllers
         // DELETE: api/Users
         [HttpDelete]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteUser(string name)
+        public async Task<IActionResult> DeleteUser([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {

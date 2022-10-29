@@ -1,9 +1,9 @@
 ﻿using QuizProject.Models;
 using System.Threading.Tasks;
 
-namespace QuizProject.Services.RepositoryService.Interfaces
+namespace QuizProject.Services.IAdminService
 {
-    public interface IAdminExtention
+    public interface IAdminService
     {
         public Task<UserManagerResponse> ResetScore(string name);
         public Task<UserManagerResponse> ChangePassword(string name, string password);

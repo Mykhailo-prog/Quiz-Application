@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
-using QuizProject.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,26 +35,30 @@ namespace QuizProject.Services.RepositoryService.RepositoryAbstractions
         {
             _context.SaveChanges();
         }
-    }
-    public class QuestionRepository : DefaultRepositoryAbstraction<Question, QuestionDTO>, IQuestionRepository<Question, QuestionDTO>
-    {
-        public QuestionRepository(QuizContext context) : base(context)
-        {
-        }
 
-        public override Task<UserManagerResponse> Create(QuestionDTO item)
+        public virtual async Task<UserManagerResponse> Delete(int id)
         {
-            throw new NotImplementedException();
-        }
+            var entity = await _dbSet.FindAsync(id);
 
-        public override Task<UserManagerResponse> Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
+            if (entity == null)
+            {
+                return new UserManagerResponse
+                {
+                    Success = false,
+                    Message = "Delete operation failed!",
+                    Errors = new List<string> { $"{typeof(T).GenericTypeArguments.FirstOrDefault()} with this id not found" }
+                };
+            }
 
-        public override Task<UserManagerResponse> Update(int id, QuestionDTO item)
-        {
-            throw new NotImplementedException();
+            _dbSet.Remove(entity);
+
+            Save();
+
+            return new UserManagerResponse
+            {
+                Success = true,
+                Message = $"{typeof(T).GenericTypeArguments.FirstOrDefault()} deleted successfully!"
+            };
         }
     }
     /*abstract public class Repository<T, K> : IRepository<T, K> where T : class

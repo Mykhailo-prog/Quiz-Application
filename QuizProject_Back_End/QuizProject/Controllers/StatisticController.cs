@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
 using QuizProject.Services.DataTransferService;
+using QuizProject.Services.RepositoryService;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,56 +20,54 @@ namespace QuizProject.Controllers
     //DONE
     public class StatisticController : ControllerBase
     {
-        private readonly QuizContext _context;
-        private readonly IDataTransferServise _dto;
-        public StatisticController(QuizContext context, IDataTransferServise dto)
+        private readonly ILogger<StatisticController> _logger;
+        private readonly IStatisticRepositiry<TestStatistic, TestStatisticDTO> _repository;
+        public StatisticController(ILogger<StatisticController> logger, RepositoryFactory factory)
         {
-            _context = context;
-            _dto = dto;
+            _logger = logger;
+            _repository = factory.GetRepository<IStatisticRepositiry<TestStatistic, TestStatisticDTO>>();
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TestStatistic>>> GetStatistic()
+        public async Task<IEnumerable<TestStatistic>> GetStatistic()
         {
-            return await _context.Statistics.ToListAsync();
+            return await _repository.GetAll();
         }
         [HttpPost]
-        public async Task<ActionResult<TestStatisticDTO>> PostStatistic(TestStatisticDTO statdto)
+        public async Task<ActionResult<TestStatisticDTO>> PostStatistic([FromBody]TestStatisticDTO statdto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var stat = new TestStatistic
+            var result = await _repository.Create(statdto);
+
+            if (!result.Success)
             {
-                TestId = statdto.TestId,
-            };
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
+            }
 
-            _context.Statistics.Add(stat);
-            await _context.SaveChangesAsync();
-
-            return Ok(_dto.TestStatToDTO(stat));
+            return Ok(result);
         }
         [HttpDelete]
-        public async Task<ActionResult<TestStatistic>> DeleteStat (string id)
+        public async Task<ActionResult<TestStatistic>> DeleteStat ([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorrect Id");
             }
 
-            var stat = await _context.Statistics.FindAsync(int.Parse(id));
+            var result = await _repository.Delete(int.Parse(id));
 
-            if (stat == null)
+            if (!result.Success)
             {
-                return NotFound("No statistic with this Id");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            _context.Statistics.Remove(stat);
-            await _context.SaveChangesAsync();
-
-            return Ok(stat);
+            return Ok(result);
         }
     }
      

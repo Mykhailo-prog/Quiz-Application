@@ -11,12 +11,12 @@ namespace QuizProject.Services.EmailService
 {
     public class EmailService : IEmailService
     {
-        private readonly App App;
+        private readonly AppConf _appConf;
         private readonly ILogger<EmailService> _logger;
-        public EmailService(IOptions<App> options, ILogger<EmailService> logger)
+        public EmailService(IOptions<AppConf> options, ILogger<EmailService> logger)
         {
             _logger = logger;
-            App = options.Value;
+            _appConf = options.Value;
         }
 
         public async Task<UserManagerResponse> SendEmailAsync(string toEmail, string subject, string mail)
@@ -27,14 +27,14 @@ namespace QuizProject.Services.EmailService
                 //TODO: configuration can be regitered for certain class and used in service constructor like IOptions<ClassName> option after option.Value
                 // please check how it works and do it in this way
                 //DONE
-                MailAddress from = new MailAddress(App.Email.Sender.From, App.Email.Sender.SenderName);
+                MailAddress from = new MailAddress(_appConf.Email.Sender.From, _appConf.Email.Sender.SenderName);
                 MailMessage mailMessage = new MailMessage(from, to);
                 mailMessage.Subject = subject;
                 mailMessage.Body = mail;
                 mailMessage.IsBodyHtml = true;
 
-                SmtpClient smtpClient = new SmtpClient(App.Email.SMTP.Client.Host, App.Email.SMTP.Client.Port);
-                smtpClient.Credentials = new NetworkCredential(App.Email.SMTP.Credentials.Name, App.Email.SMTP.Credentials.Password);
+                SmtpClient smtpClient = new SmtpClient(_appConf.Email.SMTP.Client.Host, _appConf.Email.SMTP.Client.Port);
+                smtpClient.Credentials = new NetworkCredential(_appConf.Email.SMTP.Credentials.Name, _appConf.Email.SMTP.Credentials.Password);
                 smtpClient.EnableSsl = true;
 
                 await smtpClient.SendMailAsync(mailMessage);

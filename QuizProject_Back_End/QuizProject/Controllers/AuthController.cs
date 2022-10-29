@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using QuizProject.Models.AppData;
 using QuizProject.Models.DTO;
@@ -16,12 +17,14 @@ namespace QuizProject.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthService _authServiece;
-        private readonly App App;
+        private readonly AppConf _appConf;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authServiece, IOptions<App> options)
+        public AuthController(ILogger<AuthController> logger, IAuthService authServiece, IOptions<AppConf> options)
         {
+            _logger = logger;
             _authServiece = authServiece;
-            App = options.Value;
+            _appConf = options.Value;
         }
 
         [HttpPost("Register")]
@@ -36,12 +39,15 @@ namespace QuizProject.Controllers
 
             if (!result.Success)
             {
+                foreach (var e in result.Errors)
+                {
+                    _logger.LogError("Error : {0}", e);
+                }
+
                 return BadRequest(result);
             }
 
             return Ok(result);
-            
-            
         }
 
         [HttpPost("Login")]
@@ -63,8 +69,12 @@ namespace QuizProject.Controllers
 
             if (!result.Success)
             {
+                foreach (var e in result.Errors)
+                {
+                    _logger.LogError("Error : {0}", e);
+                }
+
                 return BadRequest(result);
-                
             }
 
             //TODO: Something what? :)))))
@@ -73,7 +83,7 @@ namespace QuizProject.Controllers
         }
 
         [HttpGet("confirmemail")]
-        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        public async Task<IActionResult> ConfirmEmail([FromQuery]string userId, [FromQuery]string token)
         {
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
                 return NotFound();
@@ -82,15 +92,20 @@ namespace QuizProject.Controllers
 
             if (!result.Success)
             {
+                foreach (var e in result.Errors)
+                {
+                    _logger.LogError("Error : {0}", e);
+                }
+
                 return BadRequest(result);
             }
 
-            return Redirect(App.FrontUrl);
+            return Redirect(_appConf.FrontUrl);
             
         }
 
         [HttpPost("ForgetPassword")]
-        public async Task<IActionResult> ForgetPassword(string email)
+        public async Task<IActionResult> ForgetPassword([FromQuery]string email)
         {
             if (string.IsNullOrEmpty(email))
             {
@@ -101,6 +116,11 @@ namespace QuizProject.Controllers
 
             if (!result.Success)
             {
+                foreach (var e in result.Errors)
+                {
+                    _logger.LogError("Error : {0}", e);
+                }
+
                 return BadRequest(result);
             }
 
@@ -116,12 +136,17 @@ namespace QuizProject.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             var result = await _authServiece.ResetPasswordAsync(model);
 
             if (result.Success)
             {
+                foreach (var e in result.Errors)
+                {
+                    _logger.LogError("Error : {0}", e);
+                }
+
                 return BadRequest(result);
-                
             }
 
             return Ok(result);

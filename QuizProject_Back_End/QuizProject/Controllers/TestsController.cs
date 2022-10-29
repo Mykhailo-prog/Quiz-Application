@@ -38,7 +38,7 @@ namespace QuizProject.Controllers
 
         // GET: api/Tests/id
         [HttpGet("id")]
-        public async Task<ActionResult<Test>> GetTest(string id)
+        public async Task<IActionResult> GetTest([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -57,7 +57,7 @@ namespace QuizProject.Controllers
 
         // PUT: api/Tests
         [HttpPut]
-        public async Task<IActionResult> PutTest(string id, TestDTO editTest)
+        public async Task<IActionResult> PutTest([FromQuery]string id, [FromBody]TestDTO editTest)
         {
             if (!ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace QuizProject.Controllers
 
         // POST: api/Tests
         [HttpPost]
-        public async Task<IActionResult> PostTest(string id, TestDTO testdto)
+        public async Task<IActionResult> PostTest([FromQuery] string id, [FromBody] TestDTO testdto)
         {
             if (!ModelState.IsValid)
             {
@@ -107,7 +107,7 @@ namespace QuizProject.Controllers
 
         // DELETE: api/Tests/id
         [HttpDelete]
-        public async Task<IActionResult> DeleteTest(string id)
+        public async Task<IActionResult> DeleteTest([FromQuery] string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {

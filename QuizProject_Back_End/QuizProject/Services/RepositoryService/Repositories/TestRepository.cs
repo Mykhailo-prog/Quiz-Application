@@ -19,7 +19,24 @@ namespace QuizProject.Services.RepositoryService.Repositories
         {
             await _context.Statistics.LoadAsync();
             await _context.Questions.Include(q => q.Answers).LoadAsync();
+
             return await _dbSet.Include(t => t.UserCreatedTest).ToListAsync();
+        }
+
+        public override async Task<Test> GetByID(int id)
+        {
+            await _context.Statistics.LoadAsync();
+            await _context.Questions.Include(q => q.Answers).LoadAsync();
+            await _context.CreatedTests.LoadAsync();
+
+            var test = await _dbSet.FindAsync(id);
+
+            if (test == null)
+            {
+                return null;
+            }
+
+            return test;
         }
 
         public override async Task<UserManagerResponse> Create(int id, TestDTO item)

@@ -9,21 +9,6 @@ using System.Threading.Tasks;
 
 namespace QuizProject.Services.CalculateStatistic
 {
-    class Time
-    {
-        public int Min { get; set; }
-        public int Sec { get; set; }
-        public Time(string stringTime)
-        {
-            Min = Convert.ToInt32(stringTime.Split(':')[0]);
-            Sec = Convert.ToInt32(stringTime.Split(':')[1]);
-        }
-
-        public override string ToString()
-        {
-            return $"{Min}:{Sec}";
-        }
-    }
     public class CalculateStatistic : ICalculateStatistic
     {
         private readonly QuizContext _db;
@@ -32,48 +17,7 @@ namespace QuizProject.Services.CalculateStatistic
             _db = db;
         }
 
-        public async Task<UserManagerResponse> CalculateStat(int id, QuizUser user, UserStatistic currUserStat, FinishTestResponse result)
-        {
-            var stat = await _db.Statistics.FirstOrDefaultAsync(x => x.TestId == id);
-            var userStats = await _db.UserStatistic.Where(u => u.TestId == id).ToListAsync();
-
-            /*List<UserManagerResponse> responses = new List<UserManagerResponse>
-            {
-                ChangeAllTriesCount(stat, userStats),
-                ChangeBestResult(stat, currUserStat, user, result),
-                ChangeMinTries(stat, currUserStat, user),
-                ChangeBestTime(stat, currUserStat, userStats, result),
-                ChangeAvrTries(stat, currUserStat, userStats, result)
-            };*/
-            List<UserManagerResponse> responses = new List<UserManagerResponse>();
-
-            responses.Add(ChangeAllTriesCount(stat, userStats));
-            responses.Add(ChangeBestResult(stat, currUserStat, user, result));
-            responses.Add(ChangeMinTries(stat, currUserStat, user));
-            responses.Add(ChangeBestTime(stat, currUserStat, userStats, result));
-            responses.Add(ChangeAvrTries(stat, currUserStat, userStats, result));
-
-            foreach (var response in responses)
-            {
-                if (!response.Success)
-                {
-                    return new UserManagerResponse
-                    {
-                        Success = false,
-                        Message = response.Message,
-                        Errors = response.Errors
-                    };
-                }
-
-            }
-            return new UserManagerResponse
-            {
-                Success = true,
-                Message = "Statistic has beed calculated successfully",
-            };
-        }
-
-        private static UserManagerResponse ChangeAvrTries(TestStatistic stat, UserStatistic currUserStat, List<UserStatistic> userStats, FinishTestResponse result)
+        public UserManagerResponse ChangeAvrTries(TestStatistic stat, UserStatistic currUserStat, List<UserStatistic> userStats, FinishTestResponse result)
         {
             try
             {
@@ -107,7 +51,7 @@ namespace QuizProject.Services.CalculateStatistic
             }
         }
 
-        private static UserManagerResponse ChangeMinTries(TestStatistic stat, UserStatistic currUserStat, QuizUser user)
+        public UserManagerResponse ChangeMinTries(TestStatistic stat, UserStatistic currUserStat, QuizUser user)
         {
             try
             {
@@ -145,7 +89,7 @@ namespace QuizProject.Services.CalculateStatistic
             }
         }
 
-        private static UserManagerResponse ChangeBestResult(TestStatistic stat, UserStatistic currUserStat, QuizUser user, FinishTestResponse result)
+        public UserManagerResponse ChangeBestResult(TestStatistic stat, UserStatistic currUserStat, QuizUser user, FinishTestResponse result)
         {
             try
             {
@@ -186,7 +130,7 @@ namespace QuizProject.Services.CalculateStatistic
             }
         }
 
-        private static UserManagerResponse ChangeAllTriesCount(TestStatistic stat, List<UserStatistic> userStat)
+        public UserManagerResponse ChangeAllTriesCount(TestStatistic stat, List<UserStatistic> userStat)
         {
             try
             {
@@ -216,7 +160,7 @@ namespace QuizProject.Services.CalculateStatistic
             }
         }
 
-        private UserManagerResponse ChangeBestTime(TestStatistic stat, UserStatistic currUserStat, List<UserStatistic> userStat, FinishTestResponse result)
+        public UserManagerResponse ChangeBestTime(TestStatistic stat, UserStatistic currUserStat, List<UserStatistic> userStat, FinishTestResponse result)
         {
 
             try
@@ -231,7 +175,6 @@ namespace QuizProject.Services.CalculateStatistic
                     }
 
                     var Rtime = ParsedTime.OrderBy(x => x.Sec).OrderBy(x => x.Min);
-                    //string res = $"{Rtime.First().Min}:{Rtime.First().Sec}";
                     string res = Rtime.FirstOrDefault().ToString();
 
                     stat.BestTime = res;

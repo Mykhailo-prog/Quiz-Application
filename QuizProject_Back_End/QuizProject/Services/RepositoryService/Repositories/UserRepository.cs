@@ -13,28 +13,58 @@ namespace QuizProject.Services.RepositoryService.Repositories
 {
     public class UserRepository : UserRepositoryAbstraction<QuizUser, UserDTO>
     {
-        private readonly ITestLogic _testLogic;
         private readonly UserManager<IdentityUser> _userManager;
-        public UserRepository(QuizContext context, ITestLogic logic, UserManager<IdentityUser> userManager) : base(context)
+        private readonly IUserStatisticRepository<UserStatistic, TestLogicContainer<FinishTestResponse>> _repository;
+
+        public UserRepository(QuizContext context, UserStatisticRepository repo, UserManager<IdentityUser> userManager) : base(context)
         {
             _userManager = userManager;
-            _testLogic = logic;
+            _repository = repo;
         }
+
         public override async Task<IEnumerable<QuizUser>> GetAll()
         {
             await _context.CreatedTests.LoadAsync();
             return await _dbSet.Include(u => u.UserTestCount).ToListAsync();
         }
+
+        public override async Task<QuizUser> GetByID(int id)
+        {
+            await _context.CreatedTests.LoadAsync();
+            await _context.UserStatistic.LoadAsync();
+            var user = await _dbSet.FindAsync(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user;
+        }
+
+        public override async Task<QuizUser> GetByName(string name)
+        {
+            var user = await _dbSet.FirstOrDefaultAsync(u => u.Login == name);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user;
+        }
+
         public override async Task<UserManagerResponse> Create(UserDTO item)
         {
             try
             {
+
                 var user = new QuizUser
                 {
                     Login = item.Login,
+                    Score = 0
                 };
                 await _dbSet.AddAsync(user);
-
 
                 Save();
 
@@ -121,14 +151,28 @@ namespace QuizProject.Services.RepositoryService.Repositories
                     };
                 }
 
-                var result = _testLogic.GetScore(user, item, test);
+                var Ucontainer = new TestLogicContainer<UserUpdateDTO>
+                {
+                    User = user,
+                    Test = test,
+                    Result = item
+                };
+
+                var result = GetScore(Ucontainer);
 
                 if (!result.Success)
                 {
                     return result;
                 }
 
-                var res = await _testLogic.ChangeUserStatistic(user, test, result.Object, item.Test);
+                var Tcontainer = new TestLogicContainer<FinishTestResponse>
+                {
+                    User = user,
+                    Test = test,
+                    Result = result.Object
+                };
+
+                var res = await ChangeUserStatistic(Tcontainer, item.Test);
 
                 if (!res.Success)
                 {
@@ -150,106 +194,17 @@ namespace QuizProject.Services.RepositoryService.Repositories
             }
         }
 
-        public override async Task<UserManagerResponse> ResetScore(string name)
+        private async Task<UserManagerResponse> ChangeUserStatistic(TestLogicContainer<FinishTestResponse> container, int id)
         {
-            var user = await _dbSet.FirstOrDefaultAsync(u => u.Login == name);
-            if (user == null)
+            if (_repository.IsExists(container, id))
             {
-                return new UserManagerResponse
-                {
-                    Success = false,
-                    Message = "Resting score operation failed!",
-                    Errors = new List<string> { "User not Found" }
-                };
+                return await _repository.Update(container);
             }
-
-            user.Score = 0;
-
-            Save();
-
-            return new UserManagerResponse
+            else
             {
-                Success = true,
-                Message = "User's score has been reset successfully!"
-            };
-
+                return await _repository.Create(container);
+            }
         }
 
-        public override async Task<UserManagerResponse> ChangePassword(string name, string password)
-        {
-            var user = await _userManager.FindByNameAsync(name);
-            if (user == null)
-            {
-                return new UserManagerResponse
-                {
-                    Success = false,
-                    Message = "Changing password operation failed!",
-                    Errors = new List<string> { "User not Found" }
-                };
-            }
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, password);
-
-            if (!result.Succeeded)
-            {
-                return new UserManagerResponse
-                {
-                    Success = false,
-                    Message = "Changing password operation failed!",
-                    Errors = new List<string> { "Changing password operation failed" }
-                };
-            }
-
-            return new UserManagerResponse
-            {
-                Success = true,
-                Message = "Password has been changed successfully!"
-            };
-        }
-
-        public override async Task<UserManagerResponse> ConfirmEmail(string name)
-        {
-            var user = await _userManager.FindByNameAsync(name);
-
-            if (user == null)
-            {
-                return new UserManagerResponse
-                {
-                    Success = false,
-                    Message = "Confirm email operation failed!",
-                    Errors = new List<string> { "User not Found" }
-                };
-            }
-
-            if (user.EmailConfirmed)
-            {
-                return new UserManagerResponse
-                {
-                    Success = false,
-                    Message = "Confirm email operation failed!",
-                    Errors = new List<string> { "Email has already confirmed" }
-                };
-            }
-
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var result = await _userManager.ConfirmEmailAsync(user, token);
-
-            if (!result.Succeeded)
-            {
-                return new UserManagerResponse
-                {
-                    Success = false,
-                    Message = "Confirm email operation failed!",
-                    Errors = new List<string> { "Confirm email operation failed!" }
-                };
-            }
-
-            return new UserManagerResponse
-            {
-                Success = true,
-                Message = "Email has been confirmed successfully!"
-            };
-        }
     }
 }
