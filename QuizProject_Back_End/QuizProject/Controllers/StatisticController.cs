@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
 using QuizProject.Services.DataTransferService;
 using QuizProject.Services.RepositoryService;
 using System.Collections.Generic;
@@ -16,8 +17,6 @@ namespace QuizProject.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    //TODO: Is it not athorized controller?
-    //DONE
     public class StatisticController : ControllerBase
     {
         private readonly ILogger<StatisticController> _logger;
@@ -28,11 +27,14 @@ namespace QuizProject.Controllers
             _repository = factory.GetRepository<IStatisticRepositiry<TestStatistic, TestStatisticDTO>>();
         }
 
+        // GET: api/Statistic
         [HttpGet]
         public async Task<IEnumerable<TestStatistic>> GetStatistic()
         {
             return await _repository.GetAll();
         }
+
+        // POST: api/Statistic
         [HttpPost]
         public async Task<ActionResult<TestStatisticDTO>> PostStatistic([FromBody]TestStatisticDTO statdto)
         {
@@ -51,6 +53,8 @@ namespace QuizProject.Controllers
 
             return Ok(result);
         }
+
+        // DELETE: api/Statistic
         [HttpDelete]
         public async Task<ActionResult<TestStatistic>> DeleteStat ([FromQuery]string id)
         {

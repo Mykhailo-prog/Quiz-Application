@@ -23,7 +23,6 @@ using QuizProject.Services.DataTransferService;
 using QuizProject.Services.EmailService;
 using QuizProject.Services.IAdminService;
 using QuizProject.Services.RepositoryService;
-using QuizProject.Services.TestLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,10 +42,9 @@ namespace QuizProject
 
             Configuration = configuration;
         }
-        public AppConf _appConf { get; }
-
-        public IConfiguration Configuration { get; }
-        public IConfiguration AppConfig { get; }
+        private AppConf _appConf { get; }
+        private IConfiguration Configuration { get; }
+        private IConfiguration AppConfig { get; }
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AppConf>(AppConfig);
@@ -71,8 +69,6 @@ namespace QuizProject
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    //TODO: see my comment in EmailService
-                    //DONE
                     ValidIssuer = _appConf.Jwt.Issuer,
                     ValidAudience = _appConf.Jwt.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appConf.Jwt.Key)),
@@ -99,9 +95,6 @@ namespace QuizProject
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, QuizContext context)
         {
             
-
-            //TODO: If Db not exists inti here db migration to create it and fill with data
-            //DONE
             app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             if (env.IsDevelopment())
             {

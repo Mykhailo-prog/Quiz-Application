@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
 using QuizProject.Services.DataTransferService;
 using QuizProject.Services.RepositoryService;
 using System;
@@ -28,12 +28,14 @@ namespace QuizProject.Controllers
             _logger = logger;
         }
 
+        // GET: api/UserTestConnection
         [HttpGet]
         public async Task<IEnumerable<UserCreatedTest>> GetTestConnection()
         {
             return await _repository.GetAll();
         }
 
+        // POST: api/UserTestConnection
         [HttpPost]
         public async Task<IActionResult> PostTestConnection([FromBody] CreatedTestDTO ctdto)
         {
@@ -53,6 +55,7 @@ namespace QuizProject.Controllers
             return Ok(result);
         }
 
+        // PUT: api/UserTestConnection
         [HttpPut]
         public async Task<IActionResult> PutTestConnection([FromQuery] string id, [FromBody] CreatedTestDTO ctdto)
         {
@@ -77,6 +80,7 @@ namespace QuizProject.Controllers
             return Ok(result);
         }
 
+        // DELETE: api/UserTestConnection
         [HttpDelete]
         public async Task<IActionResult> DeleteTestConnection([FromQuery] string id)
         {

@@ -1,5 +1,6 @@
 ﻿using QuizProject.Models;
-using QuizProject.Services.TestLogic;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -3,6 +3,8 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using QuizProject.Models.Entity;
+
     public class QuizUserConfiguration : IEntityTypeConfiguration<QuizUser>
     {
 

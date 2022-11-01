@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
 using QuizProject.Services.RepositoryService.Repositories;
-using QuizProject.Services.TestLogic;
 using Serilog;
 using System;
 using System.Linq;
@@ -14,12 +14,14 @@ namespace QuizProject.Services.RepositoryService
         private readonly QuizContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ICalculateStatistic _statistic;
+
         public RepositoryFactory(QuizContext context, UserManager<IdentityUser> userManager, ICalculateStatistic statistic)
         {
             _context = context;
             _userManager = userManager;
             _statistic = statistic;
         }
+
         public R GetRepository<R>() where R : class
         {
             var typeParam = typeof(R).GenericTypeArguments.FirstOrDefault();

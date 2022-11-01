@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace QuizProject.Services.CalculateStatistic
     public class CalculateStatistic : ICalculateStatistic
     {
         private readonly QuizContext _db;
+
         public CalculateStatistic(QuizContext db)
         {
             _db = db;

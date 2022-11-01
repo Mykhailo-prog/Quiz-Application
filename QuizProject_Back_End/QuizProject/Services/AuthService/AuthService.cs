@@ -17,6 +17,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using QuizProject.Services.EmailService;
 using QuizProject.Services.RepositoryService;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 
 namespace QuizProject.Services.AuthService
 {
@@ -25,17 +27,17 @@ namespace QuizProject.Services.AuthService
         private UserManager<IdentityUser> _userManager;
         private readonly AppConf App;
         private IEmailService _emailService;
-        private readonly ILogger<AuthService> _logger;
         private readonly IUserRepository<QuizUser, UserDTO> _repository;
-        public AuthService(RepositoryFactory factory, UserManager<IdentityUser> userManager, IEmailService emailService, IOptions<AppConf> options, ILogger<AuthService> logger)
+
+        public AuthService(RepositoryFactory factory, UserManager<IdentityUser> userManager, IEmailService emailService, IOptions<AppConf> options)
         {
             _repository = factory.GetRepository<IUserRepository<QuizUser, UserDTO>>();
             _userManager = userManager;
             _emailService = emailService;
             App = options.Value;
-            _logger = logger;
 
         }
+
         public async Task<UserManagerResponse> CheckRole(string login)
         {
             try

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace QuizProject.Models
+namespace QuizProject.Models.ResponseModels
 {
     public class FinishTestResponse
     {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using QuizProject.Models.Entity;
 using QuizProject.Models.ModelConfiguration;
 using System;
 
@@ -14,7 +15,7 @@ namespace QuizProject.Models
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<UserStatistic> UserStatistic { get; set; }
-        public DbSet<UserCreatedTest> CreatedTests { get; set; }
+        public DbSet<UserCreatedTest> UserCreatedTests { get; set; }
 
         public QuizContext(DbContextOptions<QuizContext> options)
             : base(options)

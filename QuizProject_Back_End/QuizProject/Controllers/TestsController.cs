@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
 using QuizProject.Services.DataTransferService;
 using QuizProject.Services.RepositoryService;
 
@@ -105,7 +105,7 @@ namespace QuizProject.Controllers
             return Ok(result);
         }
 
-        // DELETE: api/Tests/id
+        // DELETE: api/Tests
         [HttpDelete]
         public async Task<IActionResult> DeleteTest([FromQuery] string id)
         {

@@ -1,6 +1,7 @@
 ﻿using QuizProject.Models;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 using QuizProject.Services.RepositoryService.Interfaces;
-using QuizProject.Services.TestLogic;
 using System.Threading.Tasks;
 
 namespace QuizProject.Services.RepositoryService

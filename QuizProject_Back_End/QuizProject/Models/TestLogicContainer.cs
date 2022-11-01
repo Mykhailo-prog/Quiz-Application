@@ -1,6 +1,6 @@
-﻿using QuizProject.Models;
+﻿using QuizProject.Models.Entity;
 
-namespace QuizProject.Services.TestLogic
+namespace QuizProject.Models
 {
     public class TestLogicContainer<T>
     {

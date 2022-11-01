@@ -1,4 +1,4 @@
-﻿namespace QuizProject.Models
+﻿namespace QuizProject.Models.ResponseModels
 {
     public class UserManagerResponse<T> : UserManagerResponse
     {

@@ -1,4 +1,5 @@
 ﻿using QuizProject.Models;
+using QuizProject.Models.ResponseModels;
 using QuizProject.Services.RepositoryService.Interfaces;
 using System.Collections.Generic;
 using System.Linq;

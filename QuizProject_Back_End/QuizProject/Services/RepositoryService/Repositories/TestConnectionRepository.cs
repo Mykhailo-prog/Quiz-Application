@@ -4,6 +4,8 @@ using QuizProject.Services.RepositoryService.RepositoryAbstractions;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 
 namespace QuizProject.Services.RepositoryService.Repositories
 {

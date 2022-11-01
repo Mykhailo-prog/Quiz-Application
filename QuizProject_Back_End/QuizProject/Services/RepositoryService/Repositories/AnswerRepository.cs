@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 using QuizProject.Services.RepositoryService.RepositoryAbstractions;
 using System;
 using System.Collections.Generic;

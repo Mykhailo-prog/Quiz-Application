@@ -2,19 +2,21 @@
 using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Services.RepositoryService.RepositoryAbstractions;
-using QuizProject.Services.TestLogic;
 using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Razor.Language;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 
 namespace QuizProject.Services.RepositoryService.Repositories
 {
     public class UserStatisticRepository : UserStatisticRepositoryAbstraction<UserStatistic, TestLogicContainer<FinishTestResponse>>
     {
         private readonly IStatisticRepositiry<TestStatistic, TestStatisticDTO> _repository;
+
         public UserStatisticRepository(QuizContext context, StatisticRepository stat) : base(context)
         {
             _repository = stat;

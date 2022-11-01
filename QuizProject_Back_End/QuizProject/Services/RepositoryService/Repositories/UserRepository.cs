@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 using QuizProject.Services.RepositoryService.Interfaces;
 using QuizProject.Services.RepositoryService.RepositoryAbstractions;
-using QuizProject.Services.TestLogic;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace QuizProject.Services.RepositoryService.Repositories
@@ -24,13 +26,13 @@ namespace QuizProject.Services.RepositoryService.Repositories
 
         public override async Task<IEnumerable<QuizUser>> GetAll()
         {
-            await _context.CreatedTests.LoadAsync();
+            await _context.UserCreatedTests.LoadAsync();
             return await _dbSet.Include(u => u.UserTestCount).ToListAsync();
         }
 
         public override async Task<QuizUser> GetByID(int id)
         {
-            await _context.CreatedTests.LoadAsync();
+            await _context.UserCreatedTests.LoadAsync();
             await _context.UserStatistic.LoadAsync();
             var user = await _dbSet.FindAsync(id);
 
@@ -58,7 +60,6 @@ namespace QuizProject.Services.RepositoryService.Repositories
         {
             try
             {
-
                 var user = new QuizUser
                 {
                     Login = item.Login,
@@ -203,6 +204,46 @@ namespace QuizProject.Services.RepositoryService.Repositories
             else
             {
                 return await _repository.Create(container);
+            }
+        }
+
+        private UserManagerResponse<FinishTestResponse> GetScore(TestLogicContainer<UserUpdateDTO> container)
+        {
+            try
+            {
+                var questions = container.Test.Questions.ToList();
+                double proventResult = 0;
+
+                for (int i = 0; i < container.Result.userAnswers.Count; i++)
+                {
+                    if (container.Result.userAnswers[i] == questions[i].CorrectAnswer)
+                    {
+                        proventResult++;
+                        container.User.Score += 10;
+                    }
+                }
+
+                var result = new FinishTestResponse
+                {
+                    UserName = container.User.Login,
+                    Time = container.Result.Time,
+                    Result = Convert.ToInt32(Math.Round(proventResult * 100 / container.Result.userAnswers.Count)),
+                };
+                return new UserManagerResponse<FinishTestResponse>
+                {
+                    Success = true,
+                    Message = "User score counted successfully!",
+                    Object = result
+                };
+            }
+            catch (Exception e)
+            {
+                return new UserManagerResponse<FinishTestResponse>
+                {
+                    Success = false,
+                    Message = "User score count failed!",
+                    Errors = new List<string> { e.Message }
+                };
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace QuizProject.Models
+namespace QuizProject.Models.Entity
 {
     public class Test
     {

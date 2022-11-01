@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using QuizProject.Services.TestLogic;
 using System.Security.Policy;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 
 namespace QuizProject.Services.RepositoryService.Repositories
 {
     public class StatisticRepository : StatisticAbstraction<TestStatistic, TestStatisticDTO>
     {
         private readonly ICalculateStatistic _statistic;
+
         public StatisticRepository(QuizContext context, ICalculateStatistic statistic) : base(context)
         {
             _statistic = statistic;
@@ -77,6 +79,7 @@ namespace QuizProject.Services.RepositoryService.Repositories
                 }
 
             }
+
             return new UserManagerResponse
             {
                 Success = true,

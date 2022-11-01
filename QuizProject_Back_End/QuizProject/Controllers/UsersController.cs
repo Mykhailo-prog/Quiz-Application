@@ -13,10 +13,11 @@ using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Microsoft.Extensions.Logging;
 using QuizProject.Services.DataTransferService;
-using QuizProject.Services.TestLogic;
 using QuizProject.Services.AuthService;
 using QuizProject.Services.RepositoryService;
 using QuizProject.Services.AdministratorService;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 
 namespace QuizProject.Controllers
 {
@@ -36,6 +37,7 @@ namespace QuizProject.Controllers
             _repository = factory.GetRepository<IUserRepository<QuizUser, UserDTO>>();
             _adminService = adminService;
         }
+
         // GET: api/Users
         [HttpGet]
         public async Task<IEnumerable<QuizUser>> GetUsers()
@@ -61,6 +63,7 @@ namespace QuizProject.Controllers
 
             return Ok(user);
         }
+
         // POST: api/users/checkrole
         [HttpPost("checkrole")]
         public async Task<bool> CheckRole([FromQuery] string login)
@@ -78,6 +81,8 @@ namespace QuizProject.Controllers
 
             return false;
         }
+
+        // POST: api/Users/resetscore
         [HttpPost("resetscore")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ResetUserScore([FromQuery] string name)
@@ -99,6 +104,7 @@ namespace QuizProject.Controllers
 
         }
 
+        // POST: api/Users/changepass
         [HttpPost("changepass")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminChangePassword([FromQuery] string name, [FromQuery] string password)
@@ -119,6 +125,7 @@ namespace QuizProject.Controllers
             return Ok(result);
         }
 
+        // POST: api/Users/adminconfirm
         [HttpPost("adminconfirm")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AdminConfirmEmail([FromQuery] string name)
@@ -139,7 +146,7 @@ namespace QuizProject.Controllers
             return Ok(result);
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Users
         [HttpPut]
         [Authorize]
         public async Task<IActionResult> PutUser([FromQuery] string id, [FromBody] UserUpdateDTO userUpdto)
@@ -167,6 +174,8 @@ namespace QuizProject.Controllers
 
             return Ok(result.Object);
         }
+
+        // POST: api/Users
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<QuizUser>> PostUser([FromBody] UserDTO userdto)

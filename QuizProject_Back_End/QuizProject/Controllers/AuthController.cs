@@ -16,7 +16,7 @@ namespace QuizProject.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IAuthService _authServiece;
+        private readonly IAuthService _authServiece;
         private readonly AppConf _appConf;
         private readonly ILogger<AuthController> _logger;
 
@@ -27,6 +27,7 @@ namespace QuizProject.Controllers
             _appConf = options.Value;
         }
 
+        // POST: api/auth/register
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody]RegisterModel model)
         {
@@ -50,6 +51,7 @@ namespace QuizProject.Controllers
             return Ok(result);
         }
 
+        // POST: api/auth/login
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody]LoginModel model)
         {
@@ -61,12 +63,6 @@ namespace QuizProject.Controllers
 
             var result = await _authServiece.LoginUserAsync(model);
 
-            //TODO: I think it looks more clear.
-            //if(!result.Success) return BadRequest(result);
-
-            //return Ok(result);
-            //DONE
-
             if (!result.Success)
             {
                 foreach (var e in result.Errors)
@@ -77,11 +73,10 @@ namespace QuizProject.Controllers
                 return BadRequest(result);
             }
 
-            //TODO: Something what? :)))))
-            //DONE
             return Ok(result);
         }
 
+        // GET: api/auth/confirmemail
         [HttpGet("confirmemail")]
         public async Task<IActionResult> ConfirmEmail([FromQuery]string userId, [FromQuery]string token)
         {
@@ -104,6 +99,7 @@ namespace QuizProject.Controllers
             
         }
 
+        // POST: api/auth/forgetpassword
         [HttpPost("ForgetPassword")]
         public async Task<IActionResult> ForgetPassword([FromQuery]string email)
         {
@@ -126,9 +122,9 @@ namespace QuizProject.Controllers
 
             return Ok(result);
             
-        }//TODO: You need to separate every method with space, please check other places.
-        //DONE
+        }
 
+        // POST: api/auth/resetpassword
         [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordModel model)
         {
@@ -150,9 +146,6 @@ namespace QuizProject.Controllers
             }
 
             return Ok(result);
-
-            //TODO: Something what? :)))))
-            //DONE
         }
     }
 }

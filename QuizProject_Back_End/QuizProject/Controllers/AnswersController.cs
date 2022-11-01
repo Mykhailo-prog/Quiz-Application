@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using QuizProject.Models;
 using QuizProject.Models.AppData;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
 using QuizProject.Services.DataTransferService;
 using QuizProject.Services.RepositoryService;
 using Serilog;
@@ -33,22 +34,6 @@ namespace QuizProject.Controllers
             _logger = logger;
         }
 
-        //TODO: For better compability I recomend to use next approach to return something from actions. Same for other controllers/actions.
-
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetAnswers(string id)
-        //{ 
-        //    if (string.IsNullOrWhiteSpace(id)) return BadRequest("params Id can not be null");
-
-        //    var item = await _context.Answers.FirstOrDefaultAsync(f => f.Id == int.Parse(id));
-
-        //    if (item == null) return NotFound();
-
-        //    return Ok(item);
-        //}
-
-        //DONE
-
         // GET: api/Answers
         [HttpGet]
         public async Task<IEnumerable<Answer>> GetAnswers()
@@ -57,7 +42,7 @@ namespace QuizProject.Controllers
             
         }
 
-        // GET: api/Answers/5
+        // GET: api/Answers/id
         [HttpGet("id")]
         public async Task<IActionResult> GetAnswer([FromQuery]string id)
         {
@@ -65,14 +50,7 @@ namespace QuizProject.Controllers
             {
                 return BadRequest("Incorect Id");
             }
-            //TODO: here you need to check if id has valid value. Same for other controllers/actions.
 
-            //var answer = await _context.Answers.FirstOrDefaultAsync( f=> f.Id == id);
-            //TODO: after check if answer found.
-            //if (answer == null) return BadRequest();
-
-
-            //DONE
             var answer = await _repository.GetByID(int.Parse(id));
 
             if(answer == null)
@@ -84,19 +62,10 @@ namespace QuizProject.Controllers
             
         }
 
+        // PUT: api/Answers
         [HttpPut]
         public async Task<IActionResult> PutAnswer([FromForm]string id, [FromBody]AnswerDTO answerdto)
         {
-            //TODO: Maybe it will be good idea to add model validation in next way:
-            // And use [Require] [MaxLength] etc. attributes for DTO props. see AnswerDTO.
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            //Same for other controllers/actions.
-
-            //DONE
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -120,29 +89,14 @@ namespace QuizProject.Controllers
 
                 return BadRequest(result);
             }
-            //TODO: here we will not need if we will return BadRequest() if answer == null. Same for other controllers/actions.
-            //TODO: Maybe we need to add any kind of loggin? Serilog I think will be good solution. Same for other controllers/actions.
-            //DONE
-            //var answer = await _context.Answers.FirstOrDefaultAsync( f=> f.Id == id);
-            //TODO: if (answer == null) return BadRequest()
-            //Same for other controllers/actions.
-            //DONE
+
             return Ok(result);
         }
 
+        // POST: api/Answers
         [HttpPost]
         public async Task<IActionResult> PostAnswer([FromBody]List<AnswerDTO> answersdto)
         {
-            //TODO: Maybe it will be good idea to add model validation in next way:
-            // And use [Require] [MaxLength] etc. attributes for DTO props. see AnswerDTO.
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            //Same for other controllers/actions.
-
-            //DONE
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -159,16 +113,10 @@ namespace QuizProject.Controllers
             return Ok(result);
         }
 
-        // DELETE: api/Answers/5
+        // DELETE: api/Answers
         [HttpDelete]
         public async Task<ActionResult<AnswerDTO>> DeleteAnswer([FromQuery] string id)
         {
-            //TODO: same, check if id has valid value. Same for other controllers/actions.
-            //TODO: can be simplified
-
-            //DONE
-            
-
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorrect Id");

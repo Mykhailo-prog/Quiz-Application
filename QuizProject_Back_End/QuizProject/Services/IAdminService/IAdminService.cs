@@ -1,4 +1,5 @@
 ﻿using QuizProject.Models;
+using QuizProject.Models.ResponseModels;
 using System.Threading.Tasks;
 
 namespace QuizProject.Services.IAdminService

@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 using QuizProject.Models.AppData;
-using QuizProject.Models;
 using System.Net.Mail;
 using System.Net;
 using System.Threading.Tasks;
 using System;
 using Microsoft.Extensions.Logging;
+using QuizProject.Models.ResponseModels;
+using QuizProject.Models;
+using System.Collections.Generic;
 
 namespace QuizProject.Services.EmailService
 {
@@ -13,6 +15,7 @@ namespace QuizProject.Services.EmailService
     {
         private readonly AppConf _appConf;
         private readonly ILogger<EmailService> _logger;
+
         public EmailService(IOptions<AppConf> options, ILogger<EmailService> logger)
         {
             _logger = logger;
@@ -24,9 +27,6 @@ namespace QuizProject.Services.EmailService
             try
             {
                 MailAddress to = new MailAddress(toEmail);
-                //TODO: configuration can be regitered for certain class and used in service constructor like IOptions<ClassName> option after option.Value
-                // please check how it works and do it in this way
-                //DONE
                 MailAddress from = new MailAddress(_appConf.Email.Sender.From, _appConf.Email.Sender.SenderName);
                 MailMessage mailMessage = new MailMessage(from, to);
                 mailMessage.Subject = subject;
@@ -44,8 +44,9 @@ namespace QuizProject.Services.EmailService
                 _logger.LogError("Error during Sending Email!\n{0}", e.Message);
                 return new UserManagerResponse
                 {
-                    Message = e.Message,
+                    Message = "Email sending failed",
                     Success = false,
+                    Errors = new List<string> { e.Message }
                 };
             }
 
@@ -54,10 +55,6 @@ namespace QuizProject.Services.EmailService
                 Message = "Email sent successfully!",
                 Success = true,
             };
-
-            //TODO: we dont know if email was sent or not. Use try catch and return bool
-            //DONE
-
         }
     }
 }

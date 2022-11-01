@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuizProject.Models;
 using QuizProject.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using QuizProject.Services.DataTransferService;
 using QuizProject.Services.RepositoryService;
+using QuizProject.Models.Entity;
+using QuizProject.Models;
 
 namespace QuizProject.Controllers
 {
@@ -35,7 +36,7 @@ namespace QuizProject.Controllers
             return await _repository.GetAll();
         }
 
-        // GET: api/Questions/5
+        // GET: api/Questions/id
         [HttpGet("id")]
         public async Task<IActionResult> GetQuestion([FromQuery]string id)
         {
@@ -54,6 +55,7 @@ namespace QuizProject.Controllers
             return Ok(question);
         }
 
+        // PUT: api/Questions
         [HttpPut]
         public async Task<IActionResult> PutQuestion([FromQuery]string id, [FromBody]QuestionDTO questiondto)
         {
@@ -79,6 +81,7 @@ namespace QuizProject.Controllers
 
         }
 
+        // POST: api/Questions
         [HttpPost]
         public async Task<ActionResult<Question>> PostQuestion([FromBody]QuestionDTO questiondto)
         {

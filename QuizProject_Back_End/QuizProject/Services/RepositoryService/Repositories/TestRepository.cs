@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
 using QuizProject.Services.RepositoryService.RepositoryAbstractions;
 using System;
 using System.Collections.Generic;
@@ -27,7 +29,7 @@ namespace QuizProject.Services.RepositoryService.Repositories
         {
             await _context.Statistics.LoadAsync();
             await _context.Questions.Include(q => q.Answers).LoadAsync();
-            await _context.CreatedTests.LoadAsync();
+            await _context.UserCreatedTests.LoadAsync();
 
             var test = await _dbSet.FindAsync(id);
 
@@ -104,7 +106,7 @@ namespace QuizProject.Services.RepositoryService.Repositories
                     TestId = newTest.TestId,
                 };
 
-                await _context.CreatedTests.AddAsync(userConnect);
+                await _context.UserCreatedTests.AddAsync(userConnect);
 
                 var newTestStat = new TestStatistic
                 {

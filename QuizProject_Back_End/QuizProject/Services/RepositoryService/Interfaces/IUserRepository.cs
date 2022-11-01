@@ -1,5 +1,6 @@
 ﻿using QuizProject.Models;
 using QuizProject.Models.DTO;
+using QuizProject.Models.ResponseModels;
 using QuizProject.Services.RepositoryService.Interfaces;
 using System.Threading.Tasks;
 
