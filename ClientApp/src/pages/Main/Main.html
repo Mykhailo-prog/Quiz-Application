@@ -30,6 +30,19 @@
   </b-row>
   <b-row>
     <b-col class="p-0">
+      <h3>new messages</h3>
+      <div id="pubnub">
+        <ol>
+          <li v-for="msg in Mess">{{msg.message}}</li>
+        </ol>
+        <button @click="push">push</button>
+      </div>
+      <div>
+        <h3>history pubnub</h3>
+        <ol>
+          <li v-for="msg in HistMess">{{msg.message}}</li>
+        </ol>
+      </div>
       <div>
         <user-list :users="Users"></user-list>
       </div>

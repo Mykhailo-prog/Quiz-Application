@@ -18,6 +18,7 @@ using QuizProject.Services.RepositoryService;
 using QuizProject.Services.AdministratorService;
 using QuizProject.Models.Entity;
 using QuizProject.Models.ResponseModels;
+using PubnubApi;
 
 namespace QuizProject.Controllers
 {
@@ -29,9 +30,22 @@ namespace QuizProject.Controllers
         private readonly IAdministratorService _adminService;
         private readonly ILogger<UsersController> _logger;
         private readonly IUserRepository<QuizUser, UserDTO> _repository;
+        private readonly Pubnub _pubnub;
 
         public UsersController(RepositoryFactory factory, ILogger<UsersController> logger, IAuthService authService, IAdministratorService adminService)
         {
+            var pnConf = new PNConfiguration(new UserId("d82cb833-4019-410d-9f17-a9d0b83247ee"));
+            pnConf.SubscribeKey = "sub-c-ca365b16-2ef0-4595-93dd-80bdc73e00c0";
+            pnConf.PublishKey = "pub-c-ec582826-6ede-4f44-a310-09aa38fdab05";
+            pnConf.SecretKey = "sec-c-MmExNzg3ZTEtNGNjOC00NTlkLWFmOWMtMzE0NGM4YzY0MWI0";
+            //pnConf.Uuid = "pn-6ab788e3-b5fd-4140-8f8b-a0caedd3d7a4";
+
+            _pubnub = new Pubnub(pnConf);
+
+            _pubnub.Subscribe<string>()
+                .Channels(new string[] { "my_channel" })
+                .Execute();
+
             _authService = authService;
             _logger = logger;
             _repository = factory.GetRepository<IUserRepository<QuizUser, UserDTO>>();
@@ -45,6 +59,46 @@ namespace QuizProject.Controllers
             return await _repository.GetAll();
         }
 
+        [HttpGet("pubnub")]
+        public async Task<IActionResult> GetMessage()
+        {
+            await _pubnub.DeleteMessages()
+                .Channel("my_channel")
+                .Start(16678225727905812)
+                .End(16678432914943130)
+                .ExecuteAsync();
+
+            var res = await _pubnub.FetchHistory()
+                .Channels(new string[] { "my_channel" })
+                .IncludeMessageType(true)
+                .IncludeMessageActions(true)
+                .ExecuteAsync();
+
+            return Ok(res);
+        }
+
+        [HttpPost("pubnub")]
+        public async Task<IActionResult> Publish()
+        {
+            
+
+            Dictionary<string, float> position = new Dictionary<string, float>();
+            position.Add("lat", 32F);
+            position.Add("XXX", 32F);
+
+            Console.WriteLine("before pub: " + _pubnub.JsonPluggableLibrary.SerializeToJsonString(position));
+            PNResult<PNPublishResult> publishResponse = await _pubnub.Publish()
+                                                        .Message(position)
+                                                        .Channel("my_channel")
+                                                        .ShouldStore(true)
+                                                        .Ttl(10)
+                                                        .ExecuteAsync();
+            PNPublishResult publishResult = publishResponse.Result;
+            PNStatus status = publishResponse.Status;
+            Console.WriteLine("pub timetoken: " + publishResult.Timetoken.ToString());
+            Console.WriteLine("pub status code : " + status.StatusCode.ToString());
+            return Ok(publishResult);
+        }
         // GET: api/Users/id
         [HttpGet("id")]
         public async Task<ActionResult<QuizUser>> GetUser([FromQuery] string id)
