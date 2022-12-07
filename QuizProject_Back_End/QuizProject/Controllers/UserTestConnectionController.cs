@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using QuizProject.Models;
 using QuizProject.Models.DTO;
-using QuizProject.Services;
+using QuizProject.Models.Entity;
+using QuizProject.Services.DataTransferService;
+using QuizProject.Services.RepositoryService;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace QuizProject.Controllers
@@ -17,42 +19,45 @@ namespace QuizProject.Controllers
     [Authorize]
     public class UserTestConnectionController : ControllerBase
     {
-        private readonly IDataTransferServise _dto;
-        private readonly QuizContext _context;
         private readonly ILogger<UserTestConnectionController> _logger;
+        private readonly ITestConnectionRepository<UserCreatedTest, CreatedTestDTO> _repository;
 
-        public UserTestConnectionController(QuizContext context, IDataTransferServise dto, ILogger<UserTestConnectionController> logger)
+        public UserTestConnectionController(RepositoryFactory factory, ILogger<UserTestConnectionController> logger)
         {
-            _context = context;
-            _dto = dto;
+            _repository = factory.GetRepository<ITestConnectionRepository<UserCreatedTest, CreatedTestDTO>>();
             _logger = logger;
         }
+
+        // GET: api/UserTestConnection
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserCreatedTest>>> GetTestConnection()
+        public async Task<IEnumerable<UserCreatedTest>> GetTestConnection()
         {
-            return await _context.CreatedTests.ToListAsync();
+            return await _repository.GetAll();
         }
+
+        // POST: api/UserTestConnection
         [HttpPost]
-        public async Task<ActionResult<UserCreatedTest>> PostTestConnection(CreatedTestDTO ctdto)
+        public async Task<IActionResult> PostTestConnection([FromBody] CreatedTestDTO ctdto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var uct = new UserCreatedTest
+            var result = await _repository.Create(ctdto);
+
+            if (!result.Success)
             {
-                QuizUserId = ctdto.UserId,
-                TestId = ctdto.TestId,
-            };
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
+            }
 
-            _context.CreatedTests.Add(uct);
-            await _context.SaveChangesAsync();
-
-            return Ok(_dto.CreatedTestToDTO(uct));
+            return Ok(result);
         }
+
+        // PUT: api/UserTestConnection
         [HttpPut]
-        public async Task<IActionResult> PutTestConnection(string id, CreatedTestDTO ctdto)
+        public async Task<IActionResult> PutTestConnection([FromQuery] string id, [FromBody] CreatedTestDTO ctdto)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -64,34 +69,35 @@ namespace QuizProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var uct = await _context.CreatedTests.FindAsync(int.Parse(id));
+            var result = await _repository.Update(int.Parse(id), ctdto);
 
-                if(uct == null)
-                {
-                    return NotFound("No user-test with this Id");
-                }
-
-                uct.TestId = ctdto.TestId;
-                uct.QuizUserId = ctdto.UserId;
-
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException err)
+            if (!result.Success)
             {
-                _logger.LogError("Db update error!\n{0}", err.Message);
-                return BadRequest(err.Message);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("Database wasn't updated. Error on updating Test Connection with id:{0} \nReason: {1}", id, e.Message);
-                return BadRequest(e.Message);
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            //TODO: I think it is not the best type to return if everything ok, it should be Ok(); :) \
-            //DONE
-            return Ok();
+            return Ok(result);
+        }
+
+        // DELETE: api/UserTestConnection
+        [HttpDelete]
+        public async Task<IActionResult> DeleteTestConnection([FromQuery] string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest("Incorrect Id");
+            }
+
+            var result = await _repository.Delete(int.Parse(id));
+
+            if (!result.Success)
+            {
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }

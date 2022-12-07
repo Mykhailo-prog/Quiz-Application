@@ -13,7 +13,9 @@ using Microsoft.Extensions.Options;
 using QuizProject.Models;
 using QuizProject.Models.AppData;
 using QuizProject.Models.DTO;
-using QuizProject.Services;
+using QuizProject.Models.Entity;
+using QuizProject.Services.DataTransferService;
+using QuizProject.Services.RepositoryService;
 using Serilog;
 
 namespace QuizProject.Controllers
@@ -23,57 +25,33 @@ namespace QuizProject.Controllers
     [Authorize]
     public class AnswersController : ControllerBase
     {
-        private readonly IDataTransferServise _dto;
-        private readonly QuizContext _context;
         private readonly ILogger<AnswersController> _logger;
+        private readonly IAnswerRepository<Answer, AnswerDTO> _repository;
 
-        public AnswersController(QuizContext context, IDataTransferServise dataTransferServise, ILogger<AnswersController> logger)
+        public AnswersController(ILogger<AnswersController> logger, RepositoryFactory factory)
         {
+            _repository = factory.GetRepository<IAnswerRepository<Answer, AnswerDTO>>();
             _logger = logger;
-            _context = context;
-            _dto = dataTransferServise;
         }
-
-        //TODO: For better compability I recomend to use next approach to return something from actions. Same for other controllers/actions.
-
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> GetAnswers(string id)
-        //{ 
-        //    if (string.IsNullOrWhiteSpace(id)) return BadRequest("params Id can not be null");
-
-        //    var item = await _context.Answers.FirstOrDefaultAsync(f => f.Id == int.Parse(id));
-
-        //    if (item == null) return NotFound();
-
-        //    return Ok(item);
-        //}
-
-        //DONE
 
         // GET: api/Answers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Answer>>> GetAnswers()
+        public async Task<IEnumerable<Answer>> GetAnswers()
         {
-            return await _context.Answers.ToListAsync();
+            return await _repository.GetAll();
+            
         }
 
-        // GET: api/Answers/5
+        // GET: api/Answers/id
         [HttpGet("id")]
-        public async Task<ActionResult<Answer>> GetAnswer([FromQuery]string id)
+        public async Task<IActionResult> GetAnswer([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorect Id");
             }
-            //TODO: here you need to check if id has valid value. Same for other controllers/actions.
 
-            //var answer = await _context.Answers.FirstOrDefaultAsync( f=> f.Id == id);
-            //TODO: after check if answer found.
-            //if (answer == null) return BadRequest();
-
-
-            //DONE
-            var answer = await _context.Answers.FindAsync(int.Parse(id));
+            var answer = await _repository.GetByID(int.Parse(id));
 
             if(answer == null)
             {
@@ -84,117 +62,75 @@ namespace QuizProject.Controllers
             
         }
 
+        // PUT: api/Answers
         [HttpPut]
-        public async Task<IActionResult> PutAnswer(string id, AnswerDTO answerdto)
+        public async Task<IActionResult> PutAnswer([FromForm]string id, [FromBody]AnswerDTO answerdto)
         {
-            //TODO: Maybe it will be good idea to add model validation in next way:
-            // And use [Require] [MaxLength] etc. attributes for DTO props. see AnswerDTO.
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            //Same for other controllers/actions.
-
-            //DONE
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            try
+            if (string.IsNullOrWhiteSpace(id))
             {
-                var answer = await _context.Answers.FindAsync(int.Parse(id));
+                return BadRequest("Incorrect id!");
+            }
 
-                if (answer == null)
+            var result = await _repository.Update(int.Parse(id), answerdto);
+
+            if (!result.Success)
+            {
+                _logger.LogError(result.Message);
+
+                foreach(var e in result.Errors)
                 {
-                    return NotFound("No answer with this Id");
+                    _logger.LogError("Error : {0}", e);
                 }
 
-                //var answer = await _context.Answers.FirstOrDefaultAsync( f=> f.Id == id);
-                //TODO: if (answer == null) return BadRequest()
-                //Same for other controllers/actions.
-                //DONE
-
-                answer.Ans = answerdto.Answer;
-                answer.QuestionId = answerdto.QuestionId;
-
-                await _context.SaveChangesAsync();
-            }
-            catch(DbUpdateConcurrencyException err)
-            {
-                _logger.LogError("Db update error!\n{0}", err.Message);
-                return BadRequest(err.Message);
-            }
-            catch (Exception e )
-            {
-                //TODO: here we will not need if we will return BadRequest() if answer == null. Same for other controllers/actions.
-                //TODO: Maybe we need to add any kind of loggin? Serilog I think will be good solution. Same for other controllers/actions.
-                //DONE
-                _logger.LogError("Database wasn't updated. Error on updating Answer with id:{0} \nReason: {1}", id, e.Message);
-                return BadRequest(e.Message);   
+                return BadRequest(result);
             }
 
-            return Ok();
+            return Ok(result);
         }
 
+        // POST: api/Answers
         [HttpPost]
-        public async Task<ActionResult<List<AnswerDTO>>> PostAnswer(List<AnswerDTO> answersdto)
+        public async Task<IActionResult> PostAnswer([FromBody]List<AnswerDTO> answersdto)
         {
-            //TODO: Maybe it will be good idea to add model validation in next way:
-            // And use [Require] [MaxLength] etc. attributes for DTO props. see AnswerDTO.
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            //Same for other controllers/actions.
-
-            //DONE
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            foreach (AnswerDTO ans in answersdto)
-            {
-                var answer = new Answer
-                {
-                    Ans = ans.Answer,
-                    QuestionId = ans.QuestionId
-                };
-                _context.Answers.Add(answer);
-            }
-            
-            await _context.SaveChangesAsync();
+            var result = await _repository.Create(answersdto);
 
-            return Ok(answersdto);
+            if (!result.Success)
+            {
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
-        // DELETE: api/Answers/5
+        // DELETE: api/Answers
         [HttpDelete]
-        public async Task<ActionResult<AnswerDTO>> DeleteAnswer(string id)
+        public async Task<ActionResult<AnswerDTO>> DeleteAnswer([FromQuery] string id)
         {
-            //TODO: same, check if id has valid value. Same for other controllers/actions.
-            //TODO: can be simplified
-
-            //DONE
-
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorrect Id");
             }
 
-            var answer = await _context.Answers.FindAsync(int.Parse(id));
-            if (answer == null)
+            var result = await _repository.Delete(int.Parse(id));
+
+            if (!result.Success)
             {
-                return NotFound("No answer with this Id");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            _context.Answers.Remove(answer);
-            await _context.SaveChangesAsync();
-
-            return Ok(_dto.AnswerToDTO(answer));
+            return Ok(result);
         }
     }
 }

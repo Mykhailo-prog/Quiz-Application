@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using QuizProject.Models.Entity;
 
 namespace QuizProject.Models.DTO
 {

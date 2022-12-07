@@ -9,11 +9,16 @@ using QuizProject.Models;
 using QuizProject.Models.DTO;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
-using QuizProject.Services;
 using Microsoft.AspNetCore.Identity;
-using QuizProject.Servieces;
 using Serilog;
 using Microsoft.Extensions.Logging;
+using QuizProject.Services.DataTransferService;
+using QuizProject.Services.AuthService;
+using QuizProject.Services.RepositoryService;
+using QuizProject.Services.AdministratorService;
+using QuizProject.Models.Entity;
+using QuizProject.Models.ResponseModels;
+using PubnubApi;
 
 namespace QuizProject.Controllers
 {
@@ -21,40 +26,89 @@ namespace QuizProject.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly QuizContext _context;
-        private ITestLogic _testLogic;
-        private IAuthService _authService;
-        private readonly IDataTransferServise _dto;
-        private UserManager<IdentityUser> _userManager;
+        private readonly IAuthService _authService;
+        private readonly IAdministratorService _adminService;
         private readonly ILogger<UsersController> _logger;
+        private readonly IUserRepository<QuizUser, UserDTO> _repository;
+        private readonly Pubnub _pubnub;
 
-        public UsersController(QuizContext context, ITestLogic testLogic, UserManager<IdentityUser> userManager, ILogger<UsersController> logger, IAuthService authService, IDataTransferServise dto)
+        public UsersController(RepositoryFactory factory, ILogger<UsersController> logger, IAuthService authService, IAdministratorService adminService)
         {
+            var pnConf = new PNConfiguration(new UserId("d82cb833-4019-410d-9f17-a9d0b83247ee"));
+            pnConf.SubscribeKey = "sub-c-ca365b16-2ef0-4595-93dd-80bdc73e00c0";
+            pnConf.PublishKey = "pub-c-ec582826-6ede-4f44-a310-09aa38fdab05";
+            pnConf.SecretKey = "sec-c-MmExNzg3ZTEtNGNjOC00NTlkLWFmOWMtMzE0NGM4YzY0MWI0";
+            //pnConf.Uuid = "pn-6ab788e3-b5fd-4140-8f8b-a0caedd3d7a4";
+
+            _pubnub = new Pubnub(pnConf);
+
+            _pubnub.Subscribe<string>()
+                .Channels(new string[] { "my_channel" })
+                .Execute();
+
             _authService = authService;
             _logger = logger;
-            _userManager = userManager;
-            _context = context;
-            _testLogic = testLogic;
-            _dto = dto;
-        }
-        // GET: api/Users
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<QuizUser>>> GetUsers()
-        {
-            await _context.CreatedTests.LoadAsync();
-            return await _context.QuizUsers.Include(u => u.UserTestCount).ToListAsync();
+            _repository = factory.GetRepository<IUserRepository<QuizUser, UserDTO>>();
+            _adminService = adminService;
         }
 
+        // GET: api/Users
+        [HttpGet]
+        public async Task<IEnumerable<QuizUser>> GetUsers()
+        {
+            return await _repository.GetAll();
+        }
+
+        [HttpGet("pubnub")]
+        public async Task<IActionResult> GetMessage()
+        {
+            await _pubnub.DeleteMessages()
+                .Channel("my_channel")
+                .Start(16678225727905812)
+                .End(16678432914943130)
+                .ExecuteAsync();
+
+            var res = await _pubnub.FetchHistory()
+                .Channels(new string[] { "my_channel" })
+                .IncludeMessageType(true)
+                .IncludeMessageActions(true)
+                .ExecuteAsync();
+
+            return Ok(res);
+        }
+
+        [HttpPost("pubnub")]
+        public async Task<IActionResult> Publish()
+        {
+            
+
+            Dictionary<string, float> position = new Dictionary<string, float>();
+            position.Add("lat", 32F);
+            position.Add("XXX", 32F);
+
+            Console.WriteLine("before pub: " + _pubnub.JsonPluggableLibrary.SerializeToJsonString(position));
+            PNResult<PNPublishResult> publishResponse = await _pubnub.Publish()
+                                                        .Message(position)
+                                                        .Channel("my_channel")
+                                                        .ShouldStore(true)
+                                                        .Ttl(10)
+                                                        .ExecuteAsync();
+            PNPublishResult publishResult = publishResponse.Result;
+            PNStatus status = publishResponse.Status;
+            Console.WriteLine("pub timetoken: " + publishResult.Timetoken.ToString());
+            Console.WriteLine("pub status code : " + status.StatusCode.ToString());
+            return Ok(publishResult);
+        }
         // GET: api/Users/id
         [HttpGet("id")]
-        public async Task<ActionResult<QuizUser>> GetUser(string id)
+        public async Task<ActionResult<QuizUser>> GetUser([FromQuery] string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorrect Id");
             }
 
-            var user = await _context.QuizUsers.FindAsync(int.Parse(id));
+            var user = await _repository.GetByID(int.Parse(id));
 
             if (user == null)
             {
@@ -63,9 +117,10 @@ namespace QuizProject.Controllers
 
             return Ok(user);
         }
+
         // POST: api/users/checkrole
         [HttpPost("checkrole")]
-        public async Task<bool> CheckRole(string login)
+        public async Task<bool> CheckRole([FromQuery] string login)
         {
             if (string.IsNullOrWhiteSpace(login))
             {
@@ -80,89 +135,75 @@ namespace QuizProject.Controllers
 
             return false;
         }
+
+        // POST: api/Users/resetscore
         [HttpPost("resetscore")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> ResetUserScore(string name)
+        public async Task<IActionResult> ResetUserScore([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest("Incorrect login");
             }
-            var user = await _context.QuizUsers.FirstOrDefaultAsync(u =>u.Login == name);
-            if(user == null)
+
+            var result = await _adminService.ResetScore(name);
+
+            if (!result.Success)
             {
-                return NotFound("No user with this login");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            user.Score = 0;
+            return Ok(result);
 
-            await _context.SaveChangesAsync();
-            return Ok();
-            
         }
 
+        // POST: api/Users/changepass
         [HttpPost("changepass")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AdminChangePassword(string name, string password)
+        public async Task<IActionResult> AdminChangePassword([FromQuery] string name, [FromQuery] string password)
         {
             if(string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password))
             {
                 return BadRequest("Incorrect name or password ");
             }
 
-            var user = await _userManager.FindByNameAsync(name);
-            if(user == null)
+            var result = await _adminService.ChangePassword(name, password);
+
+            if (!result.Success)
             {
-                return NotFound("No user with this login!");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var result = await _userManager.ResetPasswordAsync(user, token, password);
-
-            if (!result.Succeeded)
-            {
-                return BadRequest("Change password Failed!");
-            }
-
-            return Ok();
+            return Ok(result);
         }
 
+        // POST: api/Users/adminconfirm
         [HttpPost("adminconfirm")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AdminConfirmEmail(string name)
+        public async Task<IActionResult> AdminConfirmEmail([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest("Incorrect login");
             }
 
-            var user = await _userManager.FindByNameAsync(name);
+            var result = await _adminService.ConfirmEmail(name);
 
-            if(user == null)
+            if (!result.Success)
             {
-                return NotFound("No user with this login!");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            if (user.EmailConfirmed)
-            {
-                return BadRequest("Email already confirmed");
-            }
-
-            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var result = await _userManager.ConfirmEmailAsync(user, token);
-
-            if (!result.Succeeded)
-            {
-                return BadRequest("Email confirmation has beed failed");
-            }
-
-            return Ok();
+            return Ok(result);
         }
 
-        // PUT: api/Users/5
+        // PUT: api/Users
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> PutUser(string id, UserUpdateDTO userUpdto)
+        public async Task<IActionResult> PutUser([FromQuery] string id, [FromBody] UserUpdateDTO userUpdto)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -174,97 +215,63 @@ namespace QuizProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
+            var result = await _repository.UpdateScore(int.Parse(id), userUpdto) as UserManagerResponse<FinishTestResponse>;
+
+            if (!result.Success)
             {
-                var user = await _context.QuizUsers.FindAsync(int.Parse(id));
-
-                if(user == null)
+                foreach(var e in result.Errors)
                 {
-                    return NotFound("No user with this Id");
+                    _logger.LogError("Error : {0}", e);
                 }
-
-                var test = await _context.Tests.Include(t => t.Questions).FirstOrDefaultAsync(t => t.TestId == userUpdto.Test);
-
-                if(test == null)
-                {
-                    return BadRequest("No test with this Id");
-                }
-
-                var result = _testLogic.GetScore(user, userUpdto, test);
-
-                if (!_context.UserStatistic.Where(e => e.QuizUserId == user.Id).Any(u => u.TestId == userUpdto.Test))
-                {
-                    await _testLogic.CreateStatisticAsync(user, test, result);
-                }
-                else
-                {
-                    await _testLogic.UpdateStatistic(user, test, result);
-                }
-                
-                await _context.SaveChangesAsync();
-
-                return Ok(result);
+                return BadRequest(result);
             }
-            catch (DbUpdateConcurrencyException err)
-            {
-                _logger.LogError("Db update error!\n{0}", err.Message);
-                return BadRequest(err.Message);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("Database wasn't updated. Error on updating user with id:{0} \nReason: {1}", id, e.Message);
-                return BadRequest(e.Message);
-            }
+
+            return Ok(result.Object);
         }
+
+        // POST: api/Users
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<QuizUser>> PostUser(UserDTO userdto)
+        public async Task<ActionResult<QuizUser>> PostUser([FromBody] UserDTO userdto)
         {
             if (ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = new QuizUser
+            var result = await _repository.Create(userdto);
+
+            if (!result.Success)
             {
-                Login = userdto.Login,
-            };
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
+            }
 
-            _context.QuizUsers.Add(user);
-            await _context.SaveChangesAsync();
-
-            return Ok(_dto.UserToDTO(user));
+            return Ok(result);
         }
 
         // DELETE: api/Users
         [HttpDelete]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteUser(string name)
+        public async Task<IActionResult> DeleteUser([FromQuery] string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest("Incorrect login");
             }
-            var user = await _userManager.FindByNameAsync(name);
+            
+            var result = await _repository.Delete(name);
 
-            if(user == null)
+            if (!result.Success)
             {
-                return NotFound("User not found");
+                foreach (var e in result.Errors)
+                {
+                    _logger.LogError("Error : {0}", e);
+                }
+                return BadRequest(result);
             }
 
-            await _userManager.DeleteAsync(user);
-
-            var qUser = await _context.QuizUsers.FirstOrDefaultAsync(u => u.Login == name);
-
-            if (qUser == null)
-            {
-                return NotFound("User not found");
-            }
-
-            _context.QuizUsers.Remove(qUser);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            return Ok(result);
         }
     }
 }

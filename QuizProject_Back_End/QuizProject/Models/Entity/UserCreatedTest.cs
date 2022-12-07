@@ -1,4 +1,4 @@
-﻿namespace QuizProject.Models
+﻿namespace QuizProject.Models.Entity
 {
     public class UserCreatedTest
     {

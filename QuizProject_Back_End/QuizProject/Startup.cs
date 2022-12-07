@@ -16,7 +16,13 @@ using Microsoft.IdentityModel.Tokens;
 using QuizProject.Models;
 using QuizProject.Models.AppData;
 using QuizProject.Services;
-using QuizProject.Servieces;
+using QuizProject.Services.AdministratorService;
+using QuizProject.Services.AuthService;
+using QuizProject.Services.CalculateStatistic;
+using QuizProject.Services.DataTransferService;
+using QuizProject.Services.EmailService;
+using QuizProject.Services.IAdminService;
+using QuizProject.Services.RepositoryService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,17 +38,16 @@ namespace QuizProject
         {
             var builder = new ConfigurationBuilder().AddJsonFile("appData.json");
             AppConfig = builder.Build();
-            App = AppConfig.Get<App>();
+            _appConf = AppConfig.Get<AppConf>();
 
             Configuration = configuration;
         }
-        public App App { get; }
-
-        public IConfiguration Configuration { get; }
-        public IConfiguration AppConfig { get; }
+        private AppConf _appConf { get; }
+        private IConfiguration Configuration { get; }
+        private IConfiguration AppConfig { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<App>(AppConfig);
+            services.Configure<AppConf>(AppConfig);
             services.AddDbContext<QuizContext>(op => op.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<IdentityUser, IdentityRole>(opt =>
             {
@@ -64,18 +69,23 @@ namespace QuizProject
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    //TODO: see my comment in EmailService
-                    
-                    ValidIssuer = App.Jwt.Issuer,
-                    ValidAudience = App.Jwt.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(App.Jwt.Key)),
+                    ValidIssuer = _appConf.Jwt.Issuer,
+                    ValidAudience = _appConf.Jwt.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appConf.Jwt.Key)),
                     ClockSkew = TimeSpan.Zero
                 };
             });
+            
+            services.AddScoped<RepositoryFactory>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<ITestLogic, TestLogic>();
+            services.AddScoped<IAdministratorService, AdministratorService>();
+            services.AddScoped<ICalculateStatistic, CalculateStatistic>();
             services.AddScoped<IDataTransferServise, DataTransferService>();
+            
+            
+            
+            
             services.AddSwaggerGen();
             services.AddControllers();
             services.AddCors(c => c.AddPolicy("AllowOrigin", opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
@@ -85,9 +95,6 @@ namespace QuizProject
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, QuizContext context)
         {
             
-
-            //TODO: If Db not exists inti here db migration to create it and fill with data
-            //DONE
             app.UseCors(opt => opt.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             if (env.IsDevelopment())
             {

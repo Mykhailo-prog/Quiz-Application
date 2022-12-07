@@ -1,6 +1,6 @@
 ﻿namespace QuizProject.Models.AppData
 {
-    public class App
+    public class AppConf
     {
         public string AppUrl { get; set; }
         public string FrontUrl { get; set; }

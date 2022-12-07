@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using QuizProject.Models;
 using QuizProject.Models.DTO;
-using QuizProject.Services;
+using QuizProject.Models.Entity;
+using QuizProject.Services.DataTransferService;
+using QuizProject.Services.RepositoryService;
 
 namespace QuizProject.Controllers
 {
@@ -18,37 +19,33 @@ namespace QuizProject.Controllers
     [Authorize]
     public class TestsController : ControllerBase
     {
-        private readonly IDataTransferServise _dto;
-        private readonly QuizContext _context;
         private readonly ILogger<TestsController> _logger;
+        private readonly ITestRepository<Test, TestDTO> _repository;
 
-        public TestsController(QuizContext context, IDataTransferServise dto, ILogger<TestsController> logger)
+        public TestsController(RepositoryFactory factory, ILogger<TestsController> logger)
         {
-            _context = context;
-            _dto = dto;
+            _repository = factory.GetRepository<ITestRepository<Test, TestDTO>>();
             _logger = logger;
         }
 
         // GET: api/Tests
         [HttpGet]
         
-        public async Task<ActionResult<IEnumerable<Test>>> GetTests()
+        public async Task<IEnumerable<Test>> GetTests()
         {
-            await _context.Statistics.LoadAsync();
-            await _context.Questions.Include(q => q.Answers).LoadAsync();
-            return  await _context.Tests.Include(t => t.UserCreatedTest).ToListAsync();
+            return await _repository.GetAll();
         }
 
-        // GET: api/Tests/5
+        // GET: api/Tests/id
         [HttpGet("id")]
-        public async Task<ActionResult<Test>> GetTest(string id)
+        public async Task<IActionResult> GetTest([FromQuery]string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorrect Id");
             }
 
-            var test = await _context.Tests.FindAsync(int.Parse(id));
+            var test = await _repository.GetByID(int.Parse(id));
 
             if (test == null)
             {
@@ -60,61 +57,32 @@ namespace QuizProject.Controllers
 
         // PUT: api/Tests
         [HttpPut]
-        public async Task<IActionResult> PutTest(TestDTO editTest, string id)
+        public async Task<IActionResult> PutTest([FromQuery]string id, [FromBody]TestDTO editTest)
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                return BadRequest("Incorrect Id");
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            try
+            if (string.IsNullOrWhiteSpace(id))
             {
-                var test = await _context.Tests.FindAsync(int.Parse(id));
-
-                if(test == null)
-                {
-                    return NotFound("No test with this Id");
-                }
-
-                await _context.Questions.Include(q => q.Answers).LoadAsync();
-
-                test.Name = editTest.Name;
-
-                for (int i = 0; i < editTest.Questions.Count; i++)
-                {
-                    test.Questions[i].Quest = editTest.Questions[i].Quest;
-                    test.Questions[i].CorrectAnswer = editTest.Questions[i].CorrectAnswer;
-
-                    for (int j = 0; j < editTest.Questions[i].Answers.Count; j++)
-                    {
-                        test.Questions[i].Answers[j].Ans = editTest.Questions[i].Answers[j].Ans;
-                    }
-                }
-
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException err)
-            {
-                _logger.LogError("Db update error!\n{0}", err.Message);
-                return BadRequest(err.Message);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("Database wasn't updated. Error on updating test with id:{0} \nReason: {1}", id, e.Message);
-                return BadRequest(e.Message);
+                return NotFound("Incorrect Id");
             }
 
-            return Ok();
+            var result = await _repository.Update(int.Parse(id), editTest);
+
+            if (!result.Success)
+            {
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         // POST: api/Tests
         [HttpPost]
-        public async Task<IActionResult> PostTest(TestDTO testdto, string id)
+        public async Task<IActionResult> PostTest([FromQuery] string id, [FromBody] TestDTO testdto)
         {
             if (!ModelState.IsValid)
             {
@@ -123,107 +91,38 @@ namespace QuizProject.Controllers
 
             if (string.IsNullOrWhiteSpace(id))
             {
-                return BadRequest("Incorrect Id");
+                return NotFound("Incorrect Id");
             }
 
-            var user = await _context.QuizUsers.FindAsync(int.Parse(id));
+            var result = await _repository.Create(int.Parse(id),testdto);
 
-            if(user == null)
+            if (!result.Success)
             {
-                return NotFound("No user with this Id");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            try
-            {
-                if (_context.Tests.Any(t => t.Name == testdto.Name))
-                {
-                    return BadRequest("Test with this name already exists! Choose another one.");
-                }
-
-                var newTest = new Test
-                {
-                    Name = testdto.Name,
-                };
-
-                _context.Tests.Add(newTest);
-                await _context.SaveChangesAsync();
-
-                foreach (var quest in testdto.Questions)
-                {
-                    var newQuest = new Question
-                    {
-                        TestId = newTest.TestId,
-                        Quest = quest.Quest,
-                        CorrectAnswer = quest.CorrectAnswer,
-                    };
-
-                    _context.Questions.Add(newQuest);
-                    await _context.SaveChangesAsync();
-
-                    foreach (var answer in quest.Answers)
-                    {
-                        var newAnswer = new Answer
-                        {
-                            QuestionId = newQuest.Id,
-                            Ans = answer.Ans
-                        };
-
-                        _context.Answers.Add(newAnswer);
-                        await _context.SaveChangesAsync();
-                    }
-                }
-
-                var userConnect = new UserCreatedTest
-                {
-                    QuizUserId = user.Id,
-                    TestId = newTest.TestId,
-                };
-
-                _context.CreatedTests.Add(userConnect);
-                await _context.SaveChangesAsync();
-
-                var newTestStat = new TestStatistic
-                {
-                    TestId = newTest.TestId,
-                };
-
-                _context.Statistics.Add(newTestStat);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException err)
-            {
-                _logger.LogError("Db update error!\n{0}", err.Message);
-                return BadRequest(err.Message);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("Database wasn't created. Error on updating test with id:{0} \nReason: {1}", id, e.Message);
-                return BadRequest(e.Message);
-            }
-
-            return Ok();
+            return Ok(result);
         }
 
-        // DELETE: api/Tests/5
+        // DELETE: api/Tests
         [HttpDelete]
-        public async Task<ActionResult<TestDTO>> DeleteTest(string id)
+        public async Task<IActionResult> DeleteTest([FromQuery] string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
                 return BadRequest("Incorrect Id");
             }
 
-            var test = await _context.Tests.FindAsync(int.Parse(id));
+            var result = await _repository.Delete(int.Parse(id));
 
-            if(test == null)
+            if (!result.Success)
             {
-                return NotFound("No test with this Id");
+                _logger.LogError("Error : {0}", result.Errors.FirstOrDefault());
+                return BadRequest(result);
             }
 
-            _context.Tests.Remove(test);
-            await _context.SaveChangesAsync();
-
-            return Ok(_dto.TestToDTO(test));
+            return Ok(result);
         }
     }
 }

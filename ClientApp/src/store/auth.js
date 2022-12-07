@@ -33,7 +33,7 @@ export default {
     async loginUser({ commit }, form) {
       var response = await axios.post("/auth/login", form);
       commit("SET_LOGIN_RESPONSE", response.data);
-      store.commit("UPDATE_CURRENT_USER", response.data.user);
+      store.commit("UPDATE_CURRENT_USER", response.data.object);
     },
     async RegisterUser({ commit }, form) {
       var response = await axios.post("auth/register", form);
